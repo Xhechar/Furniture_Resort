@@ -1,0 +1,94 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.collection-section {
+  display: flex;
+  width: 100vw;
+  /* height: 100vh; */
+  padding: 2vh 5vw;
+}
+
+.left-menu {
+  width: 20vw;
+  padding-right: 2vw;
+  border-right: 1px solid #ddd;
+}
+
+.left-menu h1 {
+  font-size: 2.5vw;
+  font-weight: bold;
+  margin-top: 2vh;
+  color: #333;
+}
+
+.left-menu p {
+  margin-top: 1vh;
+  font-size: 1.2vw;
+  color: #666;
+}
+
+.left-menu ul {
+  list-style: none;
+  margin-top: 3vh;
+}
+
+.left-menu ul li {
+  font-size: 1.2vw;
+  margin-top: 1.5vh;
+  color: #444;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2vw;
+  width: 70vw;
+  padding-left: 3vw;
+}
+
+.image-box {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  color: #333;
+  font-size: 1.5vw;
+  font-weight: bold;
+  padding: 1vw;
+  background-color: #f0f0f0;
+  border-radius: 0.5vw;
+  text-align: center;
+}
+
+/* Individual box sizes (approximated) */
+.accessories {
+  height: 45vh;
+  width: 20vw;
+}
+
+.chairs {
+  height: 40vh;
+  width: 30vw;
+}
+
+.sofas {
+  height: 30vh;
+  width: 30vw;
+}
+
+.tables {
+  height: 30vh;
+  width: 20vw;
+}
+
+.lighting {
+  height: 20vh;
+  width: 20vw;
+}
+
+.furnishings {
+  height: 20vh;
+  width: 30vw;
+}

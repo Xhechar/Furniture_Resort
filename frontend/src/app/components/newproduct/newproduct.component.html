@@ -1,1 +1,84 @@
-<p>newproduct works!</p>
+<body>
+    <div class="container">
+        <h1>Create <span class="highlight">New</span> Furniture</h1>
+        <form [formGroup]="newProductForm" (ngSubmit)="createNewProduct()">
+            <div class="form-layout">
+                <div class="upload-seection-holder">
+                    <div class="upload-section">
+                        <label for="image-upload" class="upload-label">
+                            <div class="spinner-container">
+                                <div class="loader" *ngIf="set_loader == 1"></div>
+                                <div class="no-loader" *ngIf="set_loader == 0">
+                                    <img src="../../../icons/image_upload.png" alt="Upload icon">
+                                </div>
+                            </div>
+                            <p *ngIf="set_loader == 1" style="color: #544820; font-weight: 600; letter-spacing: 2px;">Loading Image ...</p>
+                            <p *ngIf="set_loader == 0">Drag and Drop image here to Upload</p>
+                        </label>
+                        <input type="file" id="image-upload" (change)="setFurnitureImages($event)" hidden>
+                    </div>
+                    <div class="new-images-holder">
+                        <div class="new-image" *ngFor="let furniture_image of furniture_images; let i = index">
+                            <button (click)="removeImage(i)">X</button>
+                            <img [src]="furniture_images[i]" alt="new {{furniture_image}}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pricing-section">
+                    <h3>Pricing</h3>
+                    <div class="input-box">
+                        <label for="price">Price (Ksh)</label>
+                        <input type="number" id="price" required formControlName="price" placeholder="0.00 Ksh">
+                    </div>
+                    <div class="input-box">
+                        <label for="color">Color</label>
+                        <input type="text" id="color" required formControlName="color" placeholder="enter color">
+                    </div>
+                    <div class="input-box">
+                        <label for="size">Size (6x6)</label>
+                        <input type="text" id="size" required formControlName="size" placeholder="enter product sizes">
+                    </div>
+                </div>
+
+                <div class="identity-section">
+                    <h3>Identity</h3>
+                    <div class="input-box">
+                        <label for="product-name">Product Name</label>
+                        <input type="text" id="furniture_name" required formControlName="furniture_name" placeholder="enter name here">
+                        <div class="err" *ngIf="newProductForm.get('furniture_name')?.invalid && (newProductForm.get('furniture_name')?.touched || newProductForm.get('furniture_name')?.dirty)">
+                            <div *ngIf="newProductForm.get('furniture_name')?.errors?.['required']">furniture name is required.</div>
+                            <div *ngIf="newProductForm.get('furniture_name')?.errors?.['invalidStringLength']">furniture name must be more than 2 characters.</div>
+                            <div *ngIf="newProductForm.get('furniture_name')?.errors?.['invalidString']">furniture name can only contain alphanumeric characters and spaces.</div>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <label for="category">Category</label>
+                        <select formControlName="category" id="category">
+                            <option value="required">*Reqired</option>
+                            <option *ngFor="let option of category_options; let i = index" >{{category_options[i]}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="product-details-section">
+                    <h3>Product Details</h3>
+                    <div class="input-box">
+                        <label for="short-description">Short Description</label>
+                        <textarea id="short-description" rows="2" required formControlName="short_description" placeholder="enter short description here"></textarea>
+                    </div>
+                    <div class="input-box">
+                        <label for="long-description">Long Description</label>
+                        <textarea id="long-description" rows="4" required formControlName="long_description" placeholder="enter long description here, explain product details"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+                <button type="submit" class="create-btn">Create</button>
+                <button type="button" class="cancel-btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+</body>

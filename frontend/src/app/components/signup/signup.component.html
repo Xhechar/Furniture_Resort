@@ -1,1 +1,101 @@
-<p>signup works!</p>
+<div class="body">
+    <div class="coloured-body">
+      <div class="entire-grid">
+        <div class="business-services"></div>
+        <div class="entire-content">
+            <div class="logo-title-area">
+              <div class="logo-container">
+                <div class="image-holder"></div>
+              </div>
+              <div class="title-area">
+                <h3>REGISTER DETAILS.</h3>
+                <p>Sign Up</p>
+              </div>
+            </div>
+      
+            <div class="form-container">
+              <form>
+                <div class="input-group">
+                  <div class="input">
+                    <div class="image-label">
+                      <img src="../../../icons/badge_53dp_544820.png" alt="" />
+                      <label for="fullname">fullname</label>
+                    </div>
+                    <div class="input-cont">
+                      <input type="text" name="fullname" required placeholder="John Doe" />
+                    </div>
+                    <!-- <div class="err" *ngIf="fullname.invalid && (fullname.touched || fullname.dirty)">
+                        <div class="err" *ngIf="fullname.hasError('required')">
+                          <p>Fullname field cannot be empty!</p>
+                        </div>
+                      </div> -->
+                  </div>
+      
+                  <div class="input">
+                    <div class="image-label">
+                      <img src="../../../icons/person_pin_53dp_544820.png" alt="" />
+                      <label for="username">username</label>
+                    </div>
+                    <div class="input-cont">
+                      <input type="text" name="username" required placeholder="johniee" />
+                    </div>
+                  </div>
+      
+                  <div class="input">
+                    <div class="image-label">
+                      <img src="../../../icons/email_53dp_544820.png" alt="" />
+                      <label for="email">email</label>
+                    </div>
+                    <div class="input-cont">
+                      <input type="email" name="email" required placeholder="johndoe@gmail.com" />
+                    </div>
+                  </div>
+                  
+                  <div class="input">
+                    <div class="image-label">
+                      <img src="../../../icons/phone.png" alt="" />
+                      <label for="phone_number">phone number</label>
+                    </div>
+                    <div class="input-cont">
+                      <input type="text" name="phone_number" required placeholder="07-00-000-000" />
+                    </div>
+                  </div>
+      
+                  <div class="input">
+                    <div class="image-label">
+                      <img src="../../../icons/password_53dp_544820.png" alt="" />
+                      <label for="password">password</label>
+                    </div>
+                    <div class="input-cont">
+                      <input type="password" name="password" minlength="8" maxlength="30" required placeholder="abcABC@123" />
+                    </div>
+                  </div>
+      
+                  <div class="input">
+                    <div class="image-label">
+                      <img src="../../../icons/confirm_password.png" alt="" />
+                      <label for="confirm_password">confirm password</label>
+                    </div>
+                    <div class="input-cont">
+                      <input type="password" name="confirm_password" minlength="8" maxlength="30" required placeholder="abcABC@123" />
+                    </div>
+                  </div>
+                </div>
+      
+                <div class="button-input">
+                  <button type="submit" [disabled]="false">
+                    Sign Up
+                  </button>
+                </div>
+                <div class="alternative-option">
+                  <p class="login-link">
+                    Already have an account? <a routerLink="/login">Login</a>
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  

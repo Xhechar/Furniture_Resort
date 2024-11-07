@@ -1,0 +1,214 @@
+.body {
+  width: 100%;
+  height: 200vh;
+  background-image: url(../../../../public/background_images/first_trial.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-size: 12px;
+}
+
+.coloured-body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #ebb81060;
+}
+
+.entire-grid {
+  margin-top: 12vh;
+  width: 80%;
+  height: 70%;
+  border-top-right-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+}
+
+.entire-content {
+  width: 100%;
+  height: 100%;
+  border-top-right-radius: 10px;
+  display: grid;
+  grid-template-rows: 25% 1fr;
+  row-gap: 3%;
+  align-items: center;
+  background-color: #ffffff;
+  /* box-shadow: 0 0 10px #d2b450; */
+}
+
+.logo-title-area {
+  display: grid;
+  grid-template-rows: 65% 1fr;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  row-gap: 10%;
+}
+
+.logo-container {
+  width: 50%;
+  height: 100%;
+  margin-left: 50%;
+}
+
+.image-holder {
+  width: 100%;
+  height: 100%;
+  background-image: url(../../../../public/logo/Kevin_Furnitures-removebg-preview.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-bottom: 2px solid #544820;
+}
+
+.title-area {
+  text-align: center;
+}
+
+.title-area h3 {
+  font-size: 1.2em;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+.title-area p {
+  color: #544820;
+  font-size: 14px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  letter-spacing: 2px;
+}
+
+.form-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+form {
+  width: 88%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 80% repeat(2, 1fr);
+}
+
+.input-group {
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  row-gap: 2%;
+  width: 100%;
+}
+
+.input {
+  display: grid;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.image-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.image-label img {
+  width: 6%;
+}
+
+.input-cont {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.input-cont input {
+  width: 85%;
+  height: 30%;
+  padding: 8px;
+  border: none;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom: 1px solid #544820;
+  font-size: 9px;
+  color: rgb(71, 70, 70);
+  background-color: rgba(124, 153, 163, 0.167);
+}
+
+.input-cont input::placeholder {
+  font-size: 9px;
+  color: rgb(88, 87, 87);
+}
+
+.button-input {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-input button {
+  width: 40%;
+  height: 70%;
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 600;
+  transition: all 0.5s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-input button:hover {
+  background-color: #795c26;
+  cursor: pointer;
+}
+
+.button-input button:active {
+  background-color: #58431d;
+}
+
+.button-input button:disabled {
+  background-color: rgb(205, 200, 200);
+  cursor: auto;
+}
+
+.login-link {
+  text-align: center;
+  font-size: 11px;
+  color: #666;
+}
+
+.login-link a {
+  color: #795c26;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+.alternative-option {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.err p {
+  color: rgb(143, 12, 12);
+  font-size: 10px;
+  margin-left: 20px;
+  margin-top: 5px;
+}
