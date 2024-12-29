@@ -1,65 +1,219 @@
-<body>
-    <div class="header">
-        <div class="nav">
-            <h1>Furniture Store</h1>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Products</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
+<app-topbar></app-topbar>
+<div class="entire-contents">
+    <section class="landing-area">
+        <div class="left-area">
+            <div class="text-content">
+                <h3>Latest Collection.</h3>
+                <h1>Sofas &#38; Beds</h1>
+                <p>Your, shopping companion. Your wish, our command. Make your home beautiful.</p>
+            </div>
         </div>
-    </div>
-
-    <section class="main-banner">
-        <div class="main-text">
-            <h2>Comfort and Style</h2>
-            <p>Explore the best furniture for your home.</p>
-            <button>Shop Now</button>
+        <div class="right-area">
+            <button class="home-btn">
+                <p>Shop Now</p>
+                <img src="../../../icons/arrow_forward_ios_25dp_FFF_FILL0_wght400_GRAD0_opsz24.png" alt="right-arrow">
+            </button>
         </div>
-        <div class="main-image"></div>
     </section>
 
     <section class="featured-products">
-        <h2>Featured Products</h2>
-        <div class="product-list">
-            <div class="product-card"></div>
-            <div class="product-card"></div>
-            <div class="product-card"></div>
-        </div>
-    </section>
-
-    <section class="gallery">
-        <h2>The Best Furniture</h2>
-        <div class="gallery-grid">
-            <div class="gallery-item"></div>
-            <div class="gallery-item"></div>
-            <div class="gallery-item"></div>
-            <div class="gallery-item"></div>
-            <div class="gallery-item"></div>
-            <div class="gallery-item"></div>
-        </div>
-    </section>
-
-    <section class="newsletter">
-        <h2>Sign Up for Updates</h2>
-        <form>
-            <input type="email" placeholder="Enter your email">
-            <button type="submit">Subscribe</button>
-        </form>
-    </section>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <h3>More Furniture</h3>
-            <div class="footer-gallery">
-                <div class="footer-item"></div>
-                <div class="footer-item"></div>
-                <div class="footer-item"></div>
+        <div class="title">Our Best Collections.</div>
+        <div class="products-area" *ngIf="products">
+            <div class="product-card" *ngFor="let product of products, let i = index">
+                <div class="product-image">
+                    <img [src]="product.image" [alt]="product.product_name">
+                </div>
+                <div class="product-details">
+                    <div class="product-title">
+                        <h2>{{product.product_name}}</h2>
+                    </div>
+                    <div class="descrition-and-more">
+                        <div class="description">
+                            <p>{{product.short_description}}</p>
+                        </div>
+                        <div class="more">
+                            <p>More</p>
+                            <img src="../../../icons/chevron_right_50dp_544820.png" alt="arrow">
+                        </div>
+                    </div>
+                    <div class="price-and-button">
+                        <div class="price-and-rating">
+                            <div class="price">
+                                <p>Ksh. {{product.price}}</p>
+                            </div>
+                            <div class="rating">
+                                <p>{{product.rating}}.0</p>
+                                <img style="width: 16px;" src="../../../icons/full_star_gold.png" alt="star-rating">
+                            </div>
+                        </div>
+                        <div class="button-container">
+                            <button class="add-cart">
+                                <p>Add To Cart</p>
+                                <img style="width: 14px;" src="../../../icons/icons8-shopping-cart-26.png" alt="cart-image">
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Furniture Store. All rights reserved.</p>
+    </section>
+
+    <section class="on-sale">
+        <div class="category-holder">
+            <div class="on-sale-title">
+                <p>Furnitures.</p>
+                <h2>Get the best from us.</h2>
+            </div>
+            <div class="middle-text">
+                <p>What we have gathered for you</p>
+            </div>
+            <div class="categories">
+                <h4>On Sale</h4>
+                <div class="categorie-item" *ngFor="let category of categories, let i = index">
+                    <p>{{category}}</p>
+                </div>
+            </div>
         </div>
-    </footer>
-</body>
+        <div class="grid-images">
+            <div class="left-images">
+                <div class="accessories">
+                    <div class="accessory">
+                        <p>accessories</p>
+                    </div>
+                </div>
+                <div class="chairs-and-stools">
+                    <div class="chair">
+                        <p>Chairs & Stools</p>
+                    </div>
+                </div>
+                <div class="lighting">
+                    <div class="lights">
+                        <p>lighting</p>
+                    </div>
+                </div>
+            </div>
+            <div class="right-images">
+                <div class="empty"></div>
+                <div class="sofas">
+                    <div class="sofa">
+                        <p>sofas & armchairs</p>
+                    </div>
+                </div>
+                <div class="tables">
+                    <div class="table">
+                        <p>tables</p>
+                    </div>
+                </div>
+                <div class="furnishings">
+                    <div class="furnishing">
+                        <p>furnishings</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="join-us-section">
+        <div class="left-content">
+          <h2>Get in, <br><span>Join Us</span></h2>
+          <p>Sign up for the newsletter and receive 10% off your first order.</p>
+          <form>
+            <input type="text" placeholder="John Doe" class="input-field" />
+            <input type="email" placeholder="johndoe@abcdef.com" class="input-field" />
+            <button type="submit" class="sign-up-btn">SUBSCRIBE NOW</button>
+          </form>
+          <p class="terms">
+            By subscribing you agree to our <a href="#">Terms & Conditions</a> and
+            <a href="#">Privacy & Cookies Policy</a>.
+          </p>
+        </div>
+        <div class="right-content">
+          <img src="../../../furniture_images/02dac7ae52e14088380b82234c2e71cb-removebg-preview.png" alt="Decorative furniture" />
+        </div>
+      </section>
+      
+      <section class="models-section">
+        <div class="models-info">
+          <h3 class="models-patch">New Patch</h3>
+          <h1 class="models-title">Latest Models</h1>
+          <hr class="models-divider" />
+          <p class="models-description">
+            Brighten up your living areas this Winter with top tips from our interior
+            design team.
+          </p>
+          <button class="models-button">
+            EXPLORE LATEST CHATTELS <span>&rarr;</span>
+          </button>
+        </div>
+        <div class="models-image-container">
+          <img style="height: 80%;" src="../../../furniture_images/accessories-removebg-preview.png" alt="Furniture showcase" class="models-image" />
+        </div>
+        <div class="models-highlights">
+          <h2 class="highlights-title">
+            Living room furniture designs that will leave you breathless.
+          </h2>
+          <p class="highlights-description">
+            Choosing the right mattress is not so simple. We all sleep in a different
+            way and we all want our mattress to adapt perfectly to our body.
+          </p>
+          <div class="highlights-editorial">
+            <img
+              src="../../../profile_images/reese.jpeg"
+              alt="Editorial staff profile"
+              class="editorial-avatar"
+            />
+            <span class="editorial-name">Kevin Odhiambo</span>
+          </div>
+        </div>
+      </section>
+      
+      <div class="footer-promo-section">
+        <div class="footer-promo-header">
+          <h2>Chattels on <span class="footer-highlight">OFFER</span></h2>
+        </div>
+        <div class="footer-product-gallery">
+          <div class="footer-product-card" style="height: 40vh; width: 30%;">
+            <img src="path-to-image1.jpg" alt="Bean Bag" class="footer-product-image">
+          </div>
+          <div class="footer-product-card" style="height: 40vh; width: 40%;">
+            <img src="path-to-image2.jpg" alt="Bed" class="footer-product-image">
+          </div>
+          <div class="footer-product-card" style="height: 40vh; width: 30%;">
+            <img src="path-to-image3.jpg" alt="Sofa" class="footer-product-image">
+          </div>
+        </div>
+        <div class="footer-info-section">
+          <div class="footer-info-box">
+            <h3>Find Us.</h3>
+            <ul>
+              <li>About us</li>
+              <li>Delivery and Returns Policy</li>
+              <li>Help & FAQ</li>
+              <li>Service for professionals</li>
+            </ul>
+          </div>
+          <div class="footer-info-box">
+            <h3>Contact Info</h3>
+            <p><strong>Eldoret (Kenya)</strong><br>
+              1-3 Moi Avenue<br>
+              Eldoret City, Langas<br>
+              BOX 30100
+            </p>
+            <p><strong>Nairobi (Kenya)</strong><br>
+              340 Nairobi<br>
+              X - Furniture Chattels<br>
+              KENYA
+            </p>
+          </div>
+          <div class="footer-info-box">
+            <h3>Sign Up For Mails</h3>
+            <form>
+              <input type="text" placeholder="Name" name="name" class="footer-input-field">
+              <input type="email" placeholder="Email" name="email" class="footer-input-field">
+              <button type="submit" class="footer-submit-btn">Sign Up Now</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+</div>

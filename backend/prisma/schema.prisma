@@ -1,0 +1,186 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  UserId             String   @id @unique
+  Fullname           String
+  Email              String   @unique
+  Mobile             String   @unique
+  Country            String
+  City               String
+  Gender             String
+  IdentificationNumber Int    @unique
+  ProfileImage       String
+  BackgroundWallpaper String
+  Password           String
+  IsWelcomed         Boolean  @default(false)
+  IsDeleted          Boolean  @default(false)
+  DateCreated        DateTime @default(now())
+  HasOrder           Boolean  @default(false)
+  HasWishList        Boolean  @default(false)
+  Role               String   @default("user")
+  Selected           Boolean  @default(false)
+  Orders             Order[]
+  CustomOrders       CustomOrder[]
+  WishListProducts   Wishlist[]
+  CartItems          Cart[]
+  Reviews            Review[]
+  Progresses         Progress[]
+}
+
+model Product {
+  ProductId           String   @id @unique
+  ProductName         String
+  ProductImages       String
+  ShortDesc           String
+  LongDesc            String
+  Sizes               String
+  Category            String
+  Colour              String
+  Prize               Float
+  StockQuantity       Int
+  StockLimit          Int
+  CustomPrize         Float
+  OnOffer             Boolean  @default(false)
+  OnFlushSale         Boolean  @default(false)
+  DateCreated         DateTime @default(now())
+  Discount            Float
+  MakePeriods         Int
+  Deposit             Float
+  ProductQuantityTimes ProductQuantityTime[]
+  Reviews             Review[]
+  Orders              Order[]
+  CustomOrders        CustomOrder[]
+  Carts               Cart[]
+  Wishlists           Wishlist[]
+  IsActivated         Boolean  @default(false)
+  IsFlushed           Boolean  @default(false)
+  IsCustommable       Boolean  @default(false)
+  Progresses          Progress[]
+}
+
+model ProductQuantityTime {
+  ProductQuantityTimeId String   @id @unique
+  ProductId            String
+  Quantity             Int
+  Period               Int
+  Product              Product  @relation(fields: [ProductId], references: [ProductId])
+}
+
+model Order {
+  OrderId             String   @id @unique
+  UserId              String
+  ProductId           String
+  Quantity            Int
+  Price               Float
+  AmountPaid          Float
+  OrderType           String   @default("normal")
+  Discount            Float
+  MpesaCode           String?
+  DateCreated         DateTime @default(now())
+  DeliveryStatus      String   @default("pending")
+  User                User     @relation(fields: [UserId], references: [UserId])
+  Product             Product  @relation(fields: [ProductId], references: [ProductId])
+}
+
+model Recovery {
+  RecoveryId          String   @id @unique
+  Email               String
+  RecoveryCode        Int
+  DateCreated         DateTime  @default(now())
+  CodeSent            Boolean  @default(false)
+}
+
+model CustomOrder {
+  CustomOrderId       String   @id @unique
+  ProductId           String
+  UserId              String
+  Price               Float
+  Discount            Float
+  Quantity            Int
+  Deposit             Float
+  Balance             Float
+  DeliveryStatus      String  @default("pending")
+  DateCreated         DateTime @default(now())
+  DateModified        DateTime @default(now())
+  DepMpesaCode        String?
+  BalMpesaCode        String?
+  Progresses          Progress[]
+  User                User     @relation(fields: [UserId], references: [UserId])
+  Product             Product  @relation(fields: [ProductId], references: [ProductId])
+}
+
+model Category {
+  CategoryId          String   @id @unique
+  CategoryName        String
+}
+
+model Messages {
+  MessagesId          String   @id @unique
+  SenderId            String
+  ReceiverId          String
+  Message             String
+  DateCreated         DateTime @default(now())
+}
+
+model Cart {
+  CartId              String   @id @unique
+  ProductId           String
+  UserId              String
+  Quantity            Int      @default(1)
+  Discount            Float
+  Price               Float
+  OrderType           String
+  DateCreated         DateTime @default(now())
+  User                User     @relation(fields: [UserId], references: [UserId])
+  Product             Product  @relation(fields: [ProductId], references: [ProductId])
+}
+
+model Wishlist {
+  WishlistId          String   @id @unique
+  ProductId           String
+  UserId              String
+  DateCreated         DateTime @default(now())
+  Product            Product  @relation(fields: [ProductId], references: [ProductId])
+  User                User     @relation(fields: [UserId], references: [UserId])
+}
+
+model Review {
+  ReviewId            String   @id @unique
+  ProductId           String
+  UserId              String
+  ReviewText          String
+  Rating              Float
+  DateCreated         DateTime @default(now())
+  Product             Product  @relation(fields: [ProductId], references: [ProductId])
+  User                User     @relation(fields: [UserId], references: [UserId])
+}
+
+model Progress {
+  ProgressId          String   @id @unique
+  ProductId           String
+  UserId              String
+  CustomOrderId       String
+  DateCreated         DateTime @default(now())
+  MaterialsImages     String
+  ProgressImages      String
+  FinalImages         String
+  Status              String  @default("incomplete")
+  IsApproved          Boolean @default(false)
+  DateCompleted       DateTime?
+  Product             Product  @relation(fields: [ProductId], references: [ProductId], onDelete: NoAction, onUpdate: NoAction)
+  User                User     @relation(fields: [UserId], references: [UserId], onDelete: NoAction, onUpdate: NoAction)
+  CustomOrder         CustomOrder @relation(fields: [CustomOrderId], references: [CustomOrderId], onUpdate: Cascade)
+}

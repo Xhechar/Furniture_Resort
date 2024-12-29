@@ -1,0 +1,39 @@
+version: '3.8'
+services: 
+  FurnituresDatabase:
+    container_name: FurnitureDb
+    image: mcr.microsoftsqlserver
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      SA_PASSWORD: 'Chattel$hoppie2024'
+      Accept_EULA: 'Y'
+      MSSQL_PID: 'Express'
+    ports:
+      -'1433:1433'
+    volumes:-FurnituresDbData: /var/opt/mssql
+  FurnituresPgAdmin:
+    container_name: FurniturePgAdminManager
+    image: dpage/pgadmin
+    restart: unless-stopped
+    depends-on: FurnituresDatabase
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@root.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports: 
+      -'5052:80'
+  FurnituresServerService:
+    container_name: FurnituresService
+    depends-on: FurnituresPgAdmin
+    restart: unless-stopped
+    build: ./
+    volumes:
+      -./:/app
+      -/app/node_modules
+    ports:
+      -'3000:3000'
+    stdin_open: true
+    tty: true
+    command: ["sh", "-c", "npx prisma migrate deploy && npm start"]
+  Volumes: 
+    FurnituresDbData
