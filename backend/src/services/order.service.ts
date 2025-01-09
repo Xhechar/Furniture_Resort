@@ -42,7 +42,7 @@ export class OrderService implements OrderInterface {
     if (cartExists.length == 0) {
       return {
         'success': false,
-        'error': 'You have no custom orders at the moment.'
+        'error': 'You have no orders at the moment.'
       }
     }
 

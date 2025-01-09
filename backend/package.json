@@ -5,7 +5,8 @@
   "scripts": {
     "start:build": "tsc -w",
     "start:xhr": "nodemon dist/server.js",
-    "start": "concurrently npm:start:*"
+    "start": "concurrently npm:start:*",
+    "test": "jest --watch"
   },
   "keywords": [],
   "author": "",

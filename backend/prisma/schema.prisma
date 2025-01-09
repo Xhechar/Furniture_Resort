@@ -91,6 +91,7 @@ model Order {
   MpesaCode           String?
   DateCreated         DateTime @default(now())
   DeliveryStatus      String   @default("pending")
+  DeliveryMailSent    Boolean @default(false)
   User                User     @relation(fields: [UserId], references: [UserId])
   Product             Product  @relation(fields: [ProductId], references: [ProductId])
 }
@@ -115,6 +116,7 @@ model CustomOrder {
   DeliveryStatus      String  @default("pending")
   DateCreated         DateTime @default(now())
   DateModified        DateTime @default(now())
+  DeliveryMailSent    Boolean @default(false)
   DepMpesaCode        String?
   BalMpesaCode        String?
   Progresses          Progress[]
