@@ -1,16 +1,59 @@
+import { Request, Response } from "express"
+import { CartService } from "../services/cart.service"
+import { ExtendedRequest, getIdFromToken } from "../middlewares/verification.tokens";
+
+const cartService = new CartService();
 
 export class CartController {
-  createCart() {
-    
+  async createCart(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await cartService.createCart(getIdFromToken(req), req.params.ProductId, req.body);
+
+      return res.status(201).json(result);
+        
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      })
+    }
   }
-  updateCart() {
-    
+  async updateCart(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await cartService.updateCart(getIdFromToken(req), req.params.CartId, req.body);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      })
+    }
   }
-  deleteCart() {
-    
+  async deleteCart(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await cartService.deleteCart(getIdFromToken(req), req.params.CartId);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      })
+    }
   }
-  getCartByUserId() {
-    
+  async getCartByUserId(req: ExtendedRequest, res: Response) {
+    try {
+      let result = await cartService.getCartByUserId(getIdFromToken(req));
+      
+      return res.status(200).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      })
+    }
   }
   
 }

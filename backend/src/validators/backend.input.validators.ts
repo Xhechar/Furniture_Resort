@@ -13,6 +13,22 @@ export const LoginDetailsSchema = joi.object({
   })
 });
 
+export const RecoveryDetailsSchema = joi.object({
+  Email: joi.string().required().email().messages({
+    'string.required': 'Email is required',
+    'string.email': 'Please enter a valid email address.'
+  }),
+  Password: joi.string().min(8).max(30).required().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*?])[a-zA-Z0-9!@#$%^&*?]{8, 30}$')).messages({
+    'string.required': 'Please enter password',
+    'string.min': 'Password should have more than 8 characters',
+    'string.max': 'Password should have less than 30 characters',
+    'string.pattern.base': 'Password should contain minimum 8 characters, maximum 30 and should contain special characters'
+  }),
+  RecoveryCode: joi.number().required().messages({
+    'number.required': 'Recovery Code is required'
+  })
+})
+
 export const RegistrationSchema = joi.object({
   Fullname: joi.string().required().min(5).messages({
     'string.required': 'Fullname is required.',
@@ -121,5 +137,18 @@ export const ProductQuantityTimeSchema = joi.object({
   }),
   Period: joi.number().required().messages({
     'string.required': 'Period value is required'
+  })
+});
+
+export const ReviewSchema = joi.object({
+  ReviewText: joi.string().min(3).max(240).required().messages({
+    'string.required': 'Review text is required.',
+    'string.min': 'Review text should have 3 or more characters',
+    'string.max': 'Review text should have 240 characters or less'
+  }),
+  Rating: joi.number().min(1).max(5).required().messages({
+    'string.required': 'Rating value is required',
+    'number.min': 'Rating should be between 1 and 5',
+    'number.max': 'Rating should be between 1 and 5'
   })
 });

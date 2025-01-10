@@ -1,58 +1,251 @@
+import { Response } from "express";
+import { ExtendedRequest, getIdFromToken } from "../middlewares/verification.tokens";
+import { ProductService } from "../services/products.service";
+import { ProductSchema } from "../validators/backend.input.validators";
+
+const productService = new ProductService();
 
 export class ProductsController {
-  createProduct() {
-    
+  async createProduct(req: ExtendedRequest, res: Response) {
+    try {
+
+      let { error } = ProductSchema.validate(req.body);
+
+      if (error) return res.status(401).json({ error: error.message });
+
+      let result = await productService.createProduct(getIdFromToken(req), req.body);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  updateProduct() {
-    
+  async updateProduct(req: ExtendedRequest, res: Response) {
+    try {
+      let { error } = ProductSchema.validate(req.body);
+
+      if (error) return res.status(401).json({ error: error.message });
+
+      let result = await productService.updateProduct(getIdFromToken(req), req.params.ProductId, req.body);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  toggleActivationStatus() {
-    
+  async toggleActivationStatus(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.toggleActivationStatus(getIdFromToken(req), req.params.ProductId);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  toggleActivationOfMultipleProducts() {
-    
+  async toggleActivationOfMultipleProducts(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.toggleActivationOfMultipleProducts(getIdFromToken(req), req.body.ProductIds);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  toggleOnOffer() {
-    
+  async toggleOnOffer(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.toggleOnOffer(getIdFromToken(req), req.params.ProductId);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  toggleOnOfferOfMultipleProducts() {
-    
+  async toggleOnOfferOfMultipleProducts(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.toggleOnOfferOfMultipleProducts(getIdFromToken(req), req.body.ProductIds);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  toggleFlushSaleProduct() {
-    
+  async toggleFlushSaleProduct(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.toggleFlushSaleProduct(getIdFromToken(req), req.params.ProductId);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  toggleMultipleFlushSaleProducts() {
-    
+  async toggleMultipleFlushSaleProducts(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.toggleMultipleFlushSaleProducts(getIdFromToken(req), req.body.ProductIds);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  automateFlashSaleProducts() {
-    
+  async automateFlashSaleProducts(res: Response) {
+    try {
+      
+      let result = await productService.automateFlashSaleProducts();
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  toggleCustomisationOfSingleProduct() {
-    
+  async toggleCustomisationOfSingleProduct(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.toggleCustomisationOfSingleProduct(getIdFromToken(req), req.params.ProductId);
+
+      return res.status(201).json(result);
+
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  toggleMultipleCustomisationOfProducts() {
-    
+  async toggleMultipleCustomisationOfProducts(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.toggleMultipleCustomisationOfProducts(getIdFromToken(req), req.body.ProductIds);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  deleteMultipleProducts() {
-    
+  async deleteMultipleProducts(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.deleteMultipleProducts(getIdFromToken(req), req.body.ProductIds);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  deleteSingleProduct() {
-    
+  async deleteSingleProduct(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.deleteSingleProduct(getIdFromToken(req), req.params.ProductId);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  getAllActivatedProducts() {
-    
+  async getAllActivatedProducts(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.getAllActivatedProducts();
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  getAllActivatedProductsOnOffer() {
-    
+  async getAllActivatedProductsOnOffer(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await productService.getAllActivatedProductsOnOffer();
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  getAllActivatedProductsOnFlushsale() {
-    
+  async getAllActivatedProductsOnFlushsale(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.getAllActivatedProductsOnFlushsale();
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  getAllProducts() {
-    
+  async getAllProducts(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.getAllProducts(getIdFromToken(req));
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  getSingleActivatedProduct() {
-    
+  async getSingleActivatedProduct(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await productService.getSingleActivatedProduct(getIdFromToken(req), req.params.ProductId);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
 
 }

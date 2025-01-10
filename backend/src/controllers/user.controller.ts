@@ -1,43 +1,187 @@
+import { Response } from "express";
+import { ExtendedRequest, getIdFromToken } from "../middlewares/verification.tokens";
+import { UserService } from "../services/user.service";
+import { RegistrationSchema } from "../validators/backend.input.validators";
+
+const userService = new UserService();
 
 export class UserController {
-  createUser() {
-    
+  async createUser(req: ExtendedRequest, res: Response) {
+    try {
+
+      let { error } = RegistrationSchema.validate(req.body);
+
+      if (error) return res.status(401).json({ error: error.message });
+
+      let result = await userService.createUser(req.body);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  updateUser() {
-    
+  async updateUser(req: ExtendedRequest, res: Response) {
+    try {
+
+      let { error } = RegistrationSchema.validate(req.body);
+
+      if (error) return res.status(401).json({ error: error.message });
+
+      let result = await userService.updateUser(getIdFromToken(req), req.body);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  updateUserRole() {
-    
+  async updateUserRole(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await userService.updateUserRole(req.params.UserId);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  updateBackgroundPhoto() {
-    
+  async updateBackgroundPhoto(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await userService.updateBackgroundPhoto(getIdFromToken(req), req.body.BackgroundUrl);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  softDeleteSingleUser() {
-    
+  async softDeleteSingleUser(req: ExtendedRequest, res: Response) {
+    try {
+      
+      let result = await userService.softDeleteSingleUser(req.params.UserId);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  softDeleteMultipleUsers() {
-    
+  async softDeleteMultipleUsers(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await userService.softDeleteMultipleUsers(req.body.UserIds);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  deleteMultipleUsers() {
-    
+  async deleteMultipleUsers(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await userService.deleteMultipleUsers(req.body.UserIds);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  deleteSingleUser() {
-    
+  async deleteSingleUser(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await userService.deleteSingleUser(req.params.UserId);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  restoreSoftDeletedUser() {
-    
+  async restoreSoftDeletedUser(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await userService.restoreSoftDeletedUser(req.params.UserId);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  restoreMultipleSoftDeletedUser() {
-    
+  async restoreMultipleSoftDeletedUser(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await userService.restoreMultipleSoftDeletedUser(req.body.UserIds);
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  getAllSoftDeletedUsers() {
-    
+  async getAllSoftDeletedUsers(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await userService.getAllSoftDeletedUsers();
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  getAllUsers() {
-    
+  async getAllUsers(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await userService.getAllUsers();
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
-  getSingleUser() {
-    
+  async getSingleUser(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await userService.getSingleUser(getIdFromToken(req));
+
+      return res.status(201).json(result);
+      
+    } catch (error) {
+      return res.status(501).json({
+        error: error
+      });
+    }
   }
   
 }
