@@ -11,14 +11,14 @@ export class ProductsController {
 
       let { error } = ProductSchema.validate(req.body);
 
-      if (error) return res.status(401).json({ error: error.message });
+      if (error) res.status(401).json({ error: error.message });
 
       let result = await productService.createProduct(getIdFromToken(req), req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -27,14 +27,14 @@ export class ProductsController {
     try {
       let { error } = ProductSchema.validate(req.body);
 
-      if (error) return res.status(401).json({ error: error.message });
+      if (error) res.status(401).json({ error: error.message });
 
       let result = await productService.updateProduct(getIdFromToken(req), req.params.ProductId, req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -44,10 +44,10 @@ export class ProductsController {
       
       let result = await productService.toggleActivationStatus(getIdFromToken(req), req.params.ProductId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -57,10 +57,10 @@ export class ProductsController {
       
       let result = await productService.toggleActivationOfMultipleProducts(getIdFromToken(req), req.body.ProductIds);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -70,10 +70,10 @@ export class ProductsController {
       
       let result = await productService.toggleOnOffer(getIdFromToken(req), req.params.ProductId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -83,10 +83,10 @@ export class ProductsController {
       
       let result = await productService.toggleOnOfferOfMultipleProducts(getIdFromToken(req), req.body.ProductIds);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -96,10 +96,10 @@ export class ProductsController {
       
       let result = await productService.toggleFlushSaleProduct(getIdFromToken(req), req.params.ProductId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -109,10 +109,10 @@ export class ProductsController {
       
       let result = await productService.toggleMultipleFlushSaleProducts(getIdFromToken(req), req.body.ProductIds);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -122,10 +122,10 @@ export class ProductsController {
       
       let result = await productService.automateFlashSaleProducts();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -135,10 +135,10 @@ export class ProductsController {
       
       let result = await productService.toggleCustomisationOfSingleProduct(getIdFromToken(req), req.params.ProductId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
 
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -148,10 +148,10 @@ export class ProductsController {
       
       let result = await productService.toggleMultipleCustomisationOfProducts(getIdFromToken(req), req.body.ProductIds);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -161,10 +161,10 @@ export class ProductsController {
       
       let result = await productService.deleteMultipleProducts(getIdFromToken(req), req.body.ProductIds);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -174,10 +174,10 @@ export class ProductsController {
       
       let result = await productService.deleteSingleProduct(getIdFromToken(req), req.params.ProductId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -187,10 +187,10 @@ export class ProductsController {
       
       let result = await productService.getAllActivatedProducts();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -200,10 +200,10 @@ export class ProductsController {
 
       let result = await productService.getAllActivatedProductsOnOffer();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -213,10 +213,10 @@ export class ProductsController {
       
       let result = await productService.getAllActivatedProductsOnFlushsale();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -226,10 +226,10 @@ export class ProductsController {
       
       let result = await productService.getAllProducts(getIdFromToken(req));
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -239,10 +239,10 @@ export class ProductsController {
       
       let result = await productService.getSingleActivatedProduct(getIdFromToken(req), req.params.ProductId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }

@@ -11,10 +11,10 @@ export class ProgressController {
 
       let result = await progressService.updateProgress(getIdFromToken(req), req.params.ProgressId, req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -24,10 +24,10 @@ export class ProgressController {
 
       let result = await progressService.updateProgressStatus(getIdFromToken(req), req.params.ProgressId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -37,10 +37,10 @@ export class ProgressController {
 
       let result = await progressService.approveProgress(getIdFromToken(req), req.params.ProgressId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -50,10 +50,10 @@ export class ProgressController {
 
       let result = await progressService.deleteProgress(getIdFromToken(req), req.params.ProgressId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -63,10 +63,10 @@ export class ProgressController {
 
       let result = await progressService.getAllProgresses();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -76,10 +76,10 @@ export class ProgressController {
 
       let result = await progressService.getCompletedProgresses();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -89,10 +89,10 @@ export class ProgressController {
 
       let result = await progressService.getProgressesByUserId(getIdFromToken(req));
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }

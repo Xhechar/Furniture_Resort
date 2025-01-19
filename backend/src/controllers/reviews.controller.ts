@@ -11,14 +11,14 @@ export class ReviewsController {
 
       let { error } = ReviewSchema.validate(req.body);
 
-      if (error) return res.status(401).json({ error: error.message });
+      if (error) res.status(401).json({ error: error.message });
 
       let result = await reviewsService.createReview(getIdFromToken(req), req.params.ProductId, req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -27,14 +27,14 @@ export class ReviewsController {
     try {
       let { error } = ReviewSchema.validate(req.body);
 
-      if (error) return res.status(401).json({ error: error.message });
+      if (error) res.status(401).json({ error: error.message });
 
       let result = await reviewsService.updateReview(getIdFromToken(req), req.params.ReviewId, req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -44,10 +44,10 @@ export class ReviewsController {
 
       let result = await reviewsService.deleteReview(req.params.ReviewId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -57,10 +57,10 @@ export class ReviewsController {
 
       let result = await reviewsService.getAllReviews();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -70,10 +70,10 @@ export class ReviewsController {
 
       let result = await reviewsService.getReviewsByUserId(req.params.UserId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }

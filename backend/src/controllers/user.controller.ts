@@ -11,14 +11,14 @@ export class UserController {
 
       let { error } = RegistrationSchema.validate(req.body);
 
-      if (error) return res.status(401).json({ error: error.message });
+      if (error) res.status(401).json({ error: error.message });
 
       let result = await userService.createUser(req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -28,14 +28,14 @@ export class UserController {
 
       let { error } = RegistrationSchema.validate(req.body);
 
-      if (error) return res.status(401).json({ error: error.message });
+      if (error) res.status(401).json({ error: error.message });
 
       let result = await userService.updateUser(getIdFromToken(req), req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -45,10 +45,10 @@ export class UserController {
 
       let result = await userService.updateUserRole(req.params.UserId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -58,10 +58,10 @@ export class UserController {
 
       let result = await userService.updateBackgroundPhoto(getIdFromToken(req), req.body.BackgroundUrl);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -71,10 +71,10 @@ export class UserController {
       
       let result = await userService.softDeleteSingleUser(req.params.UserId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -84,10 +84,10 @@ export class UserController {
 
       let result = await userService.softDeleteMultipleUsers(req.body.UserIds);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -97,10 +97,10 @@ export class UserController {
 
       let result = await userService.deleteMultipleUsers(req.body.UserIds);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -110,10 +110,10 @@ export class UserController {
 
       let result = await userService.deleteSingleUser(req.params.UserId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -123,10 +123,10 @@ export class UserController {
 
       let result = await userService.restoreSoftDeletedUser(req.params.UserId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -136,10 +136,10 @@ export class UserController {
 
       let result = await userService.restoreMultipleSoftDeletedUser(req.body.UserIds);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -149,10 +149,10 @@ export class UserController {
 
       let result = await userService.getAllSoftDeletedUsers();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -162,10 +162,10 @@ export class UserController {
 
       let result = await userService.getAllUsers();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -175,10 +175,10 @@ export class UserController {
 
       let result = await userService.getSingleUser(getIdFromToken(req));
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }

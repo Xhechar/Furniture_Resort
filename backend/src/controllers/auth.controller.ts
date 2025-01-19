@@ -12,17 +12,17 @@ export class AuthController {
       let { error } = LoginDetailsSchema.validate(req.body);
 
       if (error) {
-        return res.status(401).json({
+        res.status(401).json({
           error: error.message
         });
       }
      
       let result = await authService.loginUser(req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
     
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
    }
@@ -33,17 +33,17 @@ export class AuthController {
       let { error } = RecoveryDetailsSchema.validate(req.body);
 
       if (error) {
-        return res.status(401).json({
+        res.status(401).json({
           error: error.message
         });
       }
 
      let result = await authService.changePassword(req.body);
      
-     return res.status(201).json(result);
+     res.status(201).json(result);
 
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       })
     }
@@ -53,10 +53,10 @@ export class AuthController {
       
       let result = await authService.getAllRecoveries();
       
-      return res.status(201).json(result);
+      res.status(201).json(result);
 
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       })
     }
@@ -66,10 +66,10 @@ export class AuthController {
       
       let result = await authService.verifyMail(req.params.Email);
       
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       })
     }

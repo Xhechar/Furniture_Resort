@@ -10,10 +10,10 @@ export class WishlistController {
 
       let result = await wishlistService.createWishlist(getIdFromToken(req), req.params.ProductId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -23,10 +23,10 @@ export class WishlistController {
 
       let result = await wishlistService.deleteWishlist(getIdFromToken(req), req.params.WishlistId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -36,10 +36,10 @@ export class WishlistController {
 
       let result = await wishlistService.getWishlistByUserId(getIdFromToken(req));
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }

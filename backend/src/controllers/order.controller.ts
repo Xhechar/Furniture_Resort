@@ -10,10 +10,10 @@ export class OrderController {
 
       let result = await orderService.createOrder(getIdFromToken(req), req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -23,10 +23,10 @@ export class OrderController {
 
       let result = await orderService.updateOrderStatus(getIdFromToken(req), req.params.OrderId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -36,10 +36,10 @@ export class OrderController {
 
       let result = await orderService.deleteOrder(getIdFromToken(req), req.params.OrderId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -49,10 +49,10 @@ export class OrderController {
 
       let result = await orderService.getAllOrders();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -62,10 +62,10 @@ export class OrderController {
 
       let result = await orderService.getAllOrdersDelivered();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -75,10 +75,10 @@ export class OrderController {
 
       let result = await orderService.getOrdersByUserId(getIdFromToken(req));
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }

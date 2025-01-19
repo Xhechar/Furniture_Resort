@@ -10,11 +10,11 @@ export class CartController {
 
       let result = await cartService.createCart(getIdFromToken(req), req.params.ProductId, req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
         
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       })
     }
@@ -25,7 +25,7 @@ export class CartController {
       let result = await cartService.updateCart(getIdFromToken(req), req.params.CartId, req.body);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       })
     }
@@ -35,10 +35,10 @@ export class CartController {
 
       let result = await cartService.deleteCart(getIdFromToken(req), req.params.CartId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       })
     }
@@ -47,10 +47,10 @@ export class CartController {
     try {
       let result = await cartService.getCartByUserId(getIdFromToken(req));
       
-      return res.status(200).json(result);
+      res.status(200).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       })
     }

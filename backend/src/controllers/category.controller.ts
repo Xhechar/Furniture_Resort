@@ -9,10 +9,10 @@ export class CategoryController {
 
       let result = await categoryService.createCategory(req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }  
@@ -22,10 +22,10 @@ export class CategoryController {
 
       let result = await categoryService.updateCategory(req.params.CategoryId, req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }  
@@ -35,10 +35,10 @@ export class CategoryController {
 
       let result = await categoryService.deleteCategory(req.params.CategoryId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }  
@@ -48,10 +48,10 @@ export class CategoryController {
 
       let result = await categoryService.getAllCategories();
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }  

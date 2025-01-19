@@ -3,7 +3,7 @@ import { TokenDetails } from "../interfaces/backend.interfaces";
 import jwt from "jsonwebtoken";
 
 export interface ExtendedRequest extends Request {
-  info: TokenDetails
+  info?: TokenDetails
 }
 
 export const verifyToken = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -13,7 +13,7 @@ export const verifyToken = async (req: ExtendedRequest, res: Response, next: Nex
     let authToken: string = req.headers['authorization'] as string;
     
     if (!authToken) {
-      return res.status(401).json({
+      res.status(401).json({
         'error': 'Access denied.'
       });
     }
@@ -22,11 +22,11 @@ export const verifyToken = async (req: ExtendedRequest, res: Response, next: Nex
 
     jwt.verify(token, process.env.SECRET_KEY as string, (error, data) => {
       if (error) {
-        if (error.name === 'JsonWebTokenError') return res.status(401).json({ 'error': 'Invalid authorisation.' });
+        if (error.name === 'JsonWebTokenError') res.status(401).json({ 'error': 'Invalid authorisation.' });
           
-        else if (error.name === 'TokenExpiredError') return res.status(401).json({ 'error': 'Authorisation expired.' });
+        else if (error.name === 'TokenExpiredError') res.status(401).json({ 'error': 'Authorisation expired.' });
         
-        else return res.status(401).json({ 'error': 'You are not authorised.' })
+        else res.status(401).json({ 'error': 'You are not authorised.' })
         
       }
 
@@ -35,7 +35,7 @@ export const verifyToken = async (req: ExtendedRequest, res: Response, next: Nex
     });
       
   } catch (error) {
-    return res.status(501).json({
+    res.status(501).json({
       'error': error
     });
   }
@@ -43,7 +43,7 @@ export const verifyToken = async (req: ExtendedRequest, res: Response, next: Nex
 
 export const getIdFromToken = (req: ExtendedRequest): string => {
   
-  let details: TokenDetails = req.info;
+  let details = req.info as TokenDetails;
 
   if (!details) return '';
 
@@ -56,34 +56,34 @@ export const getIdFromToken = (req: ExtendedRequest): string => {
 
 export const verifyAdmin = (req: ExtendedRequest, res: Response, next: NextFunction) => {
   
-  let details: TokenDetails = req.info;
+  let details = req.info as TokenDetails;
 
-  if (!details) return res.status(401).json({'error': 'Admin access denied'});
+  if (!details) res.status(401).json({'error': 'Admin access denied'});
 
   let Role = details.Role;
 
-  if (Role == '') return res.status(401).json({ 'error': 'Invalid admin identification.' });
+  if (Role == '') res.status(401).json({ 'error': 'Invalid admin identification.' });
   
-  else if (Role == 'user') return res.status(401).json({ 'error': 'User authorised. Admin access only.' });
+  else if (Role == 'user') res.status(401).json({ 'error': 'User authorised. Admin access only.' });
 
   else if (Role === 'admin') next();
 
-  else return res.status(401).json({ 'error': 'Authority denied.' });
+  else res.status(401).json({ 'error': 'Authority denied.' });
 }
 
 export const verifyUser = (req: ExtendedRequest, res: Response, next: NextFunction) => {
   
-  let details: TokenDetails = req.info;
+  let details = req.info as TokenDetails;
 
-  if (!details) return res.status(401).json({'error': 'User access denied'});
+  if (!details) res.status(401).json({'error': 'User access denied'});
 
   let Role = details.Role;
 
-  if (Role == '') return res.status(401).json({ 'error': 'Invalid user identification.' })
+  if (Role == '') res.status(401).json({ 'error': 'Invalid user identification.' })
   
   else if (Role == 'user') next();
 
   else if (Role === 'admin') next();
 
-  else return res.status(401).json({ 'error': 'Authority denied' });
+  else res.status(401).json({ 'error': 'Authority denied' });
 }

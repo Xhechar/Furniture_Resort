@@ -10,10 +10,10 @@ export class MessagesController {
 
       let result = await messageService.sendMessage(getIdFromToken(req), req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -23,10 +23,10 @@ export class MessagesController {
 
       let result = await messageService.updateMessage(getIdFromToken(req), req.params.MessagesId, req.body);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -36,10 +36,10 @@ export class MessagesController {
 
       let result = await messageService.deleteMessage(getIdFromToken(req), req.params.MessagesId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -49,10 +49,10 @@ export class MessagesController {
 
       let result = await messageService.getAllSendersMessages(getIdFromToken(req));
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
@@ -62,10 +62,10 @@ export class MessagesController {
 
       let result = await messageService.getMessageByMessageId(req.params.MessagesId);
 
-      return res.status(201).json(result);
+      res.status(201).json(result);
       
     } catch (error) {
-      return res.status(501).json({
+      res.status(501).json({
         error: error
       });
     }
