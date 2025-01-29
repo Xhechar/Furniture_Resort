@@ -1,4 +1,5 @@
 <app-topbar></app-topbar>
+<app-notifications></app-notifications>
 <div class="body">
   <div class="coloured-body">
     <div class="entire-content">
@@ -19,7 +20,7 @@
                 <label for="email">email</label>
               </div>
               <div class="input-cont">
-                <input type="email" name="email" email #email="ngModel" ngModel required placeholder="johndoe@gmail.com">
+                <input type="email" name="Email" email #email="ngModel" ngModel required placeholder="johndoe@gmail.com">
               </div>
               <div class="err" *ngIf="email.invalid && (email.touched || email.dirty)">
                 <div class="err" *ngIf="email.hasError('required')">
@@ -36,7 +37,7 @@
                 <label for="password">password</label>
               </div>
               <div class="input-cont">
-                <input type="password" name="password" #password="ngModel" ngModel minlength="8" maxlength="30" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,30}$" password required placeholder="abcABC@123">
+                <input type="password" name="Password" #password="ngModel" ngModel minlength="8" maxlength="30" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,30}$" password required placeholder="abcABC@123">
               </div>
               <div class="err" *ngIf="password.invalid && (password.touched || password.dirty)">
                 <div class="err" *ngIf="password.hasError('required')">

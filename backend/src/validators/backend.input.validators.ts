@@ -1,15 +1,15 @@
 import joi from 'joi';
 
 export const LoginDetailsSchema = joi.object({
-  email: joi.string().required().email().messages({
+  Email: joi.string().required().email().messages({
     'string.required': 'Email is required',
     'string.email': 'Please enter a valid email address.'
   }),
-  password: joi.string().min(8).max(30).required().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*?])[a-zA-Z0-9!@#$%^&*?]{8, 30}$')).messages({
-    'string.required': 'Please enter password',
-    'string.min': 'Password should have more than 8 characters',
-    'string.max': 'Password should have less than 30 characters',
-    'string.pattern.base': 'Password should contain minimum 8 characters, maximum 30 and should contain special characters'
+  Password: joi.string().min(8).max(30).pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$')).required().messages({
+    "string.min": "Password must be at least 8 characters long",
+    "string.max": "Password must not exceed 30 characters",
+    "string.pattern.base": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    "string.required": "Password is required"
   })
 });
 

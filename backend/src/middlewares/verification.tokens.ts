@@ -10,7 +10,7 @@ export const verifyToken = async (req: ExtendedRequest, res: Response, next: Nex
   
   try {
       
-    let authToken: string = req.headers['authorization'] as string;
+    let authToken: string = req.cookies.authToken as string;
     
     if (!authToken) {
       res.status(401).json({
@@ -18,7 +18,7 @@ export const verifyToken = async (req: ExtendedRequest, res: Response, next: Nex
       });
     }
 
-    let token = authToken.split(' ')[1];
+    let token = authToken;
 
     jwt.verify(token, process.env.SECRET_KEY as string, (error, data) => {
       if (error) {

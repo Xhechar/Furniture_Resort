@@ -20,7 +20,7 @@ export interface UserInterface {
 
 export interface AuthInterface {
   prisma: PrismaClient;
-  loginUser(Logins: LoginDetails): Promise<{ success: boolean, error?: string, message?: string, role?: string, token?: string }>,
+  loginUser(Logins: LoginDetails): Promise<{ success: boolean, error?: string, user?: User }>,
   changePassword(Details: RecoveryDetails) : Promise<{success: boolean, error?:string, message?: string}>,
   getAllRecoveries() : Promise<{success: boolean, error?:string, message?: string, recoveries?: Recovery[] | unknown[]}>,
   verifyMail(Email: string) : Promise<{success: boolean, error?:string, message?: string}>

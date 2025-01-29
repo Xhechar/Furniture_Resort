@@ -9,7 +9,6 @@
   grid-template-columns: 20% 1fr;
   grid-template-rows: 1fr;
   align-items: center;
-  border-bottom: 2px solid #372f15;
 }
 
 .logo-holder {
@@ -18,7 +17,6 @@
   background-image: url(../../../../public/logo/Kevin_Furnitures-removebg-preview.png);
   background-position: center;
   background-size: cover;
-  /* border-right: 1px solid #544820; */
 }
 
 .right-items {
@@ -59,7 +57,7 @@
 .middle-section p {
   color: #372f15;
   font-weight: 600;
-  font-size: 9.5px;
+  font-size: .9rem;
   letter-spacing: 1px;
   transition: all 0.4s ease-in-out;
 }

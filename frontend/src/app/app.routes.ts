@@ -21,6 +21,10 @@ import { OnOffersComponent } from './components/admin/on-offers/on-offers.compon
 import { UserOrdersComponent } from './components/admin/user-orders/user-orders.component';
 import { UsersComponent } from './components/admin/users/users.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
+import { PageloaderComponent } from './components/pageloader/pageloader.component';
+import { VerifymailComponent } from './components/verifymail/verifymail.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
+import { ChangepasswordComponent } from './components/changepassword/changepassword.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -28,6 +32,10 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'single-product', component: SingleComponent },
+  { path: 'page-loader', component: PageloaderComponent },
+  { path: 'verify-email', component: VerifymailComponent },
+  { path: 'notifications', component: NotificationsComponent },
+  { path: 'auth-change-password', component: ChangepasswordComponent},
   { path: 'new-product', component: NewproductComponent },
   { path: 'user', component: UserComponent },
   { path: 'admin', component: AdminComponent },

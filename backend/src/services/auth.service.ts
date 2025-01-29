@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { LoginDetails, TokenDetails, RecoveryDetails, Recovery, MessageOptions } from "../interfaces/backend.interfaces";
+import { LoginDetails, TokenDetails, RecoveryDetails, Recovery, MessageOptions, User } from "../interfaces/backend.interfaces";
 import { AuthInterface } from "../interfaces/services.coupling.interfaces";
 import bcryptjs from 'bcryptjs';
 import jwt  from "jsonwebtoken";
@@ -14,7 +14,7 @@ export class AuthService implements AuthInterface{
   prisma = new PrismaClient({
     log: ["error"]
   });
-  public async loginUser(Logins: LoginDetails): Promise<{ success: boolean; error?: string; message?: string; role?: string; token?: string; }> {
+  public async loginUser(Logins: LoginDetails): Promise<{ success: boolean; error?: string; user?: User }> {
 
     let userExists = await this.prisma.user.findUnique({
       where: {
@@ -45,17 +45,9 @@ export class AuthService implements AuthInterface{
       }
     }
 
-    let { Password, Mobile, IdentificationNumber, IsDeleted, Selected, Fullname, Email, Country, City, HasOrder, HasWishList, ProfileImage, BackgroundWallpaper, IsWelcomed, ...rest } = userExists;
-
-    let token: string = jwt.sign(rest, process.env.SECRET_KEY as string, {
-      expiresIn: '15m'
-    });
-
     return {
       'success': true,
-      'message': 'Welcome back. Login Successfull.',
-      'role': userExists.Role,
-      'token': token
+      'user': userExists
     }
 
   }

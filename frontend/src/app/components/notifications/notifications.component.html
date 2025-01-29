@@ -1,0 +1,13 @@
+<div class="notfication-container" [style]="message ? {'display': 'grid'} : {'display': 'none'}">
+  <div class="header-part-success" *ngIf="type">
+    <i class='bx bx-check-circle bx-tada' ></i>
+    <h3>Success</h3>
+  </div>
+  <div class="header-part-error" *ngIf="type != null">
+    <i class='bx bx-calendar-exclamation bx-flashing' ></i>
+    <h3>Error</h3>
+  </div>
+  <div class="message-holder">
+    <p>{{ message }}</p>
+  </div>
+</div>
