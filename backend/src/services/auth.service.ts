@@ -47,7 +47,7 @@ export class AuthService implements AuthInterface{
 
     return {
       'success': true,
-      'user': userExists
+      'user': userExists as User
     }
 
   }

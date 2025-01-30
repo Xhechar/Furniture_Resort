@@ -25,6 +25,7 @@ export class PQTSerice implements PtQTInteface {
       data: {
         ProductQuantityTimeId: v4(),
         ProductId,
+        Price: pqt.Price,
         Quantity: pqt.Quantity,
         Period: pqt.Period
       }

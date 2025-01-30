@@ -39,7 +39,7 @@ app.use('/wishlist', wishlistRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(501).json({
-    err: err.message
+    error: err.message
   })
 });
 

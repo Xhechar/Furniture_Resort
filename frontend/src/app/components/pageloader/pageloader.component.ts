@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './pageloader.component.css'
 })
 export class PageloaderComponent {
-
+  
 }

@@ -8,12 +8,12 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-  API_URL: string = 'http://localhost:3000/'
+  API_URL: string = 'http://localhost:3000/auth/'
 
   constructor(private http: HttpClient) { }
 
   loginUser(loginDetails: LoginDetails): Observable<{ success: boolean, error?: string, message?: string, Role?: string }> {
-    return this.http.post<{ success: boolean, error?: string, message?: string, Role?: string }>(`${this.API_URL}auth/login`, loginDetails);
+    return this.http.post<{ success: boolean, error?: string, message?: string, Role?: string }>(`${this.API_URL}login`, loginDetails);
   };
 
   changePassword(recoveryDetails: RecoveryDetails): Observable<{ success: boolean, error?: string, message?: string }> {

@@ -23,7 +23,7 @@ model User {
   Gender             String
   IdentificationNumber Int    @unique
   ProfileImage       String
-  BackgroundWallpaper String
+  BackgroundWallpaper String?
   Password           String
   IsWelcomed         Boolean  @default(false)
   IsDeleted          Boolean  @default(false)
@@ -76,6 +76,7 @@ model ProductQuantityTime {
   ProductId            String
   Quantity             Int
   Period               Int
+  Price                Int
   Product              Product  @relation(fields: [ProductId], references: [ProductId])
 }
 

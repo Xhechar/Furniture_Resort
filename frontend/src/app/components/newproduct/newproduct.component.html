@@ -1,3 +1,4 @@
+<app-notifications></app-notifications>
 <body>
     <div class="container">
         <h1>Create <span class="highlight">New</span> Furniture</h1>
@@ -26,18 +27,27 @@
                 </div>
 
                 <div class="pricing-section">
-                    <h3>Pricing</h3>
+                    <h3>Furniture Stock</h3>
                     <div class="input-box">
-                        <label for="price">Price (Ksh)</label>
-                        <input type="number" id="price" required formControlName="price" placeholder="0.00 Ksh">
+                        <label for="stock_quantity">Stock Quantity</label>
+                        <input type="number" id="stock_quantity" required formControlName="StockQuantity" placeholder="0">
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('StockQuantity')?.invalid && (newProductForm.get('StockQuantity')?.touched || newProductForm.get('StockQuantity')?.dirty)">
+                        <div *ngIf="newProductForm.get('StockQuantity')?.errors?.['required']">furniture stock quantity is required.</div>
                     </div>
                     <div class="input-box">
-                        <label for="color">Color</label>
-                        <input type="text" id="color" required formControlName="color" placeholder="enter color">
+                        <label for="stock_limit">Stock Limit</label>
+                        <input type="number" id="stock_limit" required formControlName="StockLimit" placeholder="0">
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('StockLimit')?.invalid && (newProductForm.get('StockLimit')?.touched || newProductForm.get('StockLimit')?.dirty)">
+                        <div *ngIf="newProductForm.get('StockLimit')?.errors?.['required']">furniture stock limit is required.</div>
                     </div>
                     <div class="input-box">
-                        <label for="size">Size (6x6)</label>
-                        <input type="text" id="size" required formControlName="size" placeholder="enter product sizes">
+                        <label for="make_periods">Make Periods</label>
+                        <input type="number" id="make_periods" required formControlName="MakePeriods" placeholder="example 2, for making (1 item for 2days, 2 items for 4days)">
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('MakePeriods')?.invalid && (newProductForm.get('MakePeriods')?.touched || newProductForm.get('MakePeriods')?.dirty)">
+                        <div *ngIf="newProductForm.get('MakePeriods')?.errors?.['required']">make periods are required.</div>
                     </div>
                 </div>
 
@@ -45,19 +55,73 @@
                     <h3>Identity</h3>
                     <div class="input-box">
                         <label for="product-name">Product Name</label>
-                        <input type="text" id="furniture_name" required formControlName="furniture_name" placeholder="enter name here">
-                        <div class="err" *ngIf="newProductForm.get('furniture_name')?.invalid && (newProductForm.get('furniture_name')?.touched || newProductForm.get('furniture_name')?.dirty)">
-                            <div *ngIf="newProductForm.get('furniture_name')?.errors?.['required']">furniture name is required.</div>
-                            <div *ngIf="newProductForm.get('furniture_name')?.errors?.['invalidStringLength']">furniture name must be more than 2 characters.</div>
-                            <div *ngIf="newProductForm.get('furniture_name')?.errors?.['invalidString']">furniture name can only contain alphanumeric characters and spaces.</div>
+                        <input type="text" id="ProductName" required formControlName="ProductName" placeholder="enter name here">
+                        <div class="err" *ngIf="newProductForm.get('ProductName')?.invalid && (newProductForm.get('ProductName')?.touched || newProductForm.get('ProductName')?.dirty)">
+                            <div *ngIf="newProductForm.get('ProductName')?.errors?.['required']">furniture name is required.</div>
+                            <div *ngIf="newProductForm.get('ProductName')?.errors?.['invalidStringLength']">furniture name must be more than 2 characters.</div>
+                            <div *ngIf="newProductForm.get('ProductName')?.errors?.['invalidString']">furniture name can only contain alphanumeric characters and spaces.</div>
                         </div>
                     </div>
                     <div class="input-box">
                         <label for="category">Category</label>
-                        <select formControlName="category" id="category">
-                            <option value="required">*Reqired</option>
-                            <option *ngFor="let option of category_options; let i = index" >{{category_options[i]}}</option>
+                        <select formControlName="Category" id="category">
+                            <option value="" selected disabled>Select Category</option>
+                            <option *ngFor="let option of category_options; let i = index" [value]="option">{{category_options[i]}}</option>
                         </select>
+                        <div class="err" *ngIf="newProductForm.get('Category')?.invalid && (newProductForm.get('Category')?.touched || newProductForm.get('Category')?.dirty)">
+                            <div *ngIf="newProductForm.get('Category')?.errors?.['required']">category is required.</div>
+                            <div *ngIf="newProductForm.get('Category')?.errors?.['invalidStringLength']">category must be more than 2 characters.</div>
+                            <div *ngIf="newProductForm.get('Category')?.errors?.['invalidString']">category can only contain alphanumeric characters and spaces.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-details-section">
+                    <h3>Furnitures Requirements</h3>
+                    <div class="input-box">
+                        <label for="sizes">Sizes</label>
+                        <input type="text" id="sizes" required formControlName="Sizes" placeholder="add known furniture size, e.g (4 X 4)">
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('Sizes')?.invalid && (newProductForm.get('Sizes')?.touched || newProductForm.get('Sizes')?.dirty)">
+                        <div *ngIf="newProductForm.get('Sizes')?.errors?.['required']">Sizes is required.</div>
+                        <div *ngIf="newProductForm.get('Sizes')?.errors?.['invalidStringLength']">Sizes must be more than 2 characters.</div>
+                        <div *ngIf="newProductForm.get('Sizes')?.errors?.['invalidString']">Sizes can only contain alphanumeric characters and spaces.</div>
+                    </div>
+                    <div class="input-box">
+                        <label for="sizes">Colour</label>
+                        <input class="color-picker" type="color" [style]="_color" id="color" required (change)="setColorBg($event)">
+                    </div>
+                </div>
+
+                <div class="pricing-section">
+                    <h3>Pricing</h3>
+                    <div class="input-box">
+                        <label for="price">Price (Ksh)</label>
+                        <input type="number" id="price" required formControlName="Prize" placeholder="0.00 Ksh">
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('Prize')?.invalid && (newProductForm.get('Prize')?.touched || newProductForm.get('Prize')?.dirty)">
+                        <div *ngIf="newProductForm.get('Prize')?.errors?.['required']">Product price is required.</div>
+                    </div>
+                    <div class="input-box">
+                        <label for="color">Discount (Ksh)</label>
+                        <input type="number" id="discount" required formControlName="Discount" placeholder="0.00 Ksh">
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('Discount')?.invalid && (newProductForm.get('Discount')?.touched || newProductForm.get('Discount')?.dirty)">
+                        <div *ngIf="newProductForm.get('Discount')?.errors?.['required']">Product discount is required.</div>
+                    </div>
+                    <div class="input-box">
+                        <label for="size">Deposit (Ksh)</label>
+                        <input type="number" id="deposit" required formControlName="Deposit" placeholder="add deposit for custom made items">
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('Deposit')?.invalid && (newProductForm.get('Deposit')?.touched || newProductForm.get('Deposit')?.dirty)">
+                        <div *ngIf="newProductForm.get('Deposit')?.errors?.['required']">Product deposit is required.</div>
+                    </div>
+                    <div class="input-box">
+                        <label for="price">Custom Price (Ksh)</label>
+                        <input type="number" id="price" required formControlName="CustomPrize" placeholder="add custom prize for items custom made">
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('CustomPrize')?.invalid && (newProductForm.get('CustomPrize')?.touched || newProductForm.get('CustomPrize')?.dirty)">
+                        <div *ngIf="newProductForm.get('CustomPrize')?.errors?.['required']">Product custom price is required.</div>
                     </div>
                 </div>
 
@@ -65,11 +129,21 @@
                     <h3>Product Details</h3>
                     <div class="input-box">
                         <label for="short-description">Short Description</label>
-                        <textarea id="short-description" rows="2" required formControlName="short_description" placeholder="enter short description here"></textarea>
+                        <textarea id="short-description" rows="2" required formControlName="ShortDesc" placeholder="enter short description here"></textarea>
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('ShortDesc')?.invalid && (newProductForm.get('ShortDesc')?.touched || newProductForm.get('ShortDesc')?.dirty)">
+                        <div *ngIf="newProductForm.get('ShortDesc')?.errors?.['required']">Short description is required.</div>
+                        <div *ngIf="newProductForm.get('ShortDesc')?.errors?.['invalidStringLength']">Short description must be more than 2 characters.</div>
+                        <div *ngIf="newProductForm.get('ShortDesc')?.errors?.['invalidString']">Short description can only contain alphanumeric characters and spaces.</div>
                     </div>
                     <div class="input-box">
                         <label for="long-description">Long Description</label>
-                        <textarea id="long-description" rows="4" required formControlName="long_description" placeholder="enter long description here, explain product details"></textarea>
+                        <textarea id="long-description" rows="4" required formControlName="LongDesc" placeholder="enter long description here, explain product details"></textarea>
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('LongDesc')?.invalid && (newProductForm.get('LongDesc')?.touched || newProductForm.get('LongDesc')?.dirty)">
+                        <div *ngIf="newProductForm.get('LongDesc')?.errors?.['required']">Long description is required.</div>
+                        <div *ngIf="newProductForm.get('LongDesc')?.errors?.['invalidStringLength']">Long description must be more than 2 characters.</div>
+                        <div *ngIf="newProductForm.get('LongDesc')?.errors?.['invalidString']">Long description can only contain alphanumeric characters and spaces.</div>
                     </div>
                 </div>
             </div>

@@ -11,7 +11,7 @@ export class UserController {
 
       let { error } = RegistrationSchema.validate(req.body);
 
-      if (error) res.status(401).json({ error: error.message });
+      if (error) res.status(401).json({ 'error': error.message });
 
       let result = await userService.createUser(req.body);
 

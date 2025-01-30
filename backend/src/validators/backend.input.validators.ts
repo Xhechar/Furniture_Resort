@@ -38,10 +38,11 @@ export const RegistrationSchema = joi.object({
     'string.required': 'Email is required.',
     'string.email': 'Please enter a valid email address.'
   }),
-  Mobile: joi.string().min(10).max(10).required().messages({
+  Mobile: joi.string().min(10).max(10).pattern(new RegExp('^[0-9]{10}$')).required().messages({
     'string.required': 'Mobile number is required',
     'string.min': 'Mobile number should be strictly 10 characters',
-    'string.max': 'Mobile number should be strictly 10 characters'
+    'string.max': 'Mobile number should be strictly 10 characters',
+    'string.pattern.base': 'Mobile number should only contain numbers'
   }),
   Country: joi.string().min(3).max(30).required().messages({
     'string.required': 'Country Field cannot be empty',
@@ -58,20 +59,18 @@ export const RegistrationSchema = joi.object({
     'string.min': 'Gender should have at least 3 characters or more',
     'string.max': 'Gender should have less than 39 characters'
   }),
-  IdentificationNumber: joi.number().min(6).max(10).required().messages({
-    'string.required': 'Identification number is required',
-    'string.min': 'Identification number should have at least 6 characters or more',
-    'string.max': 'Identification number should have less than 10 characters'
+  IdentificationNumber: joi.number().min(6).required().messages({
+    'number.required': 'Identification number is required',
+    'number.min': 'Identification number should have at least 6 characters or more'
   }),
   ProfileImage: joi.string().required().messages({
     'string.required': 'Profile image is required',
   }),
-  BackgroundWallpaper: joi.string(),
-  Password: joi.string().required().min(8).max(30).pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*?])[a-zA-Z0-9!@#$%^&*?]{8, 30}$')).messages({
-    'string.required': 'Please enter password',
-    'string.min': 'Password should have more than 8 characters',
-    'string.max': 'Password should have less than 30 characters',
-    'string.pattern.base': 'Password should contain minimum 8 characters, maximum 30 and should contain special characters'
+  Password: joi.string().min(8).max(30).pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$')).required().messages({
+    "string.min": "Password must be at least 8 characters long",
+    "string.max": "Password must not exceed 30 characters",
+    "string.pattern.base": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    "string.required": "Password is required"
   })
 });
 
@@ -109,34 +108,37 @@ export const ProductSchema = joi.object({
     'string.max': 'Colour should have 30 characters or less'
   }),
   Prize: joi.number().required().messages({
-    'string.required': 'Prize value is required'
+    'number.required': 'Prize value is required'
   }),
   StockQuantity: joi.number().required().messages({
-    'string.required': 'Stock Quantity value is required'
+    'number.required': 'Stock Quantity value is required'
   }),
   StockLimit: joi.number().required().messages({
-    'string.required': 'Stock Limit value is required'
+    'number.required': 'Stock Limit value is required'
   }),
   CustomPrize: joi.number().required().messages({
-    'string.required': 'Custom prize value is required'
+    'number.required': 'Custom prize value is required'
   }),
   Discount: joi.number().required().messages({
-    'string.required': 'Discount value is required'
+    'number.required': 'Discount value is required'
   }),
   MakePeriods: joi.number().required().messages({
-    'string.required': 'Make periods value is required'
+    'number.required': 'Make periods value is required'
   }),
   Deposit: joi.number().required().messages({
-    'string.required': 'Deposit value is required'
+    'number.required': 'Deposit value is required'
   })
 });
 
 export const ProductQuantityTimeSchema = joi.object({
   Quantity: joi.number().required().messages({
-    'string.required': 'Quantity value is required'
+    'number.required': 'Quantity value is required'
   }),
   Period: joi.number().required().messages({
     'string.required': 'Period value is required'
+  }),
+  Prize: joi.number().required().messages({
+    'number.required': 'Prize value is required'
   })
 });
 

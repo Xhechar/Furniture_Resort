@@ -1,42 +1,56 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { NotificationsComponent } from '../notifications/notifications.component';
+import { ProductsService } from '../../services/products.service';
+import { NotificationsService } from '../../services/notifications.service';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-newproduct',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NotificationsComponent],
   templateUrl: './newproduct.component.html',
   styleUrl: './newproduct.component.css'
 })
 export class NewproductComponent {
+  _color = {
+    'background-color': '#fff'
+  }
   furniture_images: string[] = [];
   set_loader: number = 0;
   category_options: string[] = ['Dining', 'Bed', 'Chair', 'Table']
 
   newProductForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private ps: ProductsService, private ns: NotificationsService) {
     this.newProductForm = fb.group({
-      images: ['', [Validators.required]],
-      price: ['', [Validators.required, this.validateSring()]],
-      color: ['', [Validators.required, this.validateSring()]],
-      size: ['', [Validators.required, this.validateSring()]],
-      furniture_name: ['', [Validators.required, this.validateSring()]],
-      category: ['', [Validators.required]],
-      short_description: ['', [Validators.required]],
-      long_description: ['', [Validators.required]]
+      ProductImages: ['', [Validators.required]],
+      Prize: ['', [Validators.required, this.validateSring()]],
+      Discount: ['', [Validators.required, this.validateSring()]],
+      Deposit: ['', [Validators.required, this.validateSring()]],
+      CustomPrize: ['', [Validators.required, this.validateSring()]],
+      Colour: ['', [Validators.required, this.validateSring()]],
+      Sizes: ['', [Validators.required, this.validateSring()]],
+      ProductName: ['', [Validators.required, this.validateSring()]],
+      Category: ['', [Validators.required], this.validateSring()],
+      StockQuantity: ['', [Validators.required]],
+      StockLimit: ['', [Validators.required]],
+      MakePeriods: ['', [Validators.required]],
+      ShortDesc: ['', [Validators.required, this.validateShortDesc()]],
+      LongDesc: ['', [Validators.required, this.validateLongDesc()]]
     });
   }
 
   createNewProduct() {
-    this.newProductForm.setValue({images: this.furniture_images})
-    if (this.newProductForm.valid) {
+    this.newProductForm.patchValue({ ProductImages: this.furniture_images });
+    this.newProductForm.patchValue({ Colour: this._color['background-color'] });
+    // if (this.newProductForm.valid) {
       console.log(this.newProductForm.value);
       this.clearImages(this.furniture_images);
-    } else {
-      console.error('Form is invalid');
-    }
+    // } else {
+    //   this.ns.showMessage('Form is invalid', false);
+    // }
   }
 
   removeImage(index: number): void {
@@ -48,6 +62,12 @@ export class NewproductComponent {
     for (let image of images) {
       URL.revokeObjectURL(image);
     }
+  }
+
+  setColorBg(event: any) {
+    this._color['background-color'] = event.target.value;
+    console.log(this._color['background-color']);
+    
   }
 
   setFurnitureImages(event: any) {
@@ -74,24 +94,57 @@ export class NewproductComponent {
   }
 
   validateSring(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
       let value: string = control.value;
 
       if (!value) {
-        return null
+        return of({required: true})
       } else {
         if (value.length <= 2) {
-          return { 'invalidStringLength': true };
+          return of({ 'invalidStringLength': true });
         } else {
           let pattern = /^[a-zA-Z0-9 ]*$/;
           if (!pattern.test(value)) {
-            return { 'invalidString': true }
+            return of({ 'invalidString': true })
           } else {
-            return null
+            return of(null)
           }
         }
       }
     }
   }
+
+  validateShortDesc(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      let value: string = control.value;
+      
+      if (!value) {
+        return {required: true}
+      } else {
+        if (value.length <= 20) {
+          return null;
+        } else {
+          return { 'invalidShortDescLength': true };
+        }
+      }
+    }
+  }
+
+  validateLongDesc(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      let value: string = control.value;
+      
+      if (!value) {
+        return {required: true}
+      } else {
+        if (value.length <= 200) {
+          return null;
+        } else {
+          return { 'invalidLongDescLength': true };
+        }
+      }
+    }
+  }
+
 
 }
