@@ -17,56 +17,17 @@ export class AuthController {
           'error': error.message
         });
       } else {
-     
+
         let result = await authService.loginUser(req.body);
   
-        if (result.success) {
-  
-          let {
-            IdentificationNumber,
-            IsDeleted,
-            Selected,
-            Fullname,
-            Email,
-            Country,
-            City,
-            HasOrder,
-            HasWishList,
-            ProfileImage,
-            BackgroundWallpaper,
-            IsWelcomed,
-            Password,
-            DateCreated,
-            Role,
-            ...rest
-          } = result.user as User;
-      
-          let token: string = jwt.sign(rest, process.env.SECRET_KEY as string, {
-            expiresIn: '15m'
-          });
-  
-          res.cookie("authToken", token, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "strict",
-            maxAge: 15 * 60 * 1000
-          });
-  
-          res.status(201).json({
-            'success': result.success,
-            'message': 'Welcome back. Login Successfull.',
-            'Role': Role
-          });
-        } else {
-          res.status(201).json(result);
-        }
+        res.status(201).json(result);
       }
-    
+      
     } catch (error) {
       res.status(501).json({
-        'error': error
+        error: error
       });
-   }
+    }
   }
   async changePassword(req: Request, res: Response) {
     try {

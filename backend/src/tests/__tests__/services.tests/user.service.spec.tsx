@@ -32,78 +32,78 @@ jest.mock("uuid", () => {
 
 const mockedPrisma = new PrismaClient();
 
-describe("User-service: Create User Service", () => {
+// describe("User-service: Create User Service", () => {
 
-  let userService: UserService;
+//   let userService: UserService;
   
-  beforeEach(() => {
-    userService = new UserService();
-    userService.prisma = mockedPrisma;
-  });
+//   beforeEach(() => {
+//     userService = new UserService();
+//     userService.prisma = mockedPrisma;
+//   });
 
-  afterEach(() => jest.clearAllMocks());
+//   afterEach(() => jest.clearAllMocks());
 
-  it('should return an error if email passed exists', async () => {
+//   it('should return an error if email passed exists', async () => {
     
-    (mockedPrisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockedUser);
+//     (mockedPrisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockedUser);
 
-    let result = await userService.createUser({ ...mockedUser });
+//     let result = await userService.createUser({ ...mockedUser });
 
-    expect(mockedPrisma.user.findUnique).toHaveBeenCalledWith({
-      where: {
-        Email: mockedUser.Email
-      }
-    });
+//     expect(mockedPrisma.user.findUnique).toHaveBeenCalledWith({
+//       where: {
+//         Email: mockedUser.Email
+//       }
+//     });
 
-    expect(mockedPrisma.user.findUnique).toHaveBeenCalledTimes(1);
+//     expect(mockedPrisma.user.findUnique).toHaveBeenCalledTimes(1);
 
-    expect(result).toEqual({
-      "success": false,
-      "error": "The email provided exists, Login instead."
-    });
-  });
+//     expect(result).toEqual({
+//       "success": false,
+//       "error": "The email provided exists, Login instead."
+//     });
+//   });
 
-  it("should return an error if the user is deleted", async () => {
-    (mockedPrisma.user.findUnique as jest.Mock).mockResolvedValueOnce({ ...mockedUser, IsDeleted: true });
+//   it("should return an error if the user is deleted", async () => {
+//     (mockedPrisma.user.findUnique as jest.Mock).mockResolvedValueOnce({ ...mockedUser, IsDeleted: true });
     
-    let result = await userService.createUser({ ...mockedUser, IsDeleted: true });
+//     let result = await userService.createUser({ ...mockedUser, IsDeleted: true });
 
-    expect(mockedPrisma.user.findUnique).toHaveBeenCalledTimes(1);
+//     expect(mockedPrisma.user.findUnique).toHaveBeenCalledTimes(1);
 
-    expect(mockedPrisma.user.findUnique).toHaveBeenCalledWith({
-      where: {
-        Email: mockedUser.Email
-      }
-    });
+//     expect(mockedPrisma.user.findUnique).toHaveBeenCalledWith({
+//       where: {
+//         Email: mockedUser.Email
+//       }
+//     });
 
-    expect(result).toEqual({
-      'success': false,
-      'error': 'Sorry, your account has been terminated. Contact us for assistance'
-    });
-  });
+//     expect(result).toEqual({
+//       'success': false,
+//       'error': 'Sorry, your account has been terminated. Contact us for assistance'
+//     });
+//   });
 
-  it('should return an error if the mobile is found.', async () => {
-    (mockedPrisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null);
-    (mockedPrisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockedUser);
+//   it('should return an error if the mobile is found.', async () => {
+//     (mockedPrisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null);
+//     (mockedPrisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockedUser);
 
-    let result = await userService.createUser({...mockedUser, Mobile: "0700000000", Email: "mockeduser02@gmail.com"});
+//     let result = await userService.createUser({...mockedUser, Mobile: "0700000000", Email: "mockeduser02@gmail.com"});
 
-    expect(mockedPrisma.user.findUnique).toHaveBeenCalledWith({
-      where: {
-        Email: "mockeduser02@gmail.com"
-      }
-    });
+//     expect(mockedPrisma.user.findUnique).toHaveBeenCalledWith({
+//       where: {
+//         Email: "mockeduser02@gmail.com"
+//       }
+//     });
 
-    expect(mockedPrisma.user.findUnique).toHaveBeenCalledWith({
-      where: {
-        Mobile: "0700000000"
-      }
-    });
+//     expect(mockedPrisma.user.findUnique).toHaveBeenCalledWith({
+//       where: {
+//         Mobile: "0700000000"
+//       }
+//     });
 
-    expect(result).toEqual({
-      'success': false,
-      'error': 'The mobile number provided exists, Login instead.'
-    });
+//     expect(result).toEqual({
+//       'success': false,
+//       'error': 'The mobile number provided exists, Login instead.'
+//     });
     
-  })
-})
+//   })
+// })

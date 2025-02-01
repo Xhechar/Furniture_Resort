@@ -20,7 +20,6 @@ import { wishlistRouter } from './routers/wishlist.routes';
 
 const app = express();
 
-app.use(cookieParser());
 app.use(json());
 app.use(cors());
 

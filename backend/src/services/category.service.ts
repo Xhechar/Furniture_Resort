@@ -85,7 +85,7 @@ export class CategoryService implements CategoryInterface {
   public async getAllCategories(): Promise<{ success: boolean; error?: string; message?: string; categories?: Category[] | unknown[]; }> {
     let categoriesExist = await this.prisma.category.findMany();
 
-    if (categoriesExist.length == 0) {
+    if (categoriesExist.length == 0 || null ) {
       return {
         'success': false,
         'error': 'There are no categories at the moment'

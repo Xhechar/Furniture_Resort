@@ -5,6 +5,7 @@ import { NotificationsComponent } from '../notifications/notifications.component
 import { ProductsService } from '../../services/products.service';
 import { NotificationsService } from '../../services/notifications.service';
 import { Observable, of } from 'rxjs';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-newproduct',
@@ -14,8 +15,9 @@ import { Observable, of } from 'rxjs';
   styleUrl: './newproduct.component.css'
 })
 export class NewproductComponent {
+  picked_color = '';
   _color = {
-    'background-color': '#fff'
+    'background': '#fff'
   }
   furniture_images: string[] = [];
   set_loader: number = 0;
@@ -23,7 +25,7 @@ export class NewproductComponent {
 
   newProductForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private ps: ProductsService, private ns: NotificationsService) {
+  constructor(private fb: FormBuilder, private ps: ProductsService, private ns: NotificationsService, private cs: CategoryService) {
     this.newProductForm = fb.group({
       ProductImages: ['', [Validators.required]],
       Prize: ['', [Validators.required, this.validateSring()]],
@@ -40,17 +42,47 @@ export class NewproductComponent {
       ShortDesc: ['', [Validators.required, this.validateShortDesc()]],
       LongDesc: ['', [Validators.required, this.validateLongDesc()]]
     });
+
+    this.cs.getAllCategories().subscribe({
+      next: (res) => {
+        if (res.success) {
+          console.log(res.categories);
+        } else {
+          this.ns.showMessage(res.error as string, false);
+        }
+      },
+      error: (err) => {
+        this.ns.showMessage(err.error.error as string, false);
+      }
+    });
   }
 
   createNewProduct() {
-    this.newProductForm.patchValue({ ProductImages: this.furniture_images });
-    this.newProductForm.patchValue({ Colour: this._color['background-color'] });
-    // if (this.newProductForm.valid) {
-      console.log(this.newProductForm.value);
-      this.clearImages(this.furniture_images);
-    // } else {
-    //   this.ns.showMessage('Form is invalid', false);
-    // }
+    this.newProductForm.patchValue({ ProductImages: this.returnString(this.furniture_images) });
+    this.newProductForm.patchValue({ Colour: this.picked_color});
+    
+    this.ps.createProduct(this.newProductForm.value).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.ns.showMessage('Product created successfully', true);
+          this.clearImages(this.furniture_images);
+        } else {
+          this.ns.showMessage(res.error as string, false);
+        }
+      },
+      error: (err) => {
+        this.ns.showMessage(err.error.error as string, false);
+      }
+    });
+    this.newProductForm.reset();
+  }
+
+  returnString(names: string[]): string {
+    let urls: string = '';
+    names.forEach(name => {
+      urls += name + ', ';
+    });
+    return urls.slice(0, -2);
   }
 
   removeImage(index: number): void {
@@ -65,9 +97,14 @@ export class NewproductComponent {
   }
 
   setColorBg(event: any) {
-    this._color['background-color'] = event.target.value;
-    console.log(this._color['background-color']);
-    
+    this.picked_color = '';
+    this._color['background'] = '#fff';
+    let color = event.target.value;
+
+    fetch(`https://www.thecolorapi.com/id?hex=${color.replace("#", "")}`).then(res => res.json()).then((res) => {
+      this.picked_color = res.name.value;
+      this._color['background'] = color as string;
+    });
   }
 
   setFurnitureImages(event: any) {

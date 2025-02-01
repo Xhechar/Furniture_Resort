@@ -87,9 +87,10 @@
                         <div *ngIf="newProductForm.get('Sizes')?.errors?.['invalidStringLength']">Sizes must be more than 2 characters.</div>
                         <div *ngIf="newProductForm.get('Sizes')?.errors?.['invalidString']">Sizes can only contain alphanumeric characters and spaces.</div>
                     </div>
-                    <div class="input-box">
+                    <div class="input-box1">
                         <label for="sizes">Colour</label>
-                        <input class="color-picker" type="color" [style]="_color" id="color" required (change)="setColorBg($event)">
+                        <input class="color-picker" type="color" id="color" required (change)="setColorBg($event)">
+                        <div class="color-area" *ngIf="picked_color" [style]="_color"><p>{{picked_color}}</p></div>
                     </div>
                 </div>
 

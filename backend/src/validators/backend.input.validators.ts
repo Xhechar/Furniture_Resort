@@ -83,15 +83,14 @@ export const ProductSchema = joi.object({
   ProductImages: joi.string().required().messages({
     'string.required': 'Pruduct images are required.'
   }),
-  ShortDesc: joi.string().min(3).max(40).required().messages({
+  ShortDesc: joi.string().min(3).max(80).required().messages({
     'string.required': 'Please enter Short Description.',
     'string.min': 'Short Description should have 3 or more characters',
-    'string.max': 'Short Description should have 40 characters or less'
+    'string.max': 'Short Description should have 80 characters or less'
   }),
-  LongDesc: joi.string().min(3).max(240).required().messages({
+  LongDesc: joi.string().min(3).required().messages({
     'string.required': 'Please enter Long Description.',
-    'string.min': 'Long Description should have 3 or more characters',
-    'string.max': 'Long Description should have 240 characters or less'
+    'string.min': 'Long Description should have 3 or more characters'
   }),
   Sizes: joi.string().min(3).required().messages({
     'string.required': 'Please enter value.',

@@ -14,7 +14,7 @@ export class AuthService implements AuthInterface{
   prisma = new PrismaClient({
     log: ["error"]
   });
-  public async loginUser(Logins: LoginDetails): Promise<{ success: boolean; error?: string; user?: User }> {
+  public async loginUser(Logins: LoginDetails): Promise<{ success: boolean, error?: string, message?: string, Role?: string, token?: string }> {
 
     let userExists = await this.prisma.user.findUnique({
       where: {
@@ -43,11 +43,36 @@ export class AuthService implements AuthInterface{
         'success': false,
         'error': 'Incorrect Password.'
       }
-    }
+    } else {
 
-    return {
-      'success': true,
-      'user': userExists as User
+      let {
+        IdentificationNumber,
+        IsDeleted,
+        Selected,
+        Fullname,
+        Email,
+        Country,
+        City,
+        HasOrder,
+        HasWishList,
+        ProfileImage,
+        BackgroundWallpaper,
+        IsWelcomed,
+        Password,
+        DateCreated,
+        ...rest
+      } = userExists;
+  
+      let token: string = jwt.sign(rest, process.env.SECRET_KEY as string, {
+        expiresIn: '15m'
+      });
+
+      return {
+        'success': true,
+        'message': 'Welcome back. Login Successfull.',
+        'Role': userExists.Role,
+        'token': token
+      }
     }
 
   }

@@ -25,6 +25,7 @@ export class LoginComponent {
     this._as.loginUser(logins).subscribe({
       next: (response) => {
         if (response.success) {
+          localStorage.setItem('authToken', response.token as string);
           this._ns.showMessage(response.message as string, response.success);
           
           if (response.Role == 'user') {

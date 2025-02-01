@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -25,4 +26,12 @@ export class NotificationsService {
     this.messageSubject.next(null);
     this.typeSubject.next(null);
   }
+}
+
+export const getAuthHeaders = (): HttpHeaders => {
+  let token = localStorage.getItem('authToken') as string;
+  return new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  });
 }

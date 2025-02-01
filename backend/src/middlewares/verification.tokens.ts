@@ -7,36 +7,44 @@ export interface ExtendedRequest extends Request {
 }
 
 export const verifyToken = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
-  
-  try {
-      
-    let authToken: string = req.cookies.authToken as string;
+
+  try {  
+    const authHeader = req.headers['authorization'] as string;
     
-    if (!authToken) {
+  
+    if (!authHeader) {
       res.status(401).json({
-        'error': 'Access denied.'
+        'success': false,
+        'error': 'You are not allowed to access this service. Login.'
       });
     }
+  
+    let token = authHeader.split(" ")[1];
+  
 
-    let token = authToken;
-
-    jwt.verify(token, process.env.SECRET_KEY as string, (error, data) => {
-      if (error) {
-        if (error.name === 'JsonWebTokenError') res.status(401).json({ 'error': 'Invalid authorisation.' });
-          
-        else if (error.name === 'TokenExpiredError') res.status(401).json({ 'error': 'Authorisation expired.' });
-        
-        else res.status(401).json({ 'error': 'You are not authorised.' })
-        
+    jwt.verify(token, process.env.SECRET_KEY as string, (err, data) => {
+      if (err) {
+        if (err.name === "TokenExpiredError") {
+          res.status(401).json({
+            error: "Your session has expired, please log in again"
+          });
+        } else if (err.name === "JsonWebTokenError") {
+          res.status(401).json({
+            error: "Invalid token, please log in again"
+          });
+        } else {
+          res.status(501).json({
+            error: "An error occurred while verifying the token"
+          });
+        }
       }
-
       req.info = data as TokenDetails;
       next();
-    });
-      
+    });    
   } catch (error) {
     res.status(501).json({
-      'error': error
+      'success': false,
+      'error': 'Invalid token provided.'
     });
   }
 }
@@ -79,11 +87,14 @@ export const verifyUser = (req: ExtendedRequest, res: Response, next: NextFuncti
 
   let Role = details.Role;
 
-  if (Role == '') res.status(401).json({ 'error': 'Invalid user identification.' })
+  console.log(details);
   
-  else if (Role == 'user') next();
 
-  else if (Role === 'admin') next();
-
-  else res.status(401).json({ 'error': 'Authority denied' });
+  if (Role == '') {
+    res.status(401).json({ 'error': 'Invalid user identification.' });
+  } else if (Role == 'user') {
+    next();
+  } else if (Role == 'admin') {
+    next();
+  } else res.status(401).json({ 'error': 'Authority denied' });
 }

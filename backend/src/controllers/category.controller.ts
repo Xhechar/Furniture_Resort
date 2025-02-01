@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { CategoryService } from "../services/category.service";
+import { ExtendedRequest } from "../middlewares/verification.tokens";
 
 const categoryService = new CategoryService();
 
@@ -43,7 +44,7 @@ export class CategoryController {
       });
     }  
   }
-  async getAllCategories(res: Response) {
+  async getAllCategories(req: ExtendedRequest, res: Response) { 
     try {
 
       let result = await categoryService.getAllCategories();

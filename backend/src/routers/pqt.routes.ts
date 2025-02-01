@@ -9,4 +9,4 @@ const pqtController = new PQTController();
 pqtRouter.post('/create-pqt', verifyToken, verifyAdmin, pqtController.createPQT);
 pqtRouter.put('/update-pqt/:ProductQuantityTimeId', verifyToken, verifyAdmin, pqtController.updatePQT);
 pqtRouter.delete('delete-pqt/:ProductQuantityTimeId', verifyToken, verifyAdmin, pqtController.deletePQT);
-pqtRouter.get('/get-pqt-by-product/:ProductId', pqtController.getPQTByProductId);
+pqtRouter.get('/get-pqts-by-product/:ProductId', pqtController.getPQTByProductId);

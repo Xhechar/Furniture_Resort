@@ -45,7 +45,7 @@ model Product {
   ProductName         String
   ProductImages       String
   ShortDesc           String
-  LongDesc            String
+  LongDesc            String   @db.NVarChar(max)
   Sizes               String
   Category            String
   Colour              String
