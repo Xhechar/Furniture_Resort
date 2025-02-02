@@ -1,0 +1,69 @@
+<div class="body">
+  <div class="product-qt-form-container">
+    <h2>Add <span>Product</span> Quantity</h2>
+    <form #productQtForm="ngForm" (ngSubmit)="createPQT(productQtForm.value)">
+      <label for="quantity">No of Items</label>
+      <input
+        type="number"
+        id="quantity"
+        name="Quantity"
+        #Quantity="ngModel"
+        ngModel
+        required
+        min="1"
+        placeholder="enter no of items to make"
+      />
+      <div *ngIf="Quantity.invalid && (Quantity.touched || Quantity.dirty)" class="error">
+        <div class="error" *ngIf="Quantity.hasError('required')">
+          Quantity is required.
+        </div>
+        <div class="error" *ngIf="Quantity.hasError('min')">
+          Quantity should be at least 1.
+        </div>
+      </div>
+  
+      <label for="price">Price For Item(s)</label>
+      <input
+        type="number"
+        id="price"
+        name="Prze"
+        #Prize="ngModel"
+        ngModel
+        min="1"
+        placeholder="enter price for all the items"
+        required
+      />
+      <div *ngIf="Prize.invalid && (Prize.dirty || Prize.touched)" class="error">
+        <div class="error" *ngIf="Prize.hasError('required')">
+          Price is required.
+        </div>
+        <div class="error" *ngIf="Prize.hasError('min')">
+          Price should be at least 1.
+        </div>
+      </div>
+  
+      <label for="period">Period:</label>
+      <input
+        type="number"
+        id="period"
+        name="Period"
+        #Period="ngModel"
+        ngModel
+        required
+        min="1"
+        placeholder="enter period in days for making items"
+      />
+      <div class="err" *ngIf="Period.invalid && (Period.dirty || Period.touched)">
+        <div class="error" *ngIf="Period.hasError('required')">
+          Period is required.
+        </div>
+        <div class="error" *ngIf="Period.hasError('min')">
+          Period should be at least 1.
+        </div>
+      </div>
+  
+      <button type="submit" [disabled]="productQtForm.invalid">Add Product</button>
+    </form>
+  </div>
+</div>
+

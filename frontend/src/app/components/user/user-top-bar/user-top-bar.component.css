@@ -1,0 +1,114 @@
+.top-bar {
+  position: fixed;
+  top: 0;
+  right: .6%;
+  width: 78%;
+  height: 4rem;
+  background-color: hsl(47, 71%, 52%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-bar h2, .top-bar span {
+  font-size: 1.2rem;
+  color: #fff;
+  margin-left: 1rem;
+  cursor: pointer;
+  font-weight: 750;
+  letter-spacing: 1px;
+}
+
+.top-bar span {
+  margin: 0;
+  padding: 0;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.profile-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.profile-area nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.profile-area nav ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.profile-area nav li {
+  list-style-type: none;
+  cursor: pointer;
+}
+
+.profile-area nav li i {
+  font-size: 1.4rem;
+  color: #544820;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.5s ease-in-out;
+}
+
+.profile-area nav li i:hover {
+  background-color: hsla(46, 45%, 23%, 0.15);
+}
+
+.profile {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  column-gap: .5rem;
+  margin-left: 1rem;
+  background-color: #fff;
+}
+
+.name-and-date {
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: flex-end;
+}
+
+.name-and-date h3 {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #544820;
+  letter-spacing: 1.5px;
+  line-height: .9;
+}
+
+.name-and-date p {
+  font-size: 0.7rem;
+  color: #544825;
+  font-weight: 500;
+  margin-left: 1rem;
+}
+
+.img-container {
+  width: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  cursor: pointer;
+  img {
+    object-fit: cover;
+    width: 100%;
+    border-radius: 50%;
+  }
+}

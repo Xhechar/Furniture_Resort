@@ -1,0 +1,29 @@
+<div class="body">
+  <div class="category-form-container">
+    <h2>Add <span>Category</span></h2>
+    <form #categoryForm="ngForm" (ngSubmit)="createCategory(categoryForm.value)">
+      
+      <label for="categoryName">Category Name</label>
+      <input
+        type="text"
+        id="categoryName"
+        name="CategoryName"
+        #CategoryName="ngModel"
+        ngModel
+        required
+        minlength="3"
+        placeholder="Enter category name"
+      />
+      <div *ngIf="CategoryName.invalid && (CategoryName.dirty || CategoryName.touched)" class="error">
+        <div class="error" *ngIf="CategoryName.hasError('required')">
+          Category name is required.
+        </div>
+        <div class="error" *ngIf="CategoryName.hasError('minlength')">
+          Category name must be at least 3 characters long.
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="categoryForm.invalid">Add Category</button>
+    </form>
+  </div>
+</div>

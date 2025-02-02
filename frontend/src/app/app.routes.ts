@@ -25,6 +25,13 @@ import { PageloaderComponent } from './components/pageloader/pageloader.componen
 import { VerifymailComponent } from './components/verifymail/verifymail.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { ChangepasswordComponent } from './components/changepassword/changepassword.component';
+import { CategoryComponent } from './components/category/category.component';
+import { CreateReviewComponent } from './components/create-review/create-review.component';
+import { CreatePqtComponent } from './components/create-pqt/create-pqt.component';
+import { UserProgressesComponent } from './components/user/user-progresses/user-progresses.component';
+import { UserMessagesComponent } from './components/user/user-messages/user-messages.component';
+import { UserWishlistsComponent } from './components/user/user-wishlists/user-wishlists.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -35,16 +42,25 @@ export const routes: Routes = [
   { path: 'page-loader', component: PageloaderComponent },
   { path: 'verify-email', component: VerifymailComponent },
   { path: 'notifications', component: NotificationsComponent },
+  { path: 'logout', component: LogoutComponent },
+  { path: 'category', component: CategoryComponent }, //to be removed
+  { path: 'create-review', component: CreateReviewComponent }, //to be removed
+  { path: 'create-pqt', component: CreatePqtComponent }, //to be removed
   { path: 'auth-change-password', component: ChangepasswordComponent},
-  { path: 'new-product', component: NewproductComponent },
-  { path: 'user', component: UserComponent },
+  { path: 'new-product', component: NewproductComponent }, //to be removed
+  { path: 'user', component: UserComponent , children: [
+    { path: 'cart', component: CartComponent },
+    { path: 'my-reviews', component: MyreviewsComponent },
+    { path: 'orders', component: OrdersComponent },
+    { path: 'products', component: ProductsComponent },
+    { path: 'my-profile', component: ProfileComponent },
+    { path: 'my-progresses', component: UserProgressesComponent },
+    { path: 'my-messages', component: UserMessagesComponent },
+    { path: 'my-wishlist', component: UserWishlistsComponent },
+    { path: 'create-review', component: SinglereviewComponent }
+  ]
+  },
   { path: 'admin', component: AdminComponent },
-  { path: 'user/cart', component: CartComponent },
-  { path: 'user/my-reviews', component: MyreviewsComponent },
-  { path: 'user/orders', component: OrdersComponent },
-  { path: 'user/products', component: ProductsComponent },
-  { path: 'user/profile', component: ProfileComponent },
-  { path: 'user/create-review', component: SinglereviewComponent },
   { path: 'admin/a-profile', component: AProfileComponent },
   { path: 'admin/dashboard', component: DashboardComponent },
   { path: 'admin/deleted-products', component: DeletedProductsComponent },

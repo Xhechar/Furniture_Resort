@@ -1,0 +1,49 @@
+<div class="body">
+  <div class="review-form-container">
+    <h2>Add <span>Review</span></h2>
+    <form #reviewForm="ngForm" (ngSubmit)="createReview(reviewForm.value)">
+      
+      <label for="reviewText">Review Text</label>
+      <textarea
+        id="reviewText"
+        name="ReviewText"
+        #ReviewText="ngModel"
+        ngModel
+        required
+        minlength="10"
+        placeholder="Enter your review"
+      ></textarea>
+      <div *ngIf="ReviewText.invalid && (ReviewText.touched || ReviewText.dirty)" class="error">
+        <div class="error" *ngIf="ReviewText.hasError('required')">
+          Review text is required.
+        </div>
+        <div class="error" *ngIf="ReviewText.hasError('minlength')">
+          Review must be at least 10 characters long.
+        </div>
+      </div>
+
+      <label for="rating">Rating (1-5)</label>
+      <input
+        type="number"
+        id="rating"
+        name="Rating"
+        #Rating="ngModel"
+        ngModel
+        required
+        min="1"
+        max="5"
+        placeholder="Enter rating (1-5)"
+      />
+      <div *ngIf="Rating.invalid && (Rating.dirty || Rating.touched)" class="error">
+        <div class="error" *ngIf="Rating.hasError('required')">
+          Rating is required.
+        </div>
+        <div class="error" *ngIf="Rating.hasError('min') || Rating.hasError('max')">
+          Rating must be between 1 and 5.
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="reviewForm.invalid">Submit Review</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+span {
+  font-weight: 700;
+  width: 95%;
+  letter-spacing: 2px;
+}
+
+.sidebar {
+  width: 15rem;
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  background: #544820;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.sidebar-header {
+  font-size: 18px;
+  font-weight: 600;
+  color: hsl(47, 71%, 52%);
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-header i {
+  margin-right: 10px;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-item {
+  padding: 12px 15px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  border-radius: 6px;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+  position: relative;
+}
+
+.menu-item i {
+  margin-right: 10px;
+  font-size: 1rem;
+}
+
+.menu-item::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -.18rem;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 90%;
+  background: hsl(47, 71%, 52%);
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.menu-item:hover::before, .menu-item.active::before {
+  opacity: 1;
+}
+
+.menu-item:hover,
+.menu-item.active {
+    background: hsl(46, 45%, 20%);
+    font-size: 15px;
+    font-weight: 500;
+    i {
+      font-size: 1.2rem;
+    }
+}
+

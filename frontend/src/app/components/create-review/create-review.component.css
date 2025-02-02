@@ -1,0 +1,94 @@
+.body {
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  position: fixed;
+  z-index: 100;
+}
+
+.review-form-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 10px 10px 0 0;
+  width: 35%;
+  height: auto;
+  text-align: center;
+  padding: 2rem;
+}
+
+h2, span {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 550;
+  color: hsl(46, 45%, 23%);
+  letter-spacing: 2px;
+}
+
+h2 {
+  border-bottom: 2px solid;
+}
+
+span {
+  color: hsl(47, 71%, 52%);
+  display: inline;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  width: 90%;
+  display: flex;
+  letter-spacing: 1px;
+  font-size: 1.12rem;
+  color: hsl(0, 0%, 35%);
+}
+
+input, textarea {
+  width: 85%;
+  padding: 0.75rem;
+  margin: 0.35rem 0;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  border-bottom: 1px solid hsl(46, 45%, 23%);
+}
+
+textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.error {
+  color: rgb(177, 10, 10);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+button {
+  background: hsl(46, 45%, 23%);
+  border: none;
+  padding: 0.75rem;
+  width: 40%;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 1rem 0;
+  color: white;
+}
+
+button:hover {
+  background: hsl(46, 40%, 20%);
+}
+
+button:disabled {
+  background: hsl(50, 3%, 44%);
+  cursor: not-allowed;
+}
