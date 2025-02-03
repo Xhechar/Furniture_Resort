@@ -1,15 +1,29 @@
-<div class="container">
-  <div class="left-section">
-      <div class="search-box">
-          <input type="text" placeholder="SEARCH ALL POST">
-          <i class="fas fa-search"></i>
-      </div>
+<div class="filter-container">
+  
+    <div class="filter-group input">
+        <input type="text" placeholder="Search any furniture . . .">
+    </div>
+
+    <div class="filter-group">
+      <label for="category">Category:</label>
+      <select id="category" class="filter-dropdown">
+        <option value="">All</option>
+        <option value="sofa">Sofas</option>
+        <option value="chair">Chairs</option>
+        <option value="table">Tables</option>
+        <option value="bed">Beds</option>
+      </select>
+    </div>
+  
+    <div class="filter-group">
+      <label for="price">Price:</label>
+      <select id="price" class="filter-dropdown">
+        <option value="">Any</option>
+        <option value="low">Under $100</option>
+        <option value="mid">$100 - $500</option>
+        <option value="high">Above $500</option>
+      </select>
+    </div>
+    <button class="clear-filters">Clear Filters</button>
   </div>
-  <div class="right-section">
-      <p class="featured-text">Featured Article</p>
-      <h2>Think Big! Make the most out of your space with these tips</h2>
-      <button class="read-more">
-          READ MORE <span>→</span>
-      </button>
-  </div>
-</div>
+  

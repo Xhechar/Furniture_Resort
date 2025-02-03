@@ -1,19 +1,18 @@
 <div class="body">
   <div class="sidebar">
       <div class="sidebar-header">
-          <i class="fas fa-home"></i>
-          <span>Felix</span>
+        <img src="../../../logo/company-logo.png" alt="">
       </div>
       <ul class="menu">
-          <li class="menu-item active" routerLink="products"><i class='bx bx-book-content' ></i> Products</li>
-          <li class="menu-item" routerLink="cart"><i class='bx bx-cart-alt' ></i> Carts</li>
-          <li class="menu-item" routerLink="orders"><i class='bx bx-shopping-bag' ></i> Orders</li>
-          <li class="menu-item" routerLink="my-reviews"><i class='bx bxs-star-half'></i> Reviews</li>
-          <li class="menu-item" routerLink="my-progresses"><i class='bx bx-purchase-tag-alt'></i> Order Progress</li>
-          <li class="menu-item" routerLink="my-messages"><i class='bx bx-conversation'></i> Messages</li>
-          <li class="menu-item" routerLink="my-wishlist"><i class='bx bx-bookmarks' ></i> Wishlists</li>
-          <li class="menu-item" routerLink="my-profile"><i class='bx bx-user-pin'></i> Profile</li>
-          <li class="menu-item" routerLink="/logout"><i class='bx bx-log-out'></i> Logout</li>
+          <li #menu1 class="menu-item active" onclick="setActive('menu1')" routerLink="products"><i class='bx bx-book-content' ></i> Products</li>
+          <li #menu2 class="menu-item" onclick="setActive('menu2')" routerLink="cart"><i class='bx bx-cart-alt' ></i> Carts</li>
+          <li #menu3 class="menu-item" onclick="setActive('menu3')" routerLink="orders"><i class='bx bx-shopping-bag' ></i> Orders</li>
+          <li #menu4 class="menu-item" onclick="setActive('menu4')" routerLink="my-reviews"><i class='bx bxs-star-half'></i> Reviews</li>
+          <li #menu5 class="menu-item" onclick="setActive('menu5')" routerLink="my-progresses"><i class='bx bx-purchase-tag-alt'></i> Order Progress</li>
+          <li #menu6 class="menu-item" onclick="setActive('menu6')" routerLink="my-messages"><i class='bx bx-conversation'></i> Messages</li>
+          <li #menu7 class="menu-item" onclick="setActive('menu7')" routerLink="my-wishlist"><i class='bx bx-bookmarks' ></i> Wishlists</li>
+          <li #menu8 class="menu-item" onclick="setActive('menu8')" routerLink="my-profile"><i class='bx bx-user-pin'></i> Profile</li>
+          <li #menu9 class="menu-item" onclick="setActive('menu9')" routerLink="/logout"><i class='bx bx-log-out'></i> Logout</li>
       </ul>
   </div>
 </div>
