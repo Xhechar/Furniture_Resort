@@ -44,15 +44,16 @@ export interface Product {
   MakePeriods: number,
   Deposit: number,
   DateCreated: Date,
+  IsActivated: boolean,
+  IsCustommable: boolean,
+  IsFlushed?: boolean
   ProductQuantityTimes?: ProductQuantityTime[],
   Reviews?: Review[],
   Orders?: Order[],
   CustomOrders?: CustomOrder[],
   Carts?: Cart[],
   Wishlists?: Wishlist[],
-  Progresses?: Progress[],
-  IsActivated: boolean,
-  IsFlushed?: boolean
+  Progresses?: Progress[]
 }
 
 export interface ProductQuantityTime {
@@ -194,4 +195,15 @@ export interface RecoveryDetails {
   Email: string
   RecoveryCode: number,
   Password: string
+}
+
+export interface TopBar {
+  parent: string,
+  child: string
+}
+
+export interface AdminStyles {
+  borderColor: string,
+  textColor: string,
+  profileTextColor: string
 }

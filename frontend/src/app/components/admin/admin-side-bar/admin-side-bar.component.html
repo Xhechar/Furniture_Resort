@@ -1,0 +1,8 @@
+<div class="sidebar">
+    <div class="sidebar-header">
+      <img src="../../../logo/company-logo.png" alt="">
+    </div>
+    <ul class="menu">
+        <li class="menu-item" (click)="setIndex(i)" *ngFor="let menu of menuItems,  let i = index" [routerLink]="menu.route" [class.active]="selectedIndex === i"><i [ngClass]="menu.icon"></i> {{menu.value}}</li>
+    </ul>
+</div>

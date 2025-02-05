@@ -32,6 +32,17 @@ import { UserProgressesComponent } from './components/user/user-progresses/user-
 import { UserMessagesComponent } from './components/user/user-messages/user-messages.component';
 import { UserWishlistsComponent } from './components/user/user-wishlists/user-wishlists.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { AdminProductsComponent } from './components/admin/admin-products/admin-products.component';
+import { ActivatedProductsComponent } from './components/admin/activated-products/activated-products.component';
+import { OnOfferProductsComponent } from './components/admin/on-offer-products/on-offer-products.component';
+import { OnFlushProductsComponent } from './components/admin/on-flush-products/on-flush-products.component';
+import { AdminReviewsComponent } from './components/admin/admin-reviews/admin-reviews.component';
+import { AdminProgressesComponent } from './components/admin/admin-progresses/admin-progresses.component';
+import { AdminCompletedProgressesComponent } from './components/admin/admin-completed-progresses/admin-completed-progresses.component';
+import { AdminMessagesComponent } from './components/admin/admin-messages/admin-messages.component';
+import { AdminDeliveredOrdersComponent } from './components/admin/admin-delivered-orders/admin-delivered-orders.component';
+import { AdminCustomOrdersComponent } from './components/admin/admin-custom-orders/admin-custom-orders.component';
+import { AdminCategoriesComponent } from './components/admin/admin-categories/admin-categories.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -60,14 +71,28 @@ export const routes: Routes = [
     { path: 'create-review', component: SinglereviewComponent }
   ]
   },
-  { path: 'admin', component: AdminComponent },
-  { path: 'admin/a-profile', component: AProfileComponent },
-  { path: 'admin/dashboard', component: DashboardComponent },
-  { path: 'admin/deleted-products', component: DeletedProductsComponent },
-  { path: 'admin/deleted-users', component: DeletedUsersComponent },
-  { path: 'admin/existing-products', component: ExistingProductsComponent },
-  { path: 'admin/on-offers', component: OnOffersComponent }, 
-  { path: 'admin/user-orders', component: UserOrdersComponent },
-  { path: 'admin/users', component: UsersComponent },
+  { path: 'admin', component: AdminComponent, children: [
+    { path: 'a-profile', component: AProfileComponent },
+    { path: 'dashboard', component: DashboardComponent },
+    { path: 'products', component: AdminProductsComponent },
+    { path: 'activated-products', component: ActivatedProductsComponent },
+    { path: 'on-offer-products', component: OnOfferProductsComponent },
+    { path: 'on-flush-products', component: OnFlushProductsComponent },
+    { path: 'user-reviews', component: AdminReviewsComponent },
+    { path: 'user-progresses', component: AdminProgressesComponent },
+    { path: 'user-completed-progresses', component: AdminCompletedProgressesComponent },
+    { path: 'admin-messages', component: AdminMessagesComponent },
+    // { path: 'deleted-products', component: DeletedProductsComponent },
+    { path: 'deleted-users', component: DeletedUsersComponent },
+    // { path: 'existing-products', component: ExistingProductsComponent },
+    { path: 'on-offers', component: OnOffersComponent }, 
+    { path: 'user-orders', component: UserOrdersComponent },
+    { path: 'delivered-orders', component: AdminDeliveredOrdersComponent },
+    { path: 'user-custom-orders', component: AdminCustomOrdersComponent },
+    { path: 'user-delivered-orders', component: AdminDeliveredOrdersComponent },
+    { path: 'user-categories', component: AdminCategoriesComponent },
+    { path: 'users', component: UsersComponent },
+  ]
+  },
   {path: '**', component: NotfoundComponent}
 ];
