@@ -1,1 +1,32 @@
-<p>admin-progresses works!</p>
+<div class="stats-container">
+  <div class="stat-card blue" routerLink="all-progresses">
+    <i class='bx bxs-objects-vertical-top bx-rotate-270'></i>
+    <div class="stat-info">
+      <p class="title">Total Custom Progress</p>
+      <p class="value">50</p>
+    </div>
+  </div>
+  <div class="stat-card purple" routerLink="user-completed-progresses">
+    <i class='bx bxs-objects-vertical-top bx-rotate-180'></i>
+    <div class="stat-info">
+      <p class="title">Completed Custom Progress</p>
+      <p class="value">22</p>
+    </div>
+  </div>
+  <div class="stat-card violet">
+    <i class='bx bxs-objects-vertical-bottom bx-rotate-180' ></i>
+    <div class="stat-info">
+      <p class="title">Pending Progress</p>
+      <p class="value">16</p>
+    </div>
+  </div>
+  <!-- <div class="stat-card green" routerLink="on-flush-products">
+    <i class='bx bxs-flag' ></i>
+    <div class="stat-info">
+      <p class="title">Products On Flush Sale</p>
+      <p class="value">2</p>
+    </div>
+  </div> -->
+</div>
+
+<router-outlet></router-outlet>

@@ -1,1 +1,73 @@
-<p>on-offer-products works!</p>
+<div class="top-bar-u">
+  <button class="button-u" disabled>
+    <i class="fas fa-percent"></i> Add To Offer
+  </button>
+  <button class="button-u" [disabled]="selectedProducts.length > 0 ? false : true">
+    <i class="fas fa-fire"></i> Add To Flush Sale
+  </button>
+  <button class="button-u" [disabled]="selectedProducts.length > 0 ? false : true">
+    <i class="fas fa-cogs"></i> Enable Custome Payment
+  </button>
+  <button class="button-u" [disabled]="selectedProducts.length > 0 ? false : true" >
+    <i class="fas fa-clock"></i> Activate Selected
+  </button>
+</div>
+
+<div class="containerp">
+  <h2 class="titlep">Furniture List</h2>
+  <div class="product-listp" *ngIf="products.length !== 0">
+    <!-- Product Header -->
+    <div class="product-headerp">
+      <p class="product-checkboxp"></p>
+      <p class="product-namep">Product Name</p>
+      <p class="product-prizep">Prize</p>
+      <p class="product-stockp">Stock</p>
+      <p class="product-limitp">On Offer</p>
+      <p class="product-customizablep">Custom Status</p>
+      <p class="product-activatedp">Activation Status</p>
+      <p class="product-actionsp">Actions</p>
+    </div>
+
+    <div class="product-rowp" *ngFor="let product of products, let i = index">
+      <input type="checkbox" class="checkboxp" (change)="setSelectedProduct(product.ProductId)" />
+      <p class="product-namep">{{product.ProductName}}</p>
+      <p class="product-prizep">{{product.Prize | currency }}</p>
+      <p class="product-stockp">
+        <i class="fa-solid fa-circle-exclamation fa-beat-fade" *ngIf="product.StockQuantity < product.StockLimit"></i>
+        {{product.StockQuantity}}
+      </p>
+      <p class="product-limitp">
+        <span class="customizable-truep" style="letter-spacing: 2px; color: green;" *ngIf="product.OnOffer">{{product.IsCustommable ? 'true' : 'false'}}</span>
+        <span class="customizable-truep" style="letter-spacing: 2px; color: hsl(16, 100%, 50%);" *ngIf="!product.OnOffer">{{product.IsCustommable ? 'true' : 'false'}}</span>
+      </p>
+      <p class="product-customizablep">
+        <span class="customizable-truep" style="letter-spacing: 2px; color: green;" *ngIf="product.IsCustommable">{{product.IsCustommable ? 'true' : 'false'}}</span>
+        <span class="customizable-truep" style="letter-spacing: 2px; color: hsl(16, 100%, 50%);" *ngIf="!product.IsCustommable">{{product.IsCustommable ? 'true' : 'false'}}</span>
+      </p>
+      <p class="product-activatedp">
+        <i class="fa-solid fa-lightbulb" *ngIf="!product.IsActivated"></i>
+        <span style="font-weight: 550; letter-spacing: 2px;" class="status-activep" *ngIf="product.IsActivated">Activated</span>
+        <span style="font-weight: 550; letter-spacing: 2px; color: hsl(16, 100%, 50%);" class="status-activep" *ngIf="!product.IsActivated">In active</span>
+      </p>
+      <div class="product-actionsp">
+        <i style="color: green;" class="fa-regular fa-pen-to-square fa-bounce"></i>
+        <i style="color: red;" class="fa fa-thin fa-trash"></i>
+        <div class="menu-buttonp">
+          <i class="fa-solid fa-ellipsis-vertical click-menu" (click)="setSelectedNumber(i + 1)"></i>
+          <div class="menu-dropdownp" [class.activated]="selected === (i + 1)">
+            <button>Add to Flush</button>
+            <button disabled class="col">Add to Offer</button>
+            <button>Set Customizable</button>
+            <button>Add Make Time</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add more product rows as needed -->
+  </div>
+  <div class="product-listp no-products" *ngIf="products.length === 0">
+    <i style="font-size: 2.4rem; color: hsl(0, 0%, 70%);" class="fa-solid fa-chair"></i>
+    <h3 style="color: hsl(0, 0%, 40%); font-weight: 600; letter-spacing: 1px; font-size: medium;">Opps! No items Currently Available</h3>
+  </div>
+</div>

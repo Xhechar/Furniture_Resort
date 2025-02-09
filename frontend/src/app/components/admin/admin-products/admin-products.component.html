@@ -1,30 +1,30 @@
 <div class="stats-container">
-  <div class="stat-card blue">
+  <div class="stat-card blue" routerLink="created-products">
     <i class="fa-solid fa-chair"></i>
     <div class="stat-info">
       <p class="title">Total Products</p>
-      <p class="value">2468</p>
+      <p class="value">{{products.length > 0 ? products.length : 0}}</p>
     </div>
   </div>
-  <div class="stat-card purple">
+  <div class="stat-card purple" routerLink="activated-products">
     <i class='bx bx-list-check'></i>
     <div class="stat-info">
       <p class="title">Activated Products</p>
-      <p class="value">245</p>
+      <p class="value">{{activeProducts.length > 0 ? activeProducts.length : 0 }}</p>
     </div>
   </div>
-  <div class="stat-card violet">
+  <div class="stat-card violet" routerLink="on-offer-products">
     <i class='bx bxs-offer' ></i>
     <div class="stat-info">
       <p class="title">Products On Offer</p>
-      <p class="value">508</p>
+      <p class="value">{{offerProducts.length > 0 ? offerProducts.length : 0 }}</p>
     </div>
   </div>
-  <div class="stat-card green">
+  <div class="stat-card green" routerLink="on-flush-products">
     <i class='bx bxs-flag' ></i>
     <div class="stat-info">
       <p class="title">Products On Flush Sale</p>
-      <p class="value">468</p>
+      <p class="value">{{flushSaleProducts.length > 0 ? flushSaleProducts.length : 0}}</p>
     </div>
   </div>
 </div>
@@ -33,67 +33,6 @@
   <button class="button-u new-product-u">
     <i class="fas fa-plus-circle"></i> New Product
   </button>
-  <button class="button-u" disabled>
-    <i class="fas fa-percent"></i> Add to Offer
-  </button>
-  <button class="button-u" disabled>
-    <i class="fas fa-fire"></i> Add to Flush Sale
-  </button>
-  <button class="button-u" disabled>
-    <i class="fas fa-cogs"></i> Set Customizable
-  </button>
-  <button class="button-u" disabled>
-    <i class="fas fa-clock"></i> Add Make Time
-  </button>
 </div>
 
-
-<div class="containerp">
-  <h2 class="titlep">Product List</h2>
-  <div class="product-listp">
-    <!-- Product Header -->
-    <div class="product-headerp">
-      <p class="product-checkboxp"></p>
-      <p class="product-namep">Product Name</p>
-      <p class="product-categoryp">Category</p>
-      <p class="product-prizep">Prize</p>
-      <p class="product-stockp">Stock</p>
-      <p class="product-limitp">Stock Limit</p>
-      <p class="product-customizablep">Customizable</p>
-      <p class="product-activatedp">Activation Status</p>
-      <p class="product-actionsp">Actions</p>
-    </div>
-
-    <!-- Example Product Row -->
-    <div class="product-rowp">
-      <input type="checkbox" class="checkboxp" />
-      <p class="product-namep">Sofa Set</p>
-      <p class="product-categoryp">Furniture</p>
-      <p class="product-prizep">$500</p>
-      <p class="product-stockp">50</p>
-      <p class="product-limitp">10</p>
-      <p class="product-customizablep">
-        <span class="customizable-truep">True</span>
-      </p>
-      <p class="product-activatedp">
-        <i class="fa-solid fa-lightbulb"></i>
-        <span class="status-activep">Activated</span>
-      </p>
-      <div class="product-actionsp">
-        <i style="color: green;" class="fa-regular fa-pen-to-square fa-bounce"></i>
-        <i style="color: red;" class="fa fa-thin fa-trash"></i>
-        <div class="menu-buttonp">
-          <i class="fa-solid fa-ellipsis-vertical"></i>
-          <div class="menu-dropdownp">
-            <button>Add to Flush</button>
-            <button>Add to Offer</button>
-            <button>Set Customizable</button>
-            <button>Add Make Time</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add more product rows as needed -->
-  </div>
-</div>
+<router-outlet></router-outlet>

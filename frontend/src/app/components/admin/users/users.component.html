@@ -1,1 +1,32 @@
-<p>users works!</p>
+<div class="stats-container">
+  <div class="stat-card blue" routerLink="all-users">
+    <i class='bx bxs-group'></i>
+    <div class="stat-info">
+      <p class="title">Total Users</p>
+      <p class="value">50</p>
+    </div>
+  </div>
+  <div class="stat-card purple" routerLink="deleted-users">
+    <i class='bx bxs-user-x'></i>
+    <div class="stat-info">
+      <p class="title">In-Active Users</p>
+      <p class="value">22</p>
+    </div>
+  </div>
+  <div class="stat-card violet">
+    <i class='bx bxs-objects-vertical-bottom bx-rotate-180' ></i>
+    <div class="stat-info">
+      <p class="title">Pending Progress</p>
+      <p class="value">16</p>
+    </div>
+  </div>
+  <!-- <div class="stat-card green" routerLink="on-flush-products">
+    <i class='bx bxs-flag' ></i>
+    <div class="stat-info">
+      <p class="title">Products On Flush Sale</p>
+      <p class="value">2</p>
+    </div>
+  </div> -->
+</div>
+
+<router-outlet></router-outlet>

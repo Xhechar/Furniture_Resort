@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-deleted-users',
+  selector: 'app-admin-all-users',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './deleted-users.component.html',
-  styleUrl: './deleted-users.component.css'
+  templateUrl: './admin-all-users.component.html',
+  styleUrl: './admin-all-users.component.css'
 })
-export class DeletedUsersComponent {
+export class AdminAllUsersComponent {
   users = [
     {
       Fullname: 'John Doe',
@@ -49,7 +49,7 @@ export class DeletedUsersComponent {
       Selected: false
     }
     // Add more users as needed
-  ].filter(u  => u.IsDeleted);
+  ];
 
   // Action methods (implement your logic here)
   deleteUser(user: any) {

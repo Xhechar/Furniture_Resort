@@ -1,1 +1,32 @@
-<p>user-orders works!</p>
+<div class="stats-container">
+  <div class="stat-card blue" routerLink="normal-orders">
+    <i class="fa-solid fa-chair"></i>
+    <div class="stat-info">
+      <p class="title">Normal Orders</p>
+      <p class="value">3</p>
+    </div>
+  </div>
+  <div class="stat-card purple" routerLink="delivered-orders">
+    <i class='bx bx-task'></i>
+    <div class="stat-info">
+      <p class="title">Delivered Normal Orders</p>
+      <p class="value">9</p>
+    </div>
+  </div>
+  <div class="stat-card violet" routerLink="user-custom-orders">
+    <i class='bx bxs-shopping-bags' ></i>
+    <div class="stat-info">
+      <p class="title">Custom Orders</p>
+      <p class="value">45</p>
+    </div>
+  </div>
+  <div class="stat-card green" routerLink="user-delivered-orders">
+    <i class='bx bx-task' ></i>
+    <div class="stat-info">
+      <p class="title">Delivered Custom Orders<p>
+      <p class="value">25</p>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

@@ -1,1 +1,94 @@
-<p>a-profile works!</p>
+<div class="entire-stuff">
+  <div class="backround-area">
+    <div class="upload-container">
+      <label for="image-upload" class="upload-label">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="upload-icon"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3 16.5V8.119c0-.704.349-1.36.922-1.748L9.36 3.387c.504-.347 1.132-.347 1.636 0l5.438 3.984c.573.388.922 1.044.922 1.748V16.5M15 21a3 3 0 110-6 3 3 0 010 6z"
+          />
+        </svg>
+        <span class="upload-text">Upload</span>
+        <input id="image-upload" type="file" accept="image/*" class="upload-input" />
+      </label>
+    </div>
+    
+  </div>
+  <div class="rest-profile">
+    <div class="user-card">
+      <div class="card-header">
+        <img src="https://via.placeholder.com/150" alt="User Profile" class="profile-img" />
+        <button class="edit-btn">
+          <i class="fas fa-edit"></i>
+        </button>
+      </div>
+      <div class="card-body">
+        <h2 class="user-name">Nathaniel Poole</h2>
+        <p class="user-company">Microsoft Inc.</p>
+        <div class="stats">
+          <div class="stat">
+            <span class="label">Opportunities applied</span>
+            <span class="value applied">32</span>
+          </div>
+          <div class="stat">
+            <span class="label">Opportunities won</span>
+            <span class="value won">26</span>
+          </div>
+          <div class="stat">
+            <span class="label">Current opportunities</span>
+            <span class="value current">6</span>
+          </div>
+        </div>
+        <button class="profile-btn">View Public Profile</button>
+        <a href="#" class="profile-link">https://app.ahiregroup.com</a>
+      </div>
+    </div>
+
+    <div class="account-settings-xhr">
+      <form class="form-xhr">
+        <div class="form-group-xhr">
+          <label for="first-name" class="label-xhr">First Name</label>
+          <input type="text" id="first-name" class="input-xhr" value="Nathaniel" />
+        </div>
+        <div class="form-group-xhr">
+          <label for="last-name" class="label-xhr">Last Name</label>
+          <input type="text" id="last-name" class="input-xhr" value="Poole" />
+        </div>
+        <div class="form-group-xhr">
+          <label for="phone-number" class="label-xhr">Phone Number</label>
+          <input type="text" id="phone-number" class="input-xhr" value="+1800-000" />
+        </div>
+        <div class="form-group-xhr">
+          <label for="email-address" class="label-xhr">Email address</label>
+          <input type="email" id="email-address" class="input-xhr" value="nathaniel.poole@microsoft.com" />
+        </div>
+        <div class="form-group-xhr">
+          <label for="city" class="label-xhr">City</label>
+          <input type="text" id="city" class="input-xhr" value="Bridgeport" />
+        </div>
+        <div class="form-group-xhr">
+          <label for="state" class="label-xhr">State/County</label>
+          <input type="text" id="state" class="input-xhr" value="WA" />
+        </div>
+        <div class="form-group-xhr">
+          <label for="postcode" class="label-xhr">Postcode</label>
+          <input type="text" id="postcode" class="input-xhr" value="31005" />
+        </div>
+        <div class="form-group-xhr">
+          <label for="country" class="label-xhr">Country</label>
+          <input type="text" id="country" class="input-xhr" value="United States" />
+        </div>
+        <button type="submit" class="btn-xhr">Update</button>
+      </form>
+    </div>
+    
+  </div>
+</div>

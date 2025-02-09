@@ -1,0 +1,263 @@
+.entire-stuff {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.backround-area {
+  margin-top: 2vh;
+  width: 100%;
+  height: 22vh;
+  border-radius: 10px;
+  background-color: #544820;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.upload-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 3%;
+  top: 10%;
+}
+
+.upload-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f3f4f6;
+  border: 2px dashed hsl(47, 71%, 52%);
+  color: hsl(47, 71%, 52%);
+  border-radius: 1rem;
+  cursor: pointer;
+  padding: .6rem;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.upload-label:hover {
+  background-color: hsl(47, 71%, 52%);
+  color: white; /* Lighter background on hover */
+}
+
+.upload-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.upload-text {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.upload-input {
+  display: none; /* Hide the actual input field */
+}
+
+.rest-profile {
+  position: absolute;
+  display: flex;
+  width: 90%;
+  top: 80%;
+}
+
+.user-card {
+  width: 36%;
+  max-width: 20rem;
+  margin: 0 auto;
+  border: 0.1rem solid #ddd;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+/* Card header section */
+.card-header {
+  position: relative;
+  background-color: #eef2ff;
+  padding: 2rem 0;
+}
+
+.profile-img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 0.2rem solid #fff;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+}
+
+.edit-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: #0056d2;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  padding: 0.6rem;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+}
+
+.edit-btn:hover {
+  background-color: #003e9f;
+}
+
+/* Card body section */
+.card-body {
+  padding: 1.5rem 1rem;
+}
+
+.user-name {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  color: #333;
+}
+
+.user-company {
+  font-size: 1rem;
+  color: #777;
+  margin-bottom: 1.5rem;
+}
+
+/* Statistics section */
+.stats {
+  margin: 1rem 0;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.label {
+  font-weight: 500;
+  color: #555;
+}
+
+.value {
+  font-weight: bold;
+}
+
+.applied {
+  color: #f39c12; /* Orange */
+}
+
+.won {
+  color: #27ae60; /* Green */
+}
+
+.current {
+  color: #3498db; /* Blue */
+}
+
+/* Profile button */
+.profile-btn {
+  display: block;
+  width: 100%;
+  background-color: #0056d2;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 1rem 0;
+}
+
+.profile-btn:hover {
+  background-color: #003e9f;
+}
+
+/* Profile link */
+.profile-link {
+  font-size: 0.9rem;
+  color: #0056d2;
+  text-decoration: none;
+}
+
+.profile-link:hover {
+  text-decoration: underline;
+}
+
+.account-settings-xhr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #f9fafb;
+}
+
+.form-xhr {
+  width: 100%;
+  max-width: 600px;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.form-group-xhr {
+  display: flex;
+  flex-direction: column;
+}
+
+.label-xhr {
+  font-size: 1rem;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.input-xhr {
+  padding: 0.75rem;
+  font-size: 1rem;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+}
+
+.input-xhr:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.btn-xhr {
+  grid-column: span 2;
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  color: #ffffff;
+  background-color: #2563eb;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 500;
+}
+
+.btn-xhr:hover {
+  background-color: #1e3a8a;
+}

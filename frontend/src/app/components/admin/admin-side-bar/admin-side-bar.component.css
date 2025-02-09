@@ -71,6 +71,7 @@ div::-webkit-scrollbar-thumb:hover {
   transition: 0.3s ease-in-out;
   cursor: pointer;
   position: relative;
+  margin: 2vh 0;
 }
 
 .menu-item i {

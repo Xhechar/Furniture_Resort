@@ -1,1 +1,54 @@
-<p>admin-reviews works!</p>
+<div class="stats-container">
+  <div class="stat-card blue" routerLink="created-products">
+    <i class="fa-solid fa-chair"></i>
+    <div class="stat-info">
+      <p class="title">Total Reviews</p>
+      <p class="value">{{reviews.length > 0 ? reviews.length : 0}}</p>
+    </div>
+  </div>
+  <div class="stat-card purple" routerLink="activated-products">
+    <i class='bx bx-list-check'></i>
+    <div class="stat-info">
+      <p class="title">Average Reviews</p>
+      <p class="value">{{reviews.length}}</p>
+    </div>
+  </div>
+  <div class="stat-card violet" routerLink="on-offer-products">
+    <i class='bx bxs-offer' ></i>
+    <div class="stat-info">
+      <p class="title">Products On Offer</p>
+      <p class="value">45</p>
+    </div>
+  </div>
+  <div class="stat-card green" routerLink="on-flush-products">
+    <i class='bx bxs-flag' ></i>
+    <div class="stat-info">
+      <p class="title">Products On Flush Sale</p>
+      <p class="value">25</p>
+    </div>
+  </div>
+</div>
+
+<div class="review-container">
+  <h2 class="review-title">Reviews and Ratings &nbsp;>></h2>
+
+  <div *ngFor="let review of reviews" class="review-card" [ngClass]="{'highlighted': review.highlighted}">
+    <div class="review-header">
+      <img class="review-avatar" [src]="review.avatar" alt="{{ review.name }}" />
+      <div>
+        <h3 class="review-name">{{ review.name }}</h3>
+        <p class="review-date">{{ review.date }}</p>
+      </div>
+    </div>
+    <p class="review-content">{{ review.content }}</p>
+    <div class="review-footer">
+      <div class="rating">
+        <span *ngFor="let star of [1,2,3,4,5]" class="star" [ngClass]="{'active': star <= review.rating}">★</span>
+      </div>
+      <div class="review-actions">
+        <i style="color: green;" class="fa-regular fa-pen-to-square fa-bounce"></i>
+        <i style="color: red;" class="fa fa-thin fa-trash"></i>
+      </div>
+    </div>
+  </div>
+</div>

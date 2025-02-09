@@ -1,0 +1,163 @@
+.stats-container {
+  display: flex;
+  gap: 1vw;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2vh;
+}
+
+.stat-card {
+  margin-top: 1vh;
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  background-color: #fff;
+  padding: 2vh 2vw;
+  width: 18vw;
+  height: 10vh;
+  transition: all 0.5s ease-in-out;
+}
+
+.stat-card:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+.stat-card i {
+  font-size: 3.5vh;
+  color: #544820;
+  background-color: hsl(0, 0%, 100%);
+  padding: 1vh;
+  border-radius: 50%;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 1.8vh;
+  color: #666;
+  font-weight: 450;
+  margin: 0;
+}
+
+.value {
+  font-size: 2.5vh;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.blue {
+  background-color: #cce7f6;
+}
+
+.purple {
+  background-color: #f2d9ff;
+}
+
+.violet {
+  background-color: #ebe4fc;
+}
+
+.green {
+  background-color: #d4f9e1;
+}
+
+.review-container {
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.review-title {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.review-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0px 0 8px rgba(0, 0, 0, 0.1);
+  transition: all 1s ease-in-out;
+  position: relative;
+}
+
+.review-card:hover {
+  border-color: #007bff;
+  background-color: #f9fcff;
+  cursor: pointer;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.review-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.review-name {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.review-date {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.review-content {
+  margin: 1rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.review-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rating {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 1rem;
+  color: #ddd;
+  transition: color 0.3s;
+}
+
+.star.active {
+  color: #ffd700;
+}
+
+.review-actions {
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+  i {
+    font-size: 1.3rem;
+  }
+}
+
+.comment-icon {
+  font-size: 1.2rem;
+}
+
+.comment-count {
+  font-size: 0.95rem;
+}
