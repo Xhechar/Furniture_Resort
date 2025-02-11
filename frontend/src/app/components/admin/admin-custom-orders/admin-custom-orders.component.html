@@ -1,1 +1,39 @@
-<p>admin-custom-orders works!</p>
+<div class="xhr-custom-orders-container">
+  <div class="xhr-custom-orders-header">
+    <div class="xhr-custom-orders-col">User</div>
+    <div class="xhr-custom-orders-col">Product</div>
+    <div class="xhr-custom-orders-col">Quantity</div>
+    <div class="xhr-custom-orders-col">Price</div>
+    <div class="xhr-custom-orders-col">Discount</div>
+    <div class="xhr-custom-orders-col">Deposit</div>
+    <div class="xhr-custom-orders-col">Balance</div>
+    <div class="xhr-custom-orders-col">Delivery Status</div>
+    <div class="xhr-custom-orders-col">Actions</div>
+  </div>
+  <div class="xhr-custom-orders-row" *ngFor="let customOrder of customOrders">
+    <div class="xhr-custom-orders-col">
+      <div class="xhr-user-details">
+        <img [src]="customOrder.User?.profileImage || 'default-profile.jpg'" alt="User Profile" class="xhr-user-profile" />
+        <div class="xhr-user-info">
+          <p>{{ customOrder.User?.FullName }}</p>
+          <p class="xhr-user-contact">{{ customOrder.User?.Email }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="xhr-custom-orders-col">{{ customOrder.Product?.name }}</div>
+    <div class="xhr-custom-orders-col">{{ customOrder.Quantity }}</div>
+    <div class="xhr-custom-orders-col">{{ customOrder.Price | currency }}</div>
+    <div class="xhr-custom-orders-col">{{ customOrder.Discount | currency }}</div>
+    <div class="xhr-custom-orders-col">{{ customOrder.Deposit | currency }}</div>
+    <div class="xhr-custom-orders-col">{{ customOrder.Balance | currency }}</div>
+    <div class="xhr-custom-orders-col">
+      <span [class]="'xhr-status ' + (customOrder.DeliveryStatus ? 'delivered' : 'pending')">
+        {{ customOrder.DeliveryStatus ? 'Delivered' : 'Pending' }}
+      </span>
+    </div>
+    <div class="xhr-custom-orders-col xhr-actions">
+      <i class="fa fa-edit xhr-icon" (click)="updateCustomOrder('customOrder')"></i>
+      <i class="fa fa-trash xhr-icon" (click)="deleteCustomOrder('customOrder')"></i>
+    </div>
+  </div>
+</div>

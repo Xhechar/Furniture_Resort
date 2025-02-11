@@ -1,1 +1,37 @@
-<p>on-offers works!</p>
+<div class="xhr-orders-container">
+  <div class="xhr-orders-header">
+    <div class="xhr-orders-col">User</div>
+    <div class="xhr-orders-col">Product</div>
+    <div class="xhr-orders-col">Quantity</div>
+    <div class="xhr-orders-col">Price</div>
+    <div class="xhr-orders-col">Amount Paid</div>
+    <div class="xhr-orders-col">Order Type</div>
+    <div class="xhr-orders-col">Delivery Status</div>
+    <div class="xhr-orders-col">Actions</div>
+  </div>
+  <div class="xhr-orders-row" *ngFor="let order of orders">
+    <div class="xhr-orders-col">
+      <div class="xhr-user-details">
+        <img [src]="order.User?.ProfileImage || 'default-profile.jpg'" alt="User Profile" class="xhr-user-profile" />
+        <div class="xhr-user-info">
+          <p>{{ order.User?.Fullname }}</p>
+          <p class="xhr-user-contact">{{ order.User?.Email }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="xhr-orders-col">{{ order.Product?.ProductName }}</div>
+    <div class="xhr-orders-col">{{ order.Quantity }}</div>
+    <div class="xhr-orders-col">{{ order.Price | currency }}</div>
+    <div class="xhr-orders-col">{{ order.AmountPaid | currency }}</div>
+    <div class="xhr-orders-col">{{ order.OrderType }}</div>
+    <div class="xhr-orders-col">
+      <span [class]="'xhr-status ' + order.DeliveryStatus.toLowerCase()">
+        {{ order.DeliveryStatus }}
+      </span>
+    </div>
+    <div class="xhr-orders-col xhr-actions">
+      <i class="fa fa-edit xhr-icon" (click)="updateDeliveryStatus(order)"></i>
+      <i class="fa fa-trash xhr-icon" (click)="deleteOrder(order)"></i>
+    </div>
+  </div>
+</div>

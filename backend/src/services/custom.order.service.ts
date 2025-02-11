@@ -85,6 +85,12 @@ export class CustomOrderService implements CustomOrderInterface {
             where: { UserId: userId }
           });
 
+          await this.prisma.cart.delete({
+            where: {
+              CartId: cartExist.CartId
+            }
+          });
+
           odersCount++;
         }
         

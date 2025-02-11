@@ -1,0 +1,96 @@
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table-like Structure */
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.row:hover {
+  background-color: #f0f8ff;
+}
+
+.header {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.cell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+.cell:first-child {
+  justify-content: flex-start;
+}
+
+.cell.actions {
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Icons and Category Name */
+.category-icon {
+  color: #007bff;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.category-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Action Icons */
+.actions i {
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.actions i:hover {
+  transform: scale(1.2);
+}
+
+.edit-icon {
+  color: #28a745;
+}
+
+.delete-icon {
+  color: #dc3545;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .row {
+    flex-wrap: wrap;
+  }
+  .cell {
+    flex: 1 1 100%;
+    padding: 5px 0;
+  }
+  .cell.actions {
+    justify-content: flex-start;
+    gap: 5px;
+  }
+}

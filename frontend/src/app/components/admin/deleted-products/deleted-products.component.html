@@ -1,1 +1,113 @@
-<p>deleted-products works!</p>
+<div class="progress-container">
+  <div *ngFor="let progress of progresses" class="progress-card">
+    <!-- Progress Status -->
+    <div class="progress-status" [ngClass]="getStatusClass(progress.Status)">
+      {{ progress.Status }}
+    </div>
+
+    <!-- Collapsible Header Section -->
+    <div class="progress-header" (click)="toggleDetails(progress.ProgressId)">
+      <div class="user-info">
+        <img src="https://i.pinimg.com/236x/98/a6/aa/98a6aadc34b3519d5c4e0a6150f0701f.jpg" alt="User Profile" class="profile-pic" />
+        <span class="user-name">{{ progress.User?.UserName }}</span>
+      </div>
+      <div class="product-info">
+        <img [src]="'https://i.pinimg.com/236x/3f/22/19/3f22192fc0aacb86ab226b61053dd29a.jpg'" alt="Product" class="product-image" />
+        <span class="product-name">{{ progress.Product?.ProductName }}</span>
+      </div>
+      <button class="toggle-btn">
+        <i class="fas" [ngClass]="expandedProgressIds.includes(progress.ProgressId) ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+      </button>
+    </div>
+
+    <!-- Collapsible Details Section -->
+    <div class="progress-details" *ngIf="expandedProgressIds.includes(progress.ProgressId)">
+      <div class="order-details-container">
+        <div class="order-details-header">
+          <h2>Order Details</h2>
+        </div>
+        <div class="order-details-grid">
+          <div class="detail-item">
+            <span class="detail-label">Price:</span>
+            <span class="detail-value">$200.00</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Discount:</span>
+            <span class="detail-value">$20.00</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Quantity:</span>
+            <span class="detail-value">3</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Deposit:</span>
+            <span class="detail-value">$100.00</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Balance:</span>
+            <span class="detail-value">$80.00</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Mobile:</span>
+            <span class="detail-value">+1234567890</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value">user&#64;example.com</span>
+          </div>
+        </div>
+      </div>
+      <!-- Progress Area -->
+      <div class="progress-area">
+        <!-- Materials Images -->
+        <div class="progress-section">
+          <h4>Materials Images ({{ progress.MaterialsImages.length }})</h4>
+          <div class="images-container">
+            <img *ngFor="let image of progress.MaterialsImages" [src]="image" alt="Material Image" class="progress-image" />
+            <input type="file" class="upload-input" id="materials-upload-{{ progress.ProgressId }}" hidden />
+            <label for="materials-upload-{{ progress.ProgressId }}" class="upload-btn">Upload</label>
+          </div>
+        </div>
+
+        <!-- Progress Images -->
+        <div class="progress-section">
+          <h4>Progress Images ({{ progress.ProgressImages.length }})</h4>
+          <div class="images-container">
+            <img *ngFor="let image of progress.ProgressImages" [src]="image" alt="Progress Image" class="progress-image" />
+            <input type="file" class="upload-input" id="progress-upload-{{ progress.ProgressId }}" hidden />
+            <label for="progress-upload-{{ progress.ProgressId }}" class="upload-btn">Upload</label>
+          </div>
+        </div>
+
+        <!-- Final Images -->
+        <div class="progress-section">
+          <h4>Final Images ({{ progress.FinalImages.length }})</h4>
+          <div class="images-container">
+            <img *ngFor="let image of progress.FinalImages" [src]="image" alt="Final Image" class="progress-image" />
+            <input type="file" class="upload-input" id="final-upload-{{ progress.ProgressId }}" hidden />
+            <label for="final-upload-{{ progress.ProgressId }}" class="upload-btn">Upload</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Details -->
+      <div class="progress-info">
+        <p><strong>Date Created:</strong> {{ progress.DateCreated }}</p>
+        <p><strong>Date Completed:</strong> {{ progress.DateCompleted || 'Not Completed' }}</p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="action-btn update-btn" (click)="onUpdate(progress.ProgressId)">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="action-btn delete-btn" (click)="onDelete(progress.ProgressId)">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+        <button class="action-btn message-btn" (click)="onMessage(progress.UserId)">
+          <i class="fas fa-envelope"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

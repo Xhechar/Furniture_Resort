@@ -1,0 +1,104 @@
+.xhr-orders-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  overflow-x: auto;
+  font-family: Arial, sans-serif;
+}
+
+.xhr-orders-header {
+  display: grid;
+  grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  font-weight: bold;
+  text-align: left;
+  background-color: #f3f4f6;
+  color: #374151;
+  border-bottom: 2px solid #d1d5db;
+  padding: 1rem;
+}
+
+.xhr-orders-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1rem;
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
+}
+
+.xhr-orders-row:hover {
+  background-color: #f9fafb;
+}
+
+.xhr-orders-col {
+  padding: 0.5rem;
+}
+
+.xhr-user-details {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.xhr-user-profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.xhr-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.xhr-user-info p {
+  margin: 0;
+}
+
+.xhr-user-contact {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.xhr-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.xhr-status.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.xhr-status.completed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.xhr-status.cancelled {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.xhr-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+.xhr-icon {
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.xhr-icon:hover {
+  color: #1f2937;
+}

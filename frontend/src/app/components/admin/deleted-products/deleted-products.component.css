@@ -1,0 +1,212 @@
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.progress-card {
+  margin-top: 1rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.progress-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.progress-status {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.5rem;
+  width: 100%;
+  height: 100%;
+  background-color: #544820;
+}
+
+.progress-status.in-progress {
+  color: hsl(47, 71%, 52%);
+}
+
+.progress-status.completed {
+  color: #28a745;
+}
+
+.progress-status.pending {
+  color: #007bff;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+  background-color: hsl(210, 17%, 96%);
+}
+
+.user-info,
+.product-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-pic,
+.product-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.product-image {
+  border-radius: 0;
+}
+
+.user-name,
+.product-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s ease;
+}
+
+.toggle-btn:hover {
+  color: hsl(47, 71%, 52%);
+}
+
+.progress-details {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.progress-section h4 {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.images-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.progress-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+}
+
+.upload-btn {
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.upload-btn:hover {
+  background-color: #0056b3;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #555;
+  transition: color 0.2s ease;
+}
+
+.order-details-container {
+  width: 100%;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.order-details-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.order-details-header h2 {
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: bold;
+}
+
+.order-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.detail-item {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.detail-value {
+  font-size: 1rem;
+  color: #222;
+}
+
+.action-btn:hover {
+  color: #007bff;
+}
+
+.update-btn i {
+  color: #007bff;
+}
+
+.delete-btn i {
+  color: #dc3545;
+}
+
+.message-btn i {
+  color: #28a745;
+}
+
+.progress-info {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 1rem;
+}
