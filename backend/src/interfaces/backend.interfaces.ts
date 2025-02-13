@@ -128,7 +128,9 @@ export interface Messages {
   SenderId: string,
   ReceiverId: string,
   Message: string,
-  DateCreated: string
+  DateCreated: string,
+  Sender: User,
+  Receiver: User
 }
 
 export interface Cart {

@@ -68,7 +68,7 @@ export interface MessagesInterface {
   sendMessage(SenderId: string, message: Messages): Promise<{success: boolean, error?: string, message?:string}>,
   updateMessage(SenderId: string, MessagesId: string, message: Messages): Promise<{success: boolean, error?: string, message?:string}>,
   deleteMessage(UserId: string, MessagesId: string): Promise<{success: boolean, error?: string, message?:string}>,
-  getAllSendersMessages(SenderId: string): Promise<{success: boolean, error?: string, message?:string, messages?: Messages[] | unknown[]}>,
+  getAllSendersMessages(SenderId: string, ReceiverId: string): Promise<{success: boolean, error?: string, message?:string, messages?: Messages[] | unknown[]}>,
   getMessageByMessageId(MessagesId: string): Promise<{success: boolean, error?: string, message?:string, messages?: Messages | unknown}>
 }
 

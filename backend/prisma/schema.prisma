@@ -38,6 +38,8 @@ model User {
   CartItems          Cart[]
   Reviews            Review[]
   Progresses         Progress[]
+  MessagesSent       Messages[]      @relation("SentMessages")
+  MessagesRecieved   Messages[]      @relation("RecievedMessages")
 }
 
 model Product {
@@ -136,6 +138,8 @@ model Messages {
   ReceiverId          String
   Message             String
   DateCreated         DateTime @default(now())
+  Sender              User     @relation("SentMessages", fields: [SenderId], references: [UserId], onDelete: NoAction, onUpdate: NoAction)
+  Receiver            User     @relation("RecievedMessages", fields: [ReceiverId], references: [UserId], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model Cart {

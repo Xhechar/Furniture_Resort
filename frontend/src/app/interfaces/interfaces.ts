@@ -129,7 +129,9 @@ export interface Messages {
   SenderId: string,
   ReceiverId: string,
   Message: string,
-  DateCreated: string
+  DateCreated: string,
+  Sender: User,
+  Receiver: User
 }
 
 export interface Cart {
@@ -206,4 +208,15 @@ export interface AdminStyles {
   borderColor: string,
   textColor: string,
   profileTextColor: string
+}
+
+export interface ChatUser {
+  id: number;
+  name: string;
+  avatar?: string;
+  initials?: string;
+  lastMessage: string;
+  time: string;
+  isTyping?: boolean;
+  unreadCount?: number;
 }

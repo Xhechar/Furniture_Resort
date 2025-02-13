@@ -254,7 +254,7 @@ export class MessagesService implements MessagesInterface {
       }
     }
   }
-  public async getAllSendersMessages(SenderId: string): Promise<{ success: boolean; error?: string; message?: string; messages?: Messages[] | unknown[]}> {
+  public async getAllSendersMessages(SenderId: string, ReceiverId: string): Promise<{ success: boolean; error?: string; message?: string; messages?: Messages[] | unknown[]}> {
     let userExists = await this.prisma.user.findUnique({
       where: {
         UserId: SenderId
@@ -274,11 +274,23 @@ export class MessagesService implements MessagesInterface {
         'error': `${userExists.Fullname}, your account is inactive.`
       }
     }
-
+    
     let myMessages = await this.prisma.messages.findMany({
       where: {
-        SenderId,
-        ReceiverId: SenderId
+        OR: [
+          {
+            SenderId,
+            ReceiverId
+          },
+          {
+            SenderId: ReceiverId,
+            ReceiverId: SenderId
+          }
+        ]
+      },
+      include: {
+        Sender: true,
+        Receiver: true
       },
       orderBy: {
         DateCreated: 'asc'

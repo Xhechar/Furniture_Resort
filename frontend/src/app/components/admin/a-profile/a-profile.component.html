@@ -1,94 +1,79 @@
-<div class="entire-stuff">
-  <div class="backround-area">
+<div class="profile-container">
+  <div class="profile-header" [style.background-image]="'url(' + user.BackgroundWallpaper + ')'">
     <div class="upload-container">
       <label for="image-upload" class="upload-label">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="upload-icon"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M3 16.5V8.119c0-.704.349-1.36.922-1.748L9.36 3.387c.504-.347 1.132-.347 1.636 0l5.438 3.984c.573.388.922 1.044.922 1.748V16.5M15 21a3 3 0 110-6 3 3 0 010 6z"
-          />
+        <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5V8.119c0-.704.349-1.36.922-1.748L9.36 3.387c.504-.347 1.132-.347 1.636 0l5.438 3.984c.573.388.922 1.044.922 1.748V16.5M15 21a3 3 0 110-6 3 3 0 010 6z" />
         </svg>
         <span class="upload-text">Upload</span>
         <input id="image-upload" type="file" accept="image/*" class="upload-input" />
       </label>
     </div>
-    
   </div>
-  <div class="rest-profile">
+  
+  <div class="profile-content">
     <div class="user-card">
       <div class="card-header">
-        <img src="https://via.placeholder.com/150" alt="User Profile" class="profile-img" />
+        <img [src]="user.ProfileImage" alt="User Profile" class="profile-img" />
         <button class="edit-btn">
           <i class="fas fa-edit"></i>
         </button>
       </div>
       <div class="card-body">
-        <h2 class="user-name">Nathaniel Poole</h2>
-        <p class="user-company">Microsoft Inc.</p>
+        <h2 class="user-name">{{ user.Fullname }}</h2>
+        <p class="user-role">{{ user.Role }}</p>
         <div class="stats">
           <div class="stat">
-            <span class="label">Opportunities applied</span>
-            <span class="value applied">32</span>
+            <span class="label">Orders</span>
+            <span class="value orders">{{ user.Orders?.length || 0 }}</span>
           </div>
           <div class="stat">
-            <span class="label">Opportunities won</span>
-            <span class="value won">26</span>
+            <span class="label">Wishlist Items</span>
+            <span class="value wishlist">{{ user.WishListProducts?.length || 0 }}</span>
           </div>
           <div class="stat">
-            <span class="label">Current opportunities</span>
-            <span class="value current">6</span>
+            <span class="label">Cart Items</span>
+            <span class="value cart">{{ user.CartItems?.length || 0 }}</span>
           </div>
         </div>
-        <button class="profile-btn">View Public Profile</button>
-        <a href="#" class="profile-link">https://app.ahiregroup.com</a>
+        <a [href]="'https://app.ahiregroup.com/user/' + user.UserId" class="profile-link">{{ 'https://app.ahiregroup.com/user/' + user.UserId }}</a>
       </div>
     </div>
 
-    <div class="account-settings-xhr">
-      <form class="form-xhr">
-        <div class="form-group-xhr">
-          <label for="first-name" class="label-xhr">First Name</label>
-          <input type="text" id="first-name" class="input-xhr" value="Nathaniel" />
+    <div class="account-settings">
+      <form class="profile-form">
+        <div class="form-group">
+          <label for="fullname" class="form-label">Full Name</label>
+          <input type="text" id="fullname" class="form-input" [value]="user.Fullname" name="fullname" />
         </div>
-        <div class="form-group-xhr">
-          <label for="last-name" class="label-xhr">Last Name</label>
-          <input type="text" id="last-name" class="input-xhr" value="Poole" />
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" id="email" class="form-input" [value]="user.Email" name="email" />
         </div>
-        <div class="form-group-xhr">
-          <label for="phone-number" class="label-xhr">Phone Number</label>
-          <input type="text" id="phone-number" class="input-xhr" value="+1800-000" />
+        <div class="form-group">
+          <label for="mobile" class="form-label">Phone Number</label>
+          <input type="text" id="mobile" class="form-input" [value]="user.Mobile" name="mobile" />
         </div>
-        <div class="form-group-xhr">
-          <label for="email-address" class="label-xhr">Email address</label>
-          <input type="email" id="email-address" class="input-xhr" value="nathaniel.poole@microsoft.com" />
+        <div class="form-group">
+          <label for="gender" class="form-label">Gender</label>
+          <input type="text" id="gender" class="form-input" [value]="user.Gender" name="gender" />
         </div>
-        <div class="form-group-xhr">
-          <label for="city" class="label-xhr">City</label>
-          <input type="text" id="city" class="input-xhr" value="Bridgeport" />
+        <div class="form-group">
+          <label for="city" class="form-label">City</label>
+          <input type="text" id="city" class="form-input" [value]="user.City" name="city" />
         </div>
-        <div class="form-group-xhr">
-          <label for="state" class="label-xhr">State/County</label>
-          <input type="text" id="state" class="input-xhr" value="WA" />
+        <div class="form-group">
+          <label for="country" class="form-label">Country</label>
+          <input type="text" id="country" class="form-input" [value]="user.Country" name="country" />
         </div>
-        <div class="form-group-xhr">
-          <label for="postcode" class="label-xhr">Postcode</label>
-          <input type="text" id="postcode" class="input-xhr" value="31005" />
+        <div class="form-group">
+          <label for="id" class="form-label">ID Number</label>
+          <input type="text" id="id" class="form-input" [value]="user.IdentificationNumber" name="id" />
         </div>
-        <div class="form-group-xhr">
-          <label for="country" class="label-xhr">Country</label>
-          <input type="text" id="country" class="input-xhr" value="United States" />
+        <div class="form-group form-actions">
+          <button type="submit" class="form-button">Update Profile</button>
         </div>
-        <button type="submit" class="btn-xhr">Update</button>
       </form>
     </div>
-    
   </div>
 </div>
