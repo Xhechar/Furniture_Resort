@@ -1,7 +1,7 @@
 <app-notifications></app-notifications>
 <body>
     <div class="container">
-        <h1>Create <span class="highlight">New</span> Furniture</h1>
+        <h1>{{inUpdate ? 'Update' : 'Create'}} <span class="highlight">{{inUpdate ? 'Existing' : 'New'}}</span> Furniture</h1>
         <form [formGroup]="newProductForm" (ngSubmit)="createNewProduct()">
             <div class="form-layout">
                 <div class="upload-seection-holder">
@@ -66,7 +66,7 @@
                         <label for="category">Category</label>
                         <select formControlName="Category" id="category">
                             <option value="" selected disabled>Select Category</option>
-                            <option *ngFor="let option of category_options; let i = index" [value]="option">{{category_options[i]}}</option>
+                            <option *ngFor="let option of category_options; let i = index">
                         </select>
                         <div class="err" *ngIf="newProductForm.get('Category')?.invalid && (newProductForm.get('Category')?.touched || newProductForm.get('Category')?.dirty)">
                             <div *ngIf="newProductForm.get('Category')?.errors?.['required']">category is required.</div>
@@ -89,7 +89,7 @@
                     </div>
                     <div class="input-box1">
                         <label for="sizes">Colour</label>
-                        <input class="color-picker" type="color" id="color" required (change)="setColorBg($event)">
+                        <input class="color-picker" type="color" id="color" required (change)="setColorBg($event)" [value]="productData ? productData.Colour : '#000000'">
                         <div class="color-area" *ngIf="picked_color" [style]="_color"><p>{{picked_color}}</p></div>
                     </div>
                 </div>
@@ -151,8 +151,8 @@
 
             <!-- Buttons -->
             <div class="button-group">
-                <button type="submit" class="create-btn">Create</button>
-                <button type="button" class="cancel-btn">Cancel</button>
+                <button type="submit" class="create-btn">{{inUpdate ? 'Update' : 'Create'}}</button>
+                <button type="button" class="cancel-btn" routerLink="/admin/products" (click)="removeFormValues()">Cancel</button>
             </div>
         </form>
     </div>

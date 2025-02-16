@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { CategoryComponent } from '../../category/category.component';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'app-admin-categories',
@@ -9,18 +11,12 @@ import { Component } from '@angular/core';
   styleUrl: './admin-categories.component.css'
 })
 export class AdminCategoriesComponent {
-  categories = [
-    { id: 1, name: 'Electronics' },
-    { id: 2, name: 'Furniture' },
-    { id: 3, name: 'Clothing' },
-  ];
-
-  // Placeholder methods for update and delete actions
-  onUpdateCategory(id: number): void {
-    alert(`Update category with ID: ${id}`);
+  constructor(private ms: ModalService) {}
+  displayModal(): void {
+    this.ms.openModal({ operation: true, submitAction: 'Add', inputValue: '' });
   }
 
-  onDeleteCategory(id: number): void {
-    alert(`Delete category with ID: ${id}`);
+  displayUpdateModal(): void {
+    this.ms.openModal({ operation: true, submitAction: 'Update', inputValue: 'Category 1' });
   }
 }

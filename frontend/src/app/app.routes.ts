@@ -59,7 +59,6 @@ export const routes: Routes = [
   { path: 'create-review', component: CreateReviewComponent }, //to be removed
   { path: 'create-pqt', component: CreatePqtComponent }, //to be removed
   { path: 'auth-change-password', component: ChangepasswordComponent},
-  { path: 'new-product', component: NewproductComponent }, //to be removed
   { path: 'user', component: UserComponent , children: [
     { path: 'cart', component: CartComponent },
     { path: 'my-reviews', component: MyreviewsComponent },
@@ -74,9 +73,12 @@ export const routes: Routes = [
   },
   { path: 'admin', component: AdminComponent, children: [
     { path: 'a-profile', component: AProfileComponent },
+    { path: '', component: DashboardComponent },
     { path: 'dashboard', component: DashboardComponent },
     { path: 'products', component: AdminProductsComponent, children: [
+      { path: '', component: ExistingProductsComponent },
       { path: 'activated-products', component: ActivatedProductsComponent },
+      { path: 'new-product', component: NewproductComponent },
       { path: 'on-offer-products', component: OnOfferProductsComponent },
       { path: 'on-flush-products', component: OnFlushProductsComponent },
       { path: 'created-products', component: ExistingProductsComponent }

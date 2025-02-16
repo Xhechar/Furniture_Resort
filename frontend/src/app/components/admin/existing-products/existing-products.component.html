@@ -47,7 +47,7 @@
         <span style="font-weight: 550; letter-spacing: 2px; color: hsl(16, 100%, 50%);" class="status-activep" *ngIf="!product.IsActivated">In active</span>
       </p>
       <div class="product-actionsp">
-        <i style="color: green;" class="fa-regular fa-pen-to-square fa-bounce"></i>
+        <i style="color: green;" class="fa-regular fa-pen-to-square fa-bounce" (click)="setUpdateValues(product.ProductId)"></i>
         <i style="color: red;" class="fa fa-thin fa-trash"></i>
         <div class="menu-buttonp">
           <i class="fa-solid fa-ellipsis-vertical click-menu" (click)="setSelectedNumber(i + 1)"></i>
@@ -55,7 +55,7 @@
             <button>Add to Flush</button>
             <button>Add to Offer</button>
             <button>Set Customizable</button>
-            <button>Add Make Time</button>
+            <button (click)="displayPqt(product.ProductName, (product.MakePeriods - 0))">Add Make Time</button>
           </div>
         </div>
       </div>

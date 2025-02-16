@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'app-admin-products',
@@ -46,8 +47,14 @@ export class AdminProductsComponent {
     'display': 'block'
   };
 
+  constructor(private ms: ModalService) {}
+
   toggleActivation(index: number) {
     this.selectedProductIndex = index;
+  }
+
+  removeFormValues() {
+    this.ms.resetProductComponent();
   }
 
   performAction(action: string, product: any) {

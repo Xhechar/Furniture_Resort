@@ -1,8 +1,12 @@
-<div class="body">
+<div class="body" [style]="operation ? {'display': 'flex'} : {'display': 'none'}">
   <div class="category-form-container">
-    <h2>Add <span>Category</span></h2>
-    <form #categoryForm="ngForm" (ngSubmit)="createCategory(categoryForm.value)">
-      
+    <div class="form-header">
+      <h2>{{submitAction || 'Add'}} <span>Category</span></h2>
+      <button type="button" class="close-button" aria-label="Close" (click)="closeModal()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <form #categoryForm="ngForm" (ngSubmit)="submitCategory(categoryForm.value)">
       <label for="categoryName">Category Name</label>
       <input
         type="text"
@@ -12,6 +16,7 @@
         ngModel
         required
         minlength="3"
+        [value]="inputValue"
         placeholder="Enter category name"
       />
       <div *ngIf="CategoryName.invalid && (CategoryName.dirty || CategoryName.touched)" class="error">
@@ -22,8 +27,8 @@
           Category name must be at least 3 characters long.
         </div>
       </div>
-
-      <button type="submit" [disabled]="categoryForm.invalid">Add Category</button>
+      
+      <button type="submit" [disabled]="categoryForm.invalid">{{submitAction || 'Add'}} Category</button>
     </form>
   </div>
 </div>

@@ -1,20 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NotificationsComponent } from '../notifications/notifications.component';
 import { ProductsService } from '../../services/products.service';
 import { NotificationsService } from '../../services/notifications.service';
 import { Observable, of } from 'rxjs';
 import { CategoryService } from '../../services/category.service';
+import { Product } from '../../interfaces/interfaces';
+import { ModalService } from '../../services/modal.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-newproduct',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, NotificationsComponent],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NotificationsComponent, RouterLink],
   templateUrl: './newproduct.component.html',
   styleUrl: './newproduct.component.css'
 })
-export class NewproductComponent {
+export class NewproductComponent implements OnInit {
+  inUpdate: boolean = false;
+  productData!: Product;
+
   picked_color = '';
   _color = {
     'background': '#fff'
@@ -25,22 +31,22 @@ export class NewproductComponent {
 
   newProductForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private ps: ProductsService, private ns: NotificationsService, private cs: CategoryService) {
+  constructor(private fb: FormBuilder, private ps: ProductsService, private ns: NotificationsService, private cs: CategoryService, private ms: ModalService) {
     this.newProductForm = fb.group({
-      ProductImages: ['', [Validators.required]],
-      Prize: ['', [Validators.required, this.validateSring()]],
-      Discount: ['', [Validators.required, this.validateSring()]],
-      Deposit: ['', [Validators.required, this.validateSring()]],
-      CustomPrize: ['', [Validators.required, this.validateSring()]],
-      Colour: ['', [Validators.required, this.validateSring()]],
-      Sizes: ['', [Validators.required, this.validateSring()]],
-      ProductName: ['', [Validators.required, this.validateSring()]],
-      Category: ['', [Validators.required], this.validateSring()],
-      StockQuantity: ['', [Validators.required]],
-      StockLimit: ['', [Validators.required]],
-      MakePeriods: ['', [Validators.required]],
-      ShortDesc: ['', [Validators.required, this.validateShortDesc()]],
-      LongDesc: ['', [Validators.required, this.validateLongDesc()]]
+      ProductImages: [this.productData?.ProductImages || '', [Validators.required]],
+      Prize: [this.productData?.Prize || '', [Validators.required, this.validateSring()]],
+      Discount: [this.productData?.Discount || '', [Validators.required, this.validateSring()]],
+      Deposit: [this.productData?.Deposit || '', [Validators.required, this.validateSring()]],
+      CustomPrize: [this.productData?.CustomPrize || '', [Validators.required, this.validateSring()]],
+      Colour: [this.productData?.Colour || '', [Validators.required, this.validateSring()]],
+      Sizes: [this.productData?.Sizes || '', [Validators.required, this.validateSring()]],
+      ProductName: [this.productData?.ProductName || '', [Validators.required, this.validateSring()]],
+      Category: [this.productData?.Category || '', [Validators.required, this.validateSring()]],
+      StockQuantity: [this.productData?.StockQuantity || '', [Validators.required]],
+      StockLimit: [this.productData?.StockLimit || '', [Validators.required]],
+      MakePeriods: [this.productData?.MakePeriods || '', [Validators.required]],
+      ShortDesc: [this.productData?.ShortDesc || '', [Validators.required, this.validateShortDesc()]],
+      LongDesc: [this.productData?.LongDesc || '', [Validators.required, this.validateLongDesc()]]
     });
 
     this.cs.getAllCategories().subscribe({
@@ -55,6 +61,44 @@ export class NewproductComponent {
         this.ns.showMessage(err.error.error as string, false);
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.ms.inUpdate$.subscribe(res => {
+      this.inUpdate = res
+    });
+    this.ms.productData$.subscribe(res => {
+      this.productData = res as Product;
+    });
+
+    this.setFormValues();
+  }
+
+  setFormValues(): void {
+    console.log(this.productData);
+    if (this.productData) {
+      this.newProductForm.patchValue({
+        ProductImages: this.productData.ProductImages,
+        Prize: this.productData.Prize,
+        Discount: this.productData.Discount,
+        Deposit: this.productData.Deposit,
+        CustomPrize: this.productData.CustomPrize,
+        Colour: this.productData.Colour,
+        Sizes: this.productData.Sizes,
+        ProductName: this.productData.ProductName,
+        Category: this.productData.Category,
+        StockQuantity: this.productData.StockQuantity,
+        StockLimit: this.productData.StockLimit,
+        MakePeriods: this.productData.MakePeriods,
+        ShortDesc: this.productData.ShortDesc,
+        LongDesc: this.productData.LongDesc
+      });
+    }
+  }
+
+  removeFormValues() {
+    this.ms.resetProductComponent();
+    this.newProductForm.reset();
   }
 
   createNewProduct() {

@@ -220,3 +220,16 @@ export interface ChatUser {
   isTyping?: boolean;
   unreadCount?: number;
 }
+
+export interface ActionType {
+  operation: boolean,
+  submitAction: string,
+  inputValue: string
+}
+
+export interface PqtModalDetails {
+  pqtCount: number,
+  pqtShow: boolean,
+  pqtData: ProductQuantityTime | null,
+  pqtFurnitureName: string
+}

@@ -63,7 +63,7 @@ div::-webkit-scrollbar-thumb:hover {
 
 .menu-item {
   padding: 12px 15px;
-  font-size: 14px;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   color: #000;
