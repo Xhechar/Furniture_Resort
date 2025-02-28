@@ -25,7 +25,7 @@ export class CategoryService implements CategoryInterface {
     } else {
       return {
         'success': true,
-        'message': `${createCategory.CategoryId} successfully created.`
+        'message': `${createCategory.CategoryName} successfully created.`
       }
     }
   }
@@ -43,9 +43,24 @@ export class CategoryService implements CategoryInterface {
         'error': 'Category specified is not found.'
       }
     } else {
-      return {
-        'success': true,
-        'message': `${categoryExists.CategoryId} updated successfully.`
+      let update = await this.prisma.category.update({
+        where: {
+          CategoryId
+        }, data: {
+          CategoryName: category.CategoryName
+        }
+      });
+
+      if (update === null) {
+        return {
+          'success': false,
+          'message': `Unable to update category.`
+        }
+      } else {
+        return {
+          'success': true,
+          'message': `${update.CategoryName} updated successfully.`
+        }
       }
     }
   }

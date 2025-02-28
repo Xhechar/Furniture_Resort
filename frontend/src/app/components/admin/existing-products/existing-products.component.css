@@ -144,6 +144,15 @@
   display: flex;
   align-items: center;
   justify-content: end;
+  h3 {
+    font-weight: 450;
+    font-size: .8rem;
+    margin: 0;
+    color: #544820;
+  }
+  i {
+    color: #544820;
+  }
 }
 
 .product-headerp,

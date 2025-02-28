@@ -47,7 +47,7 @@ export class MessagesController {
   async getAllSendersMessages(req: ExtendedRequest, res: Response) {
     try {
 
-      let result = await messageService.getAllSendersMessages(getIdFromToken(req));
+      let result = await messageService.getAllSendersMessages(getIdFromToken(req), req.params.ReceiverId);
 
       res.status(201).json(result);
       

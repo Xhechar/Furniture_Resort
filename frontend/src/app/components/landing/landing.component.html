@@ -5,7 +5,7 @@
             <div class="text-content">
                 <h3>Latest Collection.</h3>
                 <h1>Sofas &#38; Beds</h1>
-                <p>Your, shopping companion. Your wish, our command. Make your home beautiful.</p>
+                <p>Your, shopping companion. Make your home beautiful.</p>
             </div>
         </div>
         <div class="right-area">
@@ -17,46 +17,61 @@
     </section>
 
     <section class="featured-products">
-        <div class="title">Our Best Collections.</div>
-        <div class="products-area" *ngIf="products">
-            <div class="product-card" *ngFor="let product of products, let i = index">
-                <div class="product-image">
-                    <img [src]="product.image" [alt]="product.product_name">
-                </div>
-                <div class="product-details">
-                    <div class="product-title">
-                        <h2>{{product.product_name}}</h2>
-                    </div>
-                    <div class="descrition-and-more">
-                        <div class="description">
-                            <p>{{product.short_description}}</p>
-                        </div>
-                        <div class="more">
-                            <p>More</p>
-                            <img src="../../../icons/chevron_right_50dp_544820.png" alt="arrow">
-                        </div>
-                    </div>
-                    <div class="price-and-button">
-                        <div class="price-and-rating">
-                            <div class="price">
-                                <p>Ksh. {{product.price}}</p>
-                            </div>
-                            <div class="rating">
-                                <p>{{product.rating}}.0</p>
-                                <img style="width: 16px;" src="../../../icons/full_star_gold.png" alt="star-rating">
-                            </div>
-                        </div>
-                        <div class="button-container">
-                            <button class="add-cart">
-                                <p>Add To Cart</p>
-                                <img style="width: 14px;" src="../../../icons/icons8-shopping-cart-26.png" alt="cart-image">
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+      <div class="section-title">
+          <h1>Our Best Collections</h1>
+          <div class="title-underline"></div>
+      </div>
+      
+      <div id="products" class="products-area" *ngIf="products">
+          <div class="product-card" *ngFor="let product of products, let i = index">
+              <div class="product-image">
+                  <img src="https://i.pinimg.com/736x/98/48/9a/98489ac0b0ec6f96fd9c0ca367a601ed.jpg" [alt]="product.ProductName">
+                  <div class="quick-actions">
+                      <button class="action-btn wishlist-btn" title="Add to Wishlist">
+                          <i class="fas fa-heart"></i>
+                      </button>
+                      <button class="action-btn view-btn" title="Quick View">
+                          <i class="fas fa-eye"></i>
+                      </button>
+                  </div>
+              </div>
+              
+              <div class="product-details">
+                  <div class="product-title">
+                      <h2>{{product.ProductName}}</h2>
+                  </div>
+                  
+                  <div class="descrition-and-more">
+                      <div class="description">
+                          <p>{{product.ShortDesc}}</p>
+                      </div>
+                      <div class="more">
+                          <p>More</p>
+                          <i class="fas fa-chevron-right"></i>
+                      </div>
+                  </div>
+                  
+                  <div class="price-and-button">
+                      <div class="price-and-rating">
+                          <div class="price">
+                              <p>Ksh. {{product.Prize}}</p>
+                          </div>
+                          <div class="rating">
+                              <p>5.0</p>
+                              <i class="fas fa-star"></i>
+                          </div>
+                      </div>
+                      <div class="button-container">
+                          <button class="add-cart">
+                              <span>Add To Cart</span>
+                              <i class="fas fa-shopping-cart"></i>
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
 
     <section class="on-sale">
         <div class="category-holder">
@@ -70,7 +85,7 @@
             <div class="categories">
                 <h4>On Sale</h4>
                 <div class="categorie-item" *ngFor="let category of categories, let i = index">
-                    <p>{{category}}</p>
+                    <p>{{category.CategoryName}}</p>
                 </div>
             </div>
         </div>

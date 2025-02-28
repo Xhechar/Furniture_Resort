@@ -55,18 +55,21 @@
                     <h3>Identity</h3>
                     <div class="input-box">
                         <label for="product-name">Product Name</label>
-                        <input type="text" id="ProductName" required formControlName="ProductName" placeholder="enter name here">
+                        <input type="text" id="ProductName" required formControlName="ProductName" placeholder="enter name here" maxlength="20">
                         <div class="err" *ngIf="newProductForm.get('ProductName')?.invalid && (newProductForm.get('ProductName')?.touched || newProductForm.get('ProductName')?.dirty)">
                             <div *ngIf="newProductForm.get('ProductName')?.errors?.['required']">furniture name is required.</div>
                             <div *ngIf="newProductForm.get('ProductName')?.errors?.['invalidStringLength']">furniture name must be more than 2 characters.</div>
                             <div *ngIf="newProductForm.get('ProductName')?.errors?.['invalidString']">furniture name can only contain alphanumeric characters and spaces.</div>
+                            <div *ngIf="newProductForm.get('ProductName')?.errors?.['maxlength']">furniture name must be 20 characters or less.</div>
                         </div>
                     </div>
                     <div class="input-box">
                         <label for="category">Category</label>
                         <select formControlName="Category" id="category">
                             <option value="" selected disabled>Select Category</option>
-                            <option *ngFor="let option of category_options; let i = index">
+                            <option *ngFor="let cat_option of category_options" [value]="cat_option.CategoryName">
+                              {{ cat_option.CategoryName }}
+                            </option>
                         </select>
                         <div class="err" *ngIf="newProductForm.get('Category')?.invalid && (newProductForm.get('Category')?.touched || newProductForm.get('Category')?.dirty)">
                             <div *ngIf="newProductForm.get('Category')?.errors?.['required']">category is required.</div>
@@ -130,7 +133,7 @@
                     <h3>Product Details</h3>
                     <div class="input-box">
                         <label for="short-description">Short Description</label>
-                        <textarea id="short-description" rows="2" required formControlName="ShortDesc" placeholder="enter short description here"></textarea>
+                        <textarea id="short-description" rows="2" required formControlName="ShortDesc" placeholder="enter short description here" maxlength="80"></textarea>
                     </div>
                     <div class="err" *ngIf="newProductForm.get('ShortDesc')?.invalid && (newProductForm.get('ShortDesc')?.touched || newProductForm.get('ShortDesc')?.dirty)">
                         <div *ngIf="newProductForm.get('ShortDesc')?.errors?.['required']">Short description is required.</div>

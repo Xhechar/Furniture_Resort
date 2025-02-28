@@ -16,7 +16,7 @@
         ngModel
         required
         minlength="3"
-        [value]="inputValue"
+        [value]="inputValue.split(', ')[0]"
         placeholder="Enter category name"
       />
       <div *ngIf="CategoryName.invalid && (CategoryName.dirty || CategoryName.touched)" class="error">

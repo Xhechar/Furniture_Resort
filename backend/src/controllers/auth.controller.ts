@@ -1,8 +1,6 @@
 import { Request, Response } from "express"
 import { AuthService } from "../services/auth.service"
 import { LoginDetailsSchema, RecoveryDetailsSchema } from "../validators/backend.input.validators";
-import jwt from "jsonwebtoken";
-import { User } from "@prisma/client";
 
 let authService = new AuthService();
 

@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { ModalService } from '../../../services/modal.service';
 import { Router } from '@angular/router';
 import { Product } from '../../../interfaces/interfaces';
+import { ProductsService } from '../../../services/products.service';
+import { NotificationsService } from '../../../services/notifications.service';
 
 @Component({
   selector: 'app-existing-products',
@@ -15,54 +17,11 @@ export class ExistingProductsComponent {
   selected: number = 0;
   selectedProducts: string[] = [];
 
-  products: Product[] = [
-    {
-      ProductId: 'th',
-      ProductName: 'Sofa Set',
-      Category: 'Furniture',
-      Prize: 500,
-      StockQuantity: 12,
-      StockLimit: 10,
-      CustomPrize: 750,
-      IsActivated: true,
-      DateCreated: new Date('2023-12-25'),
-      IsCustommable: true,
-      OnOffer: true,
-      OnFlushSale: true,
-      ProductImages: '',
-      ShortDesc: 'smth',
-      LongDesc: 'smth',
-      Sizes: 'smth',
-      Colour: '#2acbb8',
-      Discount: 0,
-      MakePeriods: 0,
-      Deposit: 0
-    },
-    {
-      ProductId: 'thr',
-      ProductName: 'Sofa Seta',
-      Category: 'Furniture',
-      Prize: 500,
-      StockQuantity: 50,
-      StockLimit: 10,
-      CustomPrize: 600,
-      IsActivated: false,
-      DateCreated: new Date('2023-12-25'),
-      IsCustommable: false,
-      OnOffer: true,
-      OnFlushSale: false,
-      ProductImages: '',
-      ShortDesc: 'smth',
-      LongDesc: 'smth',
-      Sizes: 'smth',
-      Colour: '#2acbb8',
-      Discount: 0,
-      MakePeriods: 0,
-      Deposit: 0
-    }
-  ];
+  products: Product[] = [];
 
-  constructor(private ms: ModalService, private router: Router) { }
+  constructor(private ms: ModalService, private router: Router, private ps: ProductsService, private ns: NotificationsService) {
+    this.getProducts();
+  }
   
   setUpdateValues(ProductId: string) {
     this.ms.updateProductComponent(true, this.products.filter(p => p.ProductId === ProductId)[0]);
@@ -83,5 +42,20 @@ export class ExistingProductsComponent {
 
   displayPqt(ProductName: string, pqtCount: number) {
     this.ms.updatePqtModalDetails({pqtCount, pqtShow: true, pqtData: null, pqtFurnitureName: ProductName})
+  }
+
+  getProducts() {
+    this.ps.getAllProducts().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.products = response.products as Product[];
+        } else {
+          this.ns.showMessage(response.error as string, false);
+        }
+      },
+      error: (error) => {
+        this.ns.showMessage(error.error.error as string, false);
+      }
+    })
   }
 }

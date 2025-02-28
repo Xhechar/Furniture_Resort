@@ -6,9 +6,12 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class NotificationsService {
+  private triggerRefresh = new BehaviorSubject<boolean>(false);
 
   private messageSubject = new BehaviorSubject<string | null>(null);
   private typeSubject = new BehaviorSubject<boolean | null>(null);
+
+  triggerRefresh$: Observable<boolean> = this.triggerRefresh.asObservable();
 
   message$: Observable<string | null> = this.messageSubject.asObservable();
   type$: Observable<boolean | null> = this.typeSubject.asObservable();
@@ -25,6 +28,14 @@ export class NotificationsService {
   clearNotification() {
     this.messageSubject.next(null);
     this.typeSubject.next(null);
+  }
+
+  triggerRefreshState() {
+    this.triggerRefresh.next(true);
+  }
+
+  resetTriggerState() {
+    this.triggerRefresh.next(false);
   }
 }
 

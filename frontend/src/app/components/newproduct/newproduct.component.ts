@@ -6,7 +6,7 @@ import { ProductsService } from '../../services/products.service';
 import { NotificationsService } from '../../services/notifications.service';
 import { Observable, of } from 'rxjs';
 import { CategoryService } from '../../services/category.service';
-import { Product } from '../../interfaces/interfaces';
+import { Category, Product } from '../../interfaces/interfaces';
 import { ModalService } from '../../services/modal.service';
 import { RouterLink } from '@angular/router';
 
@@ -27,7 +27,7 @@ export class NewproductComponent implements OnInit {
   }
   furniture_images: string[] = [];
   set_loader: number = 0;
-  category_options: string[] = ['Dining', 'Bed', 'Chair', 'Table']
+  category_options!: Category[];
 
   newProductForm!: FormGroup;
 
@@ -52,7 +52,7 @@ export class NewproductComponent implements OnInit {
     this.cs.getAllCategories().subscribe({
       next: (res) => {
         if (res.success) {
-          console.log(res.categories);
+          this.category_options = res.categories as Category[];
         } else {
           this.ns.showMessage(res.error as string, false);
         }
@@ -119,6 +119,7 @@ export class NewproductComponent implements OnInit {
       }
     });
     this.newProductForm.reset();
+    this.furniture_images = [];
   }
 
   returnString(names: string[]): string {
@@ -162,7 +163,7 @@ export class NewproductComponent implements OnInit {
     fetch('https://api.remove.bg/v1.0/removebg', {
       method: 'POST',
       headers: {
-        'X-Api-Key': 'wzPTCfm92DB8SAfV6NDYA6sF'
+        'X-Api-Key': 'eWX4oBun9GhnHocJnyumhvdC'
       },
       body: formData
     }).then(res => res.blob()).then(res => {
@@ -172,6 +173,8 @@ export class NewproductComponent implements OnInit {
     });
 
     event.target.value = '';
+    console.log(this.furniture_images);
+    
   }
 
   validateSring(): ValidatorFn {

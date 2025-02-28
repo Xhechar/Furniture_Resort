@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Category, Product } from '../../interfaces/interfaces';
+import { ProductsService } from '../../services/products.service';
+import { NotificationsService } from '../../services/notifications.service';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-landing',
@@ -10,51 +14,76 @@ import { RouterLink } from '@angular/router';
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.css'
 })
-export class LandingComponent {
-  products = [
-    {
-      image: "../../../furniture_images/chair-removebg-preview.png",
-      product_name: "GREY SOURES DINING",
-      short_description: "Grey well furnished Family table for four, well furnished and decorated.",
-      price: 45000,
-      rating: 4.0
-    },
-    {
-      image: "../../../furniture_images/comfy_chzir-removebg-preview.png",
-      product_name: "COMFY CHZIR CHAIR",
-      short_description: "Grey well furnished Family table for four, well furnished and decorated.",
-      price: 15780,
-      rating: 3.0,
-    },
-    {
-      image: "../../../furniture_images/sofa-removebg-preview.png",
-      product_name: "COTTON WHITE SOFA",
-      short_description: "Grey well furnished Family table for four, well furnished and decorated.",
-      price: 60000,
-      rating: 5.0,
-    },
-    {
-      image: "../../../furniture_images/sofas-removebg-preview.png",
-      product_name: "GREY TRENDY COUCH",
-      short_description: "Grey well furnished Family table for four, well furnished and decorated.",
-      price: 30260,
-      rating: 4.0,
-    },
-    {
-      image: "../../../furniture_images/0f7cdfa7e031e7d2ec50348ac09412eb-removebg-preview.png",
-      product_name: "BROWN COUPLE BED",
-      short_description: "Grey well furnished Family table for four, well furnished and decorated.",
-      price: 50000,
-      rating: 5.0,
-    },
-    {
-      image: "../../../furniture_images/09f08cd83ce7e1e127a455a3ed242cd0-removebg-preview.png",
-      product_name: "GREY SOURES DINING",
-      short_description: "Grey well furnished Family table for four, well furnished and decorated.",
-      price: 25000,
-      rating: 3.0,
-    }
-  ];
+export class LandingComponent implements OnInit {
+  products: Product[] = [];
+  categories: Category[] = [];
+  loading = true;
 
-  categories: string[] = ["Beds", "Sofas", "Dinings", "Tables", "Furnishings", "Lightings", "TV Stands"];
+  constructor(
+    private ps: ProductsService,
+    private ns: NotificationsService,
+    private cs: CategoryService
+  ) {}
+
+  ngOnInit() {
+    this.getProducts();
+    this.getCategories();
+  }
+
+  getProducts() {
+    this.loading = true;
+    this.ps.getAllProducts().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.products = response.products as Product[];
+          // Add animation delay for staggered effect
+          setTimeout(() => {
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach((card, index) => {
+              (card as HTMLElement).style.setProperty('--i', index.toString());
+            });
+          }, 100);
+        } else {
+          this.ns.showMessage(response.message as string, false);
+        }
+        this.loading = false;
+      },
+      error: (err) => {
+        this.ns.showMessage(err.error.error as string, false);
+        this.loading = false;
+      }
+    });
+  }
+
+  getCategories() {
+    this.cs.getAllCategories().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.categories = response.categories as Category[];
+        } else {
+          this.ns.showMessage(response.message as string, false);
+        }
+      },
+      error: (err) => {
+        this.ns.showMessage(err.error.error as string, false);
+      }
+    });
+  }
+
+  addToCart(product: Product) {
+    // Implement your cart functionality here
+    console.log('Adding to cart:', product);
+    this.ns.showMessage(`${product.ProductName} added to cart!`, true);
+  }
+
+  addToWishlist(product: Product) {
+    // Implement your wishlist functionality here
+    console.log('Adding to wishlist:', product);
+    this.ns.showMessage(`${product.ProductName} added to wishlist!`, true);
+  }
+
+  quickView(product: Product) {
+    // Implement quick view functionality
+    console.log('Quick view:', product);
+  }
 }

@@ -1,3 +1,4 @@
+<app-notifications></app-notifications>
 <div class="container">
   <div class="table-header">
     <h2>Categories</h2>
@@ -11,15 +12,20 @@
       <div class="cell actions">Actions</div>
     </div>
     
-    <div class="row">
-      <div class="cell">
-        <i class="fa fa-folder category-icon"></i>
-        <span class="category-name">Technology</span>
+    <div class="categories-holder" *ngIf="categories">
+      <div class="row" *ngFor="let category of categories, let i = index">
+        <div class="cell">
+          <i class="fa fa-folder category-icon"></i>
+          <span class="category-name">{{category.CategoryName}}</span>
+        </div>
+        <div class="cell actions">
+          <i class="fa fa-edit edit-icon" title="Edit" (click)="displayUpdateModal(category.CategoryName + ', ' + category.CategoryId)"></i>
+          <i class="fa fa-trash delete-icon" title="Delete"></i>
+        </div>
       </div>
-      <div class="cell actions">
-        <i class="fa fa-edit edit-icon" title="Edit" (click)="displayUpdateModal()"></i>
-        <i class="fa fa-trash delete-icon" title="Delete"></i>
-      </div>
+    </div>
+    <div class="categories-holder no-categories" *ngIf="!categories">
+      <p>No categories currently available. Add categories now! &nbsp; <i class="fa-solid fa-up-long"></i></p>
     </div>
   </div>
 </div>

@@ -35,9 +35,9 @@ export class MessagesService {
     );
   }
 
-  getAllSendersMessages(): Observable<{ success: boolean; message: string; messages: Messages[]; error?: string }> {
+  getAllSendersMessages(ReceiverId: string): Observable<{ success: boolean; message: string; messages: Messages[]; error?: string }> {
     return this.http.get<{ success: boolean; message: string; messages: Messages[]; error?: string }>(
-      `${this.API_URL}get-messages`,
+      `${this.API_URL}get-messages/${ReceiverId}`,
       { headers: getAuthHeaders() }
     );
   }

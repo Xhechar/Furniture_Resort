@@ -152,3 +152,29 @@
     padding-left: 32px;
   }
 }
+
+.no-categories {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  p {
+    font-size: .9rem;
+    color: #544820;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    i {
+      background-color: hsla(46, 45%, 23%, 0.3);
+      padding: .5rem 1rem;
+      animation: moveUpDown 2s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes moveUpDown {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}

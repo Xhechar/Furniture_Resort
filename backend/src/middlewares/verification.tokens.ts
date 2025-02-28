@@ -87,9 +87,6 @@ export const verifyUser = (req: ExtendedRequest, res: Response, next: NextFuncti
 
   let Role = details.Role;
 
-  console.log(details);
-  
-
   if (Role == '') {
     res.status(401).json({ 'error': 'Invalid user identification.' });
   } else if (Role == 'user') {
