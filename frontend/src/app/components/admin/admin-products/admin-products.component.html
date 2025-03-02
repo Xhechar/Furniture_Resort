@@ -1,37 +1,51 @@
+<!-- Dashboard Stats Container -->
 <div class="stats-container">
-  <div class="stat-card blue" routerLink="created-products">
-    <i class="fa-solid fa-chair"></i>
+  <div class="stat-card" data-category="total" routerLink="created-products">
+    <div class="icon-container">
+      <i class="fas fa-chair"></i>
+    </div>
     <div class="stat-info">
-      <p class="title">Total Products</p>
+      <h3 class="title">Total Furnitures</h3>
       <p class="value">{{products.length > 0 ? products.length : 0}}</p>
     </div>
   </div>
-  <div class="stat-card purple" routerLink="activated-products">
-    <i class='bx bx-list-check'></i>
+
+  <div class="stat-card" data-category="active" routerLink="activated-products">
+    <div class="icon-container">
+      <i class="fas fa-check-circle"></i>
+    </div>
     <div class="stat-info">
-      <p class="title">Activated Products</p>
-      <p class="value">{{activeProducts.length > 0 ? activeProducts.length : 0 }}</p>
+      <h3 class="title">Activated Furnitures</h3>
+      <p class="value">{{activeProducts.length > 0 ? activeProducts.length : 0}}</p>
     </div>
   </div>
-  <div class="stat-card violet" routerLink="on-offer-products">
-    <i class='bx bxs-offer' ></i>
+
+  <div class="stat-card" data-category="offer" routerLink="on-offer-products">
+    <div class="icon-container">
+      <i class="fas fa-tag"></i>
+    </div>
     <div class="stat-info">
-      <p class="title">Products On Offer</p>
-      <p class="value">{{offerProducts.length > 0 ? offerProducts.length : 0 }}</p>
+      <h3 class="title">Furnitures On Offer</h3>
+      <p class="value">{{offerProducts.length > 0 ? offerProducts.length : 0}}</p>
     </div>
   </div>
-  <div class="stat-card green" routerLink="on-flush-products">
-    <i class='bx bxs-flag' ></i>
+
+  <div class="stat-card" data-category="flush" routerLink="on-flush-products">
+    <div class="icon-container">
+      <i class="fas fa-fire"></i>
+    </div>
     <div class="stat-info">
-      <p class="title">Products On Flush Sale</p>
+      <h3 class="title">Furnitures On Flush Sale</h3>
       <p class="value">{{flushSaleProducts.length > 0 ? flushSaleProducts.length : 0}}</p>
     </div>
   </div>
 </div>
 
-<div class="top-bar-u">
-  <button class="button-u new-product-u" routerLink="new-product" (click)="removeFormValues()">
-    <i class="fas fa-plus-circle"></i> New Product
+<!-- Action Button Container -->
+<div class="action-container">
+  <button class="action-button new-product" routerLink="new-product" (click)="removeFormValues()">
+    <i class="fas fa-plus-circle"></i>
+    <span>New Product</span>
   </button>
 </div>
 

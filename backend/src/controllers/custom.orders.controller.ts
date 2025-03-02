@@ -57,7 +57,7 @@ export class CustomOrderController {
       })
     }
   }
-  async getAllCustomOrders(res: Response) {
+  async getAllCustomOrders(req: ExtendedRequest, res: Response) {
     try {
 
       let result = await customOrderService.getAllCustomOrders();
@@ -70,7 +70,7 @@ export class CustomOrderController {
       })
     }
   }
-  async getAllCustomOrdersDelivered(res: Response) {
+  async getAllCustomOrdersDelivered(req: ExtendedRequest, res: Response) {
     try {
 
       let result = await customOrderService.getAllCustomOrdersDelivered();
@@ -79,7 +79,7 @@ export class CustomOrderController {
       
     } catch (error) {
       res.status(501).json({
-        error: error
+        'error': error
       })
     }
   }

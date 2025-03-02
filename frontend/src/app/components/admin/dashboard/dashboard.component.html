@@ -1,169 +1,193 @@
+<!-- Stats Container -->
 <div class="stats-container">
-  <div class="stat-card blue">
-    <i class='bx bxs-objects-vertical-bottom' ></i>
+  <div class="stat-card" data-category="custom-orders">
+    <div class="icon-container">
+      <i class='bx bxs-objects-vertical-bottom'></i>
+    </div>
     <div class="stat-info">
-      <p class="title">Custom Progress Orders</p>
-      <p class="value">2468</p>
+      <h3 class="title">Custom Progress Orders</h3>
+      <p class="value">{{customOrders}}</p>
     </div>
   </div>
-  <div class="stat-card purple">
-    <i class='bx bx-task-x' ></i>
+  
+  <div class="stat-card" data-category="normal-orders">
+    <div class="icon-container">
+      <i class='bx bx-task-x'></i>
+    </div>
     <div class="stat-info">
-      <p class="title">Normal Orders</p>
-      <p class="value">245</p>
+      <h3 class="title">Normal Orders</h3>
+      <p class="value">{{orders}}</p>
     </div>
   </div>
-  <div class="stat-card violet">
-    <i class="bx bxs-group"></i>
+  
+  <div class="stat-card" data-category="users">
+    <div class="icon-container">
+      <i class="bx bxs-group"></i>
+    </div>
     <div class="stat-info">
-      <p class="title">Total Users</p>
-      <p class="value">508</p>
+      <h3 class="title">Total Users</h3>
+      <p class="value">{{recentUsers.length}}</p>
     </div>
   </div>
-  <div class="stat-card green">
-    <i class='bx bxs-wallet-alt' ></i>
+  
+  <div class="stat-card" data-category="revenue">
+    <div class="icon-container">
+      <i class='bx bxs-wallet-alt'></i>
+    </div>
     <div class="stat-info">
-      <p class="title">Total Revenue</p>
-      <p class="value">$2,32,468</p>
+      <h3 class="title">Total Revenue</h3>
+      <p class="value">{{revenue | currency: "Ksh " }}</p>
     </div>
   </div>
 </div>
- <!-- smhw -->
-<div class="list-and-users">
-  
-  <div class="ongoing-summary-u">
-    <div class="header-u">
-      <h1 class="title-u">Business Overview</h1>
-      <i class="fas fa-star achievement-icon-u"></i>
+
+<div class="dashboard-mid-section">
+  <!-- Business Overview -->
+  <div class="business-overview">
+    <div class="section-header">
+      <h2 class="section-title">Business Overview</h2>
+      <i class="fas fa-star section-icon"></i>
     </div>
-    <div class="content-u">
-      <div class="stat-item-u">
-        <i class="fas fa-check-circle success-icon-u"></i>
-        <span>Successful Orders</span>
-        <strong>10 of 15</strong>
-      </div>
-      <div class="stat-item-u">
-        <i class="fas fa-box-open custom-icon-u"></i>
-        <span>Successful Custom Orders</span>
-        <strong>15 of 30</strong>
-      </div>
-      <div class="stat-item-u">
-        <i class="fas fa-tasks progress-icon-u"></i>
-        <span>Progress Completed</span>
-        <strong>40 of 50</strong>
-      </div>
-      <div class="stat-item-u">
-        <i class="fas fa-thumbs-up approval-icon-u"></i>
-        <span>Approved Custom Orders</span>
-        <strong>30 of 40</strong>
-      </div>
-    </div>
-  </div>
-  
-  <!-- ll -->
-  <div class="containeru">
-    <h2 class="titleu">Recent Users</h2>
-    <div class="user-listu">
-      <div class="user-rowu">
-        <div class="user-infou">
-          <img src="https://via.placeholder.com/40" alt="User" />
-          <p class="user-nameu">Morris Johnson</p>
+    
+    <div class="stat-items-container">
+      <div class="stat-item">
+        <div class="stat-icon">
+          <i class="fas fa-check-circle"></i>
         </div>
-        <p class="user-classu">Class 6</p>
-        <p class="user-subjectu">English</p>
-        <p class="user-emailu">MorrisJohnson&and;gmail.com</p>
-        <div class="user-actionu">⋮</div>
-      </div>
-  
-      <div class="user-rowu">
-        <div class="user-infou">
-          <img src="https://via.placeholder.com/40" alt="User" />
-          <p class="user-nameu">Jane Cooper</p>
+        <div class="stat-details">
+          <span class="stat-label">Successful Orders</span>
+          <div class="stat-progress">
+          <div class="progress-bar" style="width: 66%"></div>
+            <span class="progress-text">{{completedOrders}} of {{orders}}</span>
+          </div>
         </div>
-        <p class="user-classu">Class 5</p>
-        <p class="user-subjectu">Music</p>
-        <p class="user-emailu">JaneCooper&and;gmail.com</p>
-        <div class="user-actionu">⋮</div>
       </div>
-  
-      <div class="user-rowu">
-        <div class="user-infou">
-          <img src="https://via.placeholder.com/40" alt="User" />
-          <p class="user-nameu">Esther Howard</p>
+      
+      <div class="stat-item">
+        <div class="stat-icon">
+          <i class="fas fa-box-open"></i>
         </div>
-        <p class="user-classu">Class 8</p>
-        <p class="user-subjectu">Arts</p>
-        <p class="user-emailu">EstherHoward&and;gmail.com</p>
-        <div class="user-actionu">⋮</div>
+        <div class="stat-details">
+          <span class="stat-label">Successful Custom Orders</span>
+          <div class="stat-progress">
+            <div class="progress-bar" style="width: 50%"></div>
+            <span class="progress-text">{{completedCustomOrders}} of {{customOrders}}</span>
+          </div>
+        </div>
       </div>
-  
-      <div class="user-rowu">
-        <div class="user-infou">
-          <img src="https://via.placeholder.com/40" alt="User" />
-          <p class="user-nameu">Wade Warren</p>
+      
+      <div class="stat-item">
+        <div class="stat-icon">
+          <i class="fas fa-tasks"></i>
         </div>
-        <p class="user-classu">Class 7</p>
-        <p class="user-subjectu">Physics</p>
-        <p class="user-emailu">WadeWarren&and;gmail.com</p>
-        <div class="user-actionu">⋮</div>
+        <div class="stat-details">
+          <span class="stat-label">Progress Completed</span>
+          <div class="stat-progress">
+            <div class="progress-bar" style="width: 80%"></div>
+            <span class="progress-text">{{completedProgresses}} of {{progresses}}</span>
+          </div>
+        </div>
       </div>
-  
-      <div class="user-rowu">
-        <div class="user-infou">
-          <img src="https://via.placeholder.com/40" alt="User" />
-          <p class="user-nameu">Jenny Wilson</p>
+      
+      <div class="stat-item">
+        <div class="stat-icon">
+          <i class="fas fa-thumbs-up"></i>
         </div>
-        <p class="user-classu">Class 9</p>
-        <p class="user-subjectu">Chemistry</p>
-        <p class="user-emailu">JennyWilson&and;gmail.com</p>
-        <div class="user-actionu">⋮</div>
+        <div class="stat-details">
+          <span class="stat-label">Active Users</span>
+          <div class="stat-progress">
+            <div class="progress-bar" style="width: 75%"></div>
+            <span class="progress-text">{{activeUsers}} of {{recentUsers.length}}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   
+  <!-- Recent Users -->
+  <div class="recent-users">
+    <div class="section-header">
+      <h2 class="section-title">Recent Users</h2>
+      <button class="view-all-btn">View All <i class="fas fa-arrow-right"></i></button>
+    </div>
+    
+    <div class="users-list">
+      <div class="user-row" *ngFor="let user of recentUsers">
+        <div class="user-info">
+          <img [src]="user.ProfileImage || '/api/placeholder/40/40'" [alt]="user.Fullname" class="user-avatar" />
+          <div class="user-name-email">
+            <h4 class="user-name">{{user.Fullname}}</h4>
+            <p class="user-email">{{user.Email}}</p>
+          </div>
+        </div>
+        <div class="user-details">
+          <span class="user-detail">
+            <i class="fa-solid fa-earth-europe"></i>
+            {{user.Country}}
+          </span>
+          <span class="user-detail">
+            <i class="fa-solid fa-person-half-dress"></i>
+            {{user.Gender}}
+          </span>
+        </div>
+        <div class="user-actions">
+          <button class="action-btn">
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-
-
-<div class="containerp">
-  <h2 class="titlep">Product List</h2>
-  <div class="product-listp">
-    <!-- Product Row -->
-    <div class="product-headerp">
-      <p class="product-namep">Product Name</p>
-      <p class="product-categoryp">Category</p>
-      <p class="product-prizep">Prize</p>
-      <p class="product-stockp">Stock Quantity</p>
-      <p class="product-limitp">Stock Limit</p>
-      <p class="product-offerp">On Offer</p>
-      <p class="product-createdp">Date Created</p>
-      <p class="product-activatedp">Activated</p>
+<div class="products-section">
+  <div class="section-header">
+    <h2 class="section-title">Product List</h2>
+    <div class="header-actions">
+      <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search products..." class="search-input">
+      </div>
+      <button class="add-product-btn">
+        <i class="fas fa-plus-circle"></i> New Product
+      </button>
     </div>
-
-    <!-- Example Product 1 -->
-    <div class="product-rowp">
-      <p class="product-namep">Sofa Set</p>
-      <p class="product-categoryp">Furniture</p>
-      <p class="product-prizep">$500</p>
-      <p class="product-stockp">50</p>
-      <p class="product-limitp">10</p>
-      <p class="product-offerp">Yes</p>
-      <p class="product-createdp">2023-12-25</p>
-      <p class="product-activatedp">Yes</p>
+  </div>
+  
+  <div class="products-table">
+    <div class="table-header">
+      <div class="col-product-name">Product Name</div>
+      <div class="col-category">Category</div>
+      <div class="col-price">Price</div>
+      <div class="col-stock">Stock Quantity</div>
+      <div class="col-limit">Stock Limit</div>
+      <div class="col-offer">On Offer</div>
+      <div class="col-date">Date Created</div>
+      <div class="col-status">Status</div>
     </div>
-
-    <!-- Example Product 2 -->
-    <div class="product-rowp">
-      <p class="product-namep">Dining Table</p>
-      <p class="product-categoryp">Furniture</p>
-      <p class="product-prizep">$700</p>
-      <p class="product-stockp">30</p>
-      <p class="product-limitp">5</p>
-      <p class="product-offerp">No</p>
-      <p class="product-createdp">2023-11-10</p>
-      <p class="product-activatedp">No</p>
+    
+    <div class="table-row" *ngFor="let product of products">
+      <div class="col-product-name">
+        <div class="product-thumb" [style.backgroundColor]="product.Colour || '#f0f0f0'">
+          <i [class]="'fas fa-chair'"></i>
+        </div>
+        <span>{{product.ProductName}}</span>
+      </div>
+      <div class="col-category">{{product.Category}}</div>
+      <div class="col-price">${{product.Prize}}</div>
+      <div class="col-stock">{{product.StockQuantity}}</div>
+      <div class="col-limit">{{product.StockLimit}}</div>
+      <div class="col-offer">
+        <span class="status-badge" [ngClass]="product.OnOffer ? 'badge-success' : 'badge-neutral'">
+          {{product.OnOffer ? 'Yes' : 'No'}}
+        </span>
+      </div>
+      <div class="col-date">{{product.DateCreated | date:'yyyy-MM-dd'}}</div>
+      <div class="col-status">
+        <span class="status-badge" [ngClass]="product.IsActivated ? 'badge-active' : 'badge-inactive'">
+          {{product.IsActivated ? 'Active' : 'Inactive'}}
+        </span>
+      </div>
     </div>
-
-    <!-- Add more product rows as needed -->
   </div>
 </div>

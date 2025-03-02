@@ -1,73 +1,154 @@
+<app-notifications></app-notifications>
+<div class="modal-overlay" *ngIf="showModal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <button class="close-button" (click)="hideModal()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fa fa-exclamation-triangle"></i>
+      </div>
+      <div class="modal-message">
+        {{message}} <span class="highlight">{{furnitureName}}</span>?
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" (click)="hideModal()">
+        <i class="fa fa-times-circle"></i> Cancel
+      </button>
+      <button type="button" class="btn btn-confirm" (click)="confirmDelete()">
+        <i class="fa fa-check-circle"></i> Confirm
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="top-bar-u">
-  <button class="button-u" [disabled]="selectedProducts.length > 0 ? false : true">
+  <button class="button-u" *ngIf="selectedProducts.length > 0" (click)="openDeleteModal('to offer', '', 'Are you sure you want to add selected items ', 'add to offer')">
     <i class="fas fa-percent"></i> Add To Offer
   </button>
-  <button class="button-u" disabled>
-    <i class="fas fa-fire"></i> Add To Flush Sale
+  <button class="button-u" *ngIf="selectedProducts.length > 0" (click)="openDeleteModal('flush sale', '', 'Are you sure you want to add selected items to ', 'add flush sale')">
+    <i class="fas fa-fire"></i> Add Flush Sale
   </button>
-  <button class="button-u" [disabled]="selectedProducts.length > 0 ? false : true">
-    <i class="fas fa-cogs"></i> Enable Custome Payment
+  <button class="button-u" *ngIf="selectedProducts.length > 0" (click)="openDeleteModal('custom payment', '', 'Are you sure you want to add selected items to ', 'enable custom payment')">
+    <i class="fas fa-cogs"></i> Enable Custom Payment
   </button>
-  <button class="button-u" [disabled]="selectedProducts.length > 0 ? false : true" >
+  <button class="button-u" *ngIf="selectedProducts.length > 0" (click)="openDeleteModal('activated state', '', 'Are you sure you want to add selected items to ', 'activate selected')">
     <i class="fas fa-clock"></i> Activate Selected
+  </button>
+  <button class="button-u" *ngIf="selectedProducts.length > 0" (click)="openDeleteModal('', '', 'Are you sure you want to delete selected items', 'delete selected')">
+    <i class="fa-solid fa-eraser"></i> Delete Selected
   </button>
 </div>
 
-<div class="containerp">
-  <h2 class="titlep">Furniture List</h2>
-  <div class="product-listp" *ngIf="products.length !== 0">
-    <!-- Product Header -->
-    <div class="product-headerp">
-      <p class="product-checkboxp"></p>
-      <p class="product-namep">Product Name</p>
-      <p class="product-prizep">Prize</p>
-      <p class="product-stockp">Stock</p>
-      <p class="product-limitp">On Flush</p>
-      <p class="product-customizablep">Custom Status</p>
-      <p class="product-activatedp">Activation Status</p>
-      <p class="product-actionsp">Actions</p>
+<!-- furniture-list.component.html -->
+<div class="container">
+  <div class="table-header">
+    <h2>Furniture List</h2>
+  </div>
+  
+  <div class="table">
+    <div class="row header">
+      <div class="cell checkbox-cell"></div>
+      <div class="cell name-cell">Product Name</div>
+      <div class="cell price-cell">Price</div>
+      <div class="cell stock-cell">Stock</div>
+      <div class="cell limit-cell">Stock Limit</div>
+      <div class="cell custom-cell">Custom Status</div>
+      <div class="cell active-cell">Activation Status</div>
+      <div class="cell actions-cell">Actions</div>
     </div>
-
-    <div class="product-rowp" *ngFor="let product of products, let i = index">
-      <input type="checkbox" class="checkboxp" (change)="setSelectedProduct(product.ProductId)" />
-      <p class="product-namep">{{product.ProductName}}</p>
-      <p class="product-prizep">{{product.Prize | currency }}</p>
-      <p class="product-stockp">
-        <i class="fa-solid fa-circle-exclamation fa-beat-fade" *ngIf="product.StockQuantity < product.StockLimit"></i>
-        {{product.StockQuantity}}
-      </p>
-      <p class="product-limitp">
-        <span class="customizable-truep" style="letter-spacing: 2px; color: green;" *ngIf="product.OnFlushSale">{{product.OnFlushSale ? 'true' : 'false'}}</span>
-        <span class="customizable-truep" style="letter-spacing: 2px; color: hsl(16, 100%, 50%);" *ngIf="!product.OnFlushSale">{{product.OnFlushSale ? 'true' : 'false'}}</span>
-      </p>
-      <p class="product-customizablep">
-        <span class="customizable-truep" style="letter-spacing: 2px;" *ngIf="product.IsCustommable">{{product.IsCustommable ? 'true' : 'false'}}</span>
-        <span class="customizable-truep" style="letter-spacing: 2px; color: hsl(16, 100%, 50%);" *ngIf="!product.IsCustommable">{{product.IsCustommable ? 'true' : 'false'}}</span>
-      </p>
-      <p class="product-activatedp">
-        <i class="fa-solid fa-lightbulb" *ngIf="!product.IsActivated"></i>
-        <span style="font-weight: 550; letter-spacing: 2px;" class="status-activep" *ngIf="product.IsActivated">Activated</span>
-        <span style="font-weight: 550; letter-spacing: 2px; color: hsl(16, 100%, 50%);" class="status-activep" *ngIf="!product.IsActivated">In active</span>
-      </p>
-      <div class="product-actionsp">
-        <i style="color: green;" class="fa-regular fa-pen-to-square fa-bounce"></i>
-        <i style="color: red;" class="fa fa-thin fa-trash"></i>
-        <div class="menu-buttonp">
-          <i class="fa-solid fa-ellipsis-vertical click-menu" (click)="setSelectedNumber(i + 1)"></i>
-          <div class="menu-dropdownp" [class.activated]="selected === (i + 1)">
-            <button disabled class="col">Add to Flush</button>
-            <button>Add to Offer</button>
-            <button>Set Customizable</button>
-            <button>Add Make Time</button>
+    
+    <!-- Products Container -->
+    <div class="products-container" *ngIf="products && products.length > 0">
+      <!-- Product Row -->
+      <div class="row product-row" *ngFor="let product of products; let i = index">
+        <!-- Checkbox -->
+        <div class="cell checkbox-cell">
+          <label class="custom-checkbox">
+            <input type="checkbox" (change)="setSelectedProduct(product.ProductId)">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+        
+        <!-- Product Name -->
+        <div class="cell name-cell">
+          <span class="product-name">{{product.ProductName.toLocaleUpperCase()}}</span>
+        </div>
+        
+        <!-- Price -->
+        <div class="cell price-cell">
+          <span class="product-price">{{product.Prize | currency : "Ksh "}}</span>
+        </div>
+        
+        <!-- Stock -->
+        <div class="cell stock-cell">
+          <div class="stock-indicator" [class.low-stock]="product.StockQuantity < product.StockLimit">
+            <i class="fa-solid fa-circle-exclamation warning-icon" *ngIf="product.StockQuantity < product.StockLimit" title="Stock increase required"></i>
+            <span>{{product.StockQuantity}}</span>
+          </div>
+        </div>
+        
+        <!-- Stock Limit -->
+        <div class="cell limit-cell">
+          <span>{{product.StockLimit}}</span>
+        </div>
+        
+        <!-- Custom Status -->
+        <div class="cell custom-cell">
+          <span class="status-badge" [class.status-true]="product.IsCustommable" [class.status-false]="!product.IsCustommable">
+            {{product.IsCustommable ? 'true' : 'false'}}
+          </span>
+        </div>
+        
+        <!-- Activation Status -->
+        <div class="cell active-cell">
+          <div class="status-container">
+            <i class="fa-solid fa-lightbulb toggle-icon" [class.inactive]="!product.IsActivated" (click)="activateProduct(product.ProductId)" title="Activate product"></i>
+            <i class="fa-regular fa-lightbulb toggle-icon" [class.active]="product.IsActivated" (click)="activateProduct(product.ProductId)" title="Deactivate product"></i>
+            <span class="status-badge" [class.status-true]="product.IsActivated" [class.status-false]="!product.IsActivated">
+              {{product.IsActivated ? 'Activated' : 'Inactive'}}
+            </span>
+          </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="cell actions-cell">
+          <div class="action-buttons">
+            <i class="fa-regular fa-pen-to-square edit-icon" (click)="setUpdateValues(product.ProductId)" title="Edit"></i>
+            <i class="fa fa-trash delete-icon" (click)="openDeleteModal(product.ProductName, product.ProductId, 'Are you sure you want to delete, ', 'delete single')" title="Delete"></i>
+            <div class="menu-wrapper">
+              <i class="fa-solid fa-ellipsis-vertical options-icon" (click)="toggleMenu(i)" title="Options"></i>
+              <div class="menu-dropdown" [class.show-menu]="selectedMenuIndex === i">
+                <button (click)="toggleOnFlushSale(product.ProductId)">
+                  <i class="fa-solid fa-water menu-icon"></i>
+                  Add to Flush
+                </button>
+                <button (click)="toggleOnOffer(product.ProductId)">
+                  <i class="fa-solid fa-tag menu-icon"></i>
+                  Add to Offer
+                </button>
+                <button (click)="setProductCustomizable(product.ProductId)">
+                  <i class="fa-solid fa-screwdriver-wrench menu-icon"></i>
+                  Set Customizable
+                </button>
+                <button (click)="displayPqt(product.ProductName, (product.MakePeriods - 0))">
+                  <i class="fa-solid fa-clock menu-icon"></i>
+                  Add Make Time
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Add more product rows as needed -->
-  </div>
-  <div class="product-listp no-products" *ngIf="products.length === 0">
-    <i style="font-size: 2.4rem; color: hsl(0, 0%, 70%);" class="fa-solid fa-chair"></i>
-    <h3 style="color: hsl(0, 0%, 40%); font-weight: 600; letter-spacing: 1px; font-size: medium;">Opps! No items Currently Available</h3>
+    
+    <!-- Empty State -->
+    <div class="products-container no-products" *ngIf="!products || products.length === 0">
+      <i class="fa-solid fa-chair empty-icon"></i>
+      <p>Oops! No items currently available</p>
+    </div>
   </div>
 </div>

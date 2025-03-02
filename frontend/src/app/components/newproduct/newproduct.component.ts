@@ -20,6 +20,7 @@ import { RouterLink } from '@angular/router';
 export class NewproductComponent implements OnInit {
   inUpdate: boolean = false;
   productData!: Product;
+  productId: string = '';
 
   picked_color = '';
   _color = {
@@ -75,15 +76,18 @@ export class NewproductComponent implements OnInit {
   }
 
   setFormValues(): void {
-    console.log(this.productData);
+    console.log(this.newProductForm.value);
     if (this.productData) {
+      this.productId = this.productData.ProductId;
+      this.furniture_images = this.productData.ProductImages.split(', ');
+      this.setPickedColour(this.productData.Colour);
       this.newProductForm.patchValue({
         ProductImages: this.productData.ProductImages,
         Prize: this.productData.Prize,
         Discount: this.productData.Discount,
         Deposit: this.productData.Deposit,
         CustomPrize: this.productData.CustomPrize,
-        Colour: this.productData.Colour,
+        Colour: this.picked_color,
         Sizes: this.productData.Sizes,
         ProductName: this.productData.ProductName,
         Category: this.productData.Category,
@@ -103,21 +107,38 @@ export class NewproductComponent implements OnInit {
 
   createNewProduct() {
     this.newProductForm.patchValue({ ProductImages: this.returnString(this.furniture_images) });
-    this.newProductForm.patchValue({ Colour: this.picked_color});
+    this.newProductForm.patchValue({ Colour: this.picked_color });
     
-    this.ps.createProduct(this.newProductForm.value).subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.ns.showMessage('Product created successfully', true);
-          this.clearImages(this.furniture_images);
-        } else {
-          this.ns.showMessage(res.error as string, false);
+    if (!this.inUpdate) {
+      this.ps.createProduct(this.newProductForm.value).subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.ns.showMessage('Product created successfully', true);
+            this.clearImages(this.furniture_images);
+          } else {
+            this.ns.showMessage(res.error as string, false);
+          }
+        },
+        error: (err) => {
+          this.ns.showMessage(err.error.error as string, false);
         }
-      },
-      error: (err) => {
-        this.ns.showMessage(err.error.error as string, false);
-      }
-    });
+      });
+    } else {
+      this.ps.updateProduct(this.productId, this.newProductForm.value).subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.ns.showMessage(res.message as string, res.success);
+            this.clearImages(this.furniture_images);
+          } else {
+            this.ns.showMessage(res.error as string, false);
+          }
+        },
+        error: (err) => {
+          this.ns.showMessage(err.error.error as string, false);
+        }
+      });
+    }
+    
     this.newProductForm.reset();
     this.furniture_images = [];
   }
@@ -152,30 +173,57 @@ export class NewproductComponent implements OnInit {
     });
   }
 
+  setPickedColour(colorName: string) {
+    fetch(`https://www.thecolorapi.com/id?name=${encodeURIComponent(colorName)}`)
+    .then(res => res.json())
+    .then((res) => {
+      // this.picked_color = res.hex.value;
+      // this._color['background'] = res.hex.value;
+      console.log(res);
+      
+    })
+    .catch(error => console.error("Error fetching color:", error));
+  } 
+
   setFurnitureImages(event: any) {
     const file = event.target.files[0];
-
     this.set_loader = 1;
-
+  
     let formData = new FormData();
     formData.append('image_file', file);
-
+  
     fetch('https://api.remove.bg/v1.0/removebg', {
       method: 'POST',
       headers: {
-        'X-Api-Key': 'eWX4oBun9GhnHocJnyumhvdC'
+        'X-Api-Key': 'GNZNUuaWome9v8nDsFzGsFgy'
       },
       body: formData
-    }).then(res => res.blob()).then(res => {
-      let image: string = URL.createObjectURL(res);
-      this.furniture_images.push(image);
-      this.set_loader = 0;
-    });
-
+    })
+      .then(res => res.blob())
+      .then(res => {
+        const cloudinaryForm = new FormData();
+        cloudinaryForm.append('file', res);
+        cloudinaryForm.append('cloud_name', 'dakyiye2e');
+        cloudinaryForm.append('upload_preset', 'furniture-site-images');
+  
+        return fetch('https://api.cloudinary.com/v1_1/dakyiye2e/image/upload', {
+          method: 'POST',
+          body: cloudinaryForm
+        });
+      })
+      .then(res => res.json())
+      .then(res => {
+        this.furniture_images.push(res.secure_url);
+        this.set_loader = 0;
+      })
+      .catch(err => {
+        this.ns.showMessage(err, false);
+        this.set_loader = 0;
+      });
+  
     event.target.value = '';
-    console.log(this.furniture_images);
-    
   }
+  
 
   validateSring(): ValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {

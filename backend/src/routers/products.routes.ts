@@ -17,7 +17,7 @@ productRouter.put('/toggle-multiple-flush-sale-products', verifyToken, verifyAdm
  productRouter.get('/automate-flash-sale-products', verifyToken, verifyAdmin, productsController.automateFlashSaleProducts);
 productRouter.put('/toggle-customisation-of-single-product/:ProductId', verifyToken, verifyAdmin, productsController.toggleCustomisationOfSingleProduct);
 productRouter.put('/toggle-multiple-customisation-of-products', verifyToken, verifyAdmin, productsController.toggleMultipleCustomisationOfProducts);
-productRouter.delete('/delete-multiple-products', verifyToken, verifyAdmin, productsController.deleteMultipleProducts);
+productRouter.put('/delete-multiple-products', verifyToken, verifyAdmin, productsController.deleteMultipleProducts);
 productRouter.delete('/delete-single-product/:ProductId', verifyToken, verifyAdmin, productsController.deleteSingleProduct);
 productRouter.get('/get-all-activated-products', productsController.getAllActivatedProducts);
 productRouter.get('/get-all-activated-products-on-offer', verifyToken, verifyUser, productsController.getAllActivatedProductsOnOffer);

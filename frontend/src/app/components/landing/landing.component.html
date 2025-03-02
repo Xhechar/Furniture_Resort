@@ -25,7 +25,7 @@
       <div id="products" class="products-area" *ngIf="products">
           <div class="product-card" *ngFor="let product of products, let i = index">
               <div class="product-image">
-                  <img src="https://i.pinimg.com/736x/98/48/9a/98489ac0b0ec6f96fd9c0ca367a601ed.jpg" [alt]="product.ProductName">
+                  <img [src]="product.ProductImages.split(', ')[0]" [alt]="product.ProductName">
                   <div class="quick-actions">
                       <button class="action-btn wishlist-btn" title="Add to Wishlist">
                           <i class="fas fa-heart"></i>
@@ -38,7 +38,7 @@
               
               <div class="product-details">
                   <div class="product-title">
-                      <h2>{{product.ProductName}}</h2>
+                      <h2>{{product.ProductName.toLocaleUpperCase()}}</h2>
                   </div>
                   
                   <div class="descrition-and-more">

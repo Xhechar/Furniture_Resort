@@ -44,7 +44,7 @@ export class OrderController {
       });
     }
   }
-  async getAllOrders(res: Response) {
+  async getAllOrders(req: ExtendedRequest, res: Response) {
     try {
 
       let result = await orderService.getAllOrders();
@@ -57,7 +57,7 @@ export class OrderController {
       });
     }
   }
-  async getAllOrdersDelivered(res: Response) {
+  async getAllOrdersDelivered(req: ExtendedRequest, res: Response) {
     try {
 
       let result = await orderService.getAllOrdersDelivered();

@@ -15,3 +15,42 @@ button {
   border-radius: 10px;
   padding: 10px 20px;
 }
+
+:root {
+  --primary: #544820;
+  --primary-light: rgba(84, 72, 32, 0.1);
+  --accent: hsl(47, 71%, 52%);
+  --accent-hover: hsl(47, 71%, 45%);
+  --white: #ffffff;
+  --text-dark: #333333;
+  --text-light: #666666;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  --total-bg: rgba(69, 142, 225, 0.15);
+  --active-bg: rgba(125, 81, 172, 0.15);
+  --offer-bg: rgba(240, 173, 78, 0.15);
+  --flush-bg: rgba(92, 184, 92, 0.15);
+
+  --primary: #544820;
+  --primary-light: rgba(84, 72, 32, 0.1);
+  --accent: hsl(47, 71%, 52%);
+  --accent-hover: hsl(47, 71%, 45%);
+  --white: #ffffff;
+  --text-dark: #333333;
+  --text-light: #666666;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  --custom-orders-color: #4a6fa1;
+  --custom-orders-bg: rgba(74, 111, 161, 0.15);
+  --normal-orders-color: #9c27b0;
+  --normal-orders-bg: rgba(156, 39, 176, 0.15);
+  --users-color: #6658dd;
+  --users-bg: rgba(102, 88, 221, 0.15);
+  --revenue-color: #3dae58;
+  --revenue-bg: rgba(61, 174, 88, 0.15);
+  
+  --border-radius: 12px;
+}

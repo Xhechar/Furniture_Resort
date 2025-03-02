@@ -32,11 +32,10 @@ export class LandingComponent implements OnInit {
 
   getProducts() {
     this.loading = true;
-    this.ps.getAllProducts().subscribe({
+    this.ps.getAllActivatedProducts().subscribe({
       next: (response) => {
         if (response.success) {
           this.products = response.products as Product[];
-          // Add animation delay for staggered effect
           setTimeout(() => {
             const cards = document.querySelectorAll('.product-card');
             cards.forEach((card, index) => {
@@ -71,19 +70,16 @@ export class LandingComponent implements OnInit {
   }
 
   addToCart(product: Product) {
-    // Implement your cart functionality here
     console.log('Adding to cart:', product);
     this.ns.showMessage(`${product.ProductName} added to cart!`, true);
   }
 
   addToWishlist(product: Product) {
-    // Implement your wishlist functionality here
     console.log('Adding to wishlist:', product);
     this.ns.showMessage(`${product.ProductName} added to wishlist!`, true);
   }
 
   quickView(product: Product) {
-    // Implement quick view functionality
     console.log('Quick view:', product);
   }
 }

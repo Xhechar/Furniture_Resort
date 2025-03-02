@@ -272,7 +272,7 @@ export class ProductService implements ProductInterface {
     let status: boolean = productExists.OnOffer ? false : true;
     
     let updateStatus = await this.prisma.product.update({
-      data: { IsActivated: status }, where: { ProductId: productExists.ProductId }
+      data: { OnOffer: status }, where: { ProductId: productExists.ProductId }
     });
 
     if (updateStatus == null) {
@@ -331,7 +331,7 @@ export class ProductService implements ProductInterface {
       let status: boolean = productExist.OnOffer ? false : true;
     
       let updateStatus = await this.prisma.product.update({
-        data: { IsActivated: status }, where: { ProductId: productExist.ProductId }
+        data: { OnOffer: status }, where: { ProductId: productExist.ProductId }
       });
 
       if (updateStatus == null) {
@@ -391,7 +391,7 @@ export class ProductService implements ProductInterface {
     let status: boolean = productExists.OnFlushSale ? false : true;
     
     let updateStatus = await this.prisma.product.update({
-      data: { IsActivated: status, IsFlushed: true }, where: { ProductId: productExists.ProductId }
+      data: { OnFlushSale: status, IsFlushed: true }, where: { ProductId: productExists.ProductId }
     });
 
     if (updateStatus == null) {
@@ -450,7 +450,7 @@ export class ProductService implements ProductInterface {
       let status: boolean = productExist.OnFlushSale ? false : true;
     
       let updateStatus = await this.prisma.product.update({
-        data: { IsActivated: status, IsFlushed: true }, where: { ProductId: productExist.ProductId }
+        data: { OnFlushSale: status, IsFlushed: true }, where: { ProductId: productExist.ProductId }
       });
 
       if (updateStatus == null) {
@@ -503,7 +503,8 @@ export class ProductService implements ProductInterface {
             OnFlushSale: true
           },
           where: {
-            ProductId: productExist.ProductId
+            ProductId: productExist.ProductId,
+            IsFlushed: false
           }
         });
 
@@ -563,7 +564,7 @@ export class ProductService implements ProductInterface {
     let status: boolean = productExists.IsCustommable ? false : true;
     
     let updateStatus = await this.prisma.product.update({
-      data: { IsActivated: status }, where: { ProductId: productExists.ProductId }
+      data: { IsCustommable: status }, where: { ProductId: productExists.ProductId }
     });
 
     if (updateStatus == null) {
@@ -622,7 +623,7 @@ export class ProductService implements ProductInterface {
       let status: boolean = productExist.IsCustommable ? false : true;
     
       let updateStatus = await this.prisma.product.update({
-        data: { IsActivated: status }, where: { ProductId: productExist.ProductId }
+        data: { IsCustommable: status }, where: { ProductId: productExist.ProductId }
       });
 
       if (updateStatus == null) {

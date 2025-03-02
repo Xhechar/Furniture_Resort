@@ -53,7 +53,7 @@ export class ProductsService {
     return this.http.put<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}toggle-multiple-customisation-of-products`, {ProductIds}, {headers: getAuthHeaders()});
   }
 
-  deleteSingleProduct(ProductId: string): Observable<{ success: boolean, error?: string, message?: string }> {
+  deleteSingleProduct(ProductId: string): Observable<{ success: boolean, error?: string, message?: string }> {    
     return this.http.delete<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}delete-single-product/${ProductId}`, {headers: getAuthHeaders()});
   }
 

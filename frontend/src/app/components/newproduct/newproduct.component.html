@@ -20,7 +20,7 @@
                     </div>
                     <div class="new-images-holder">
                         <div class="new-image" *ngFor="let furniture_image of furniture_images; let i = index">
-                            <button (click)="removeImage(i)">X</button>
+                            <button type="button" (click)="removeImage(i)">X</button>
                             <img [src]="furniture_images[i]" alt="new {{furniture_image}}">
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                     </div>
                     <div class="input-box1">
                         <label for="sizes">Colour</label>
-                        <input class="color-picker" type="color" id="color" required (change)="setColorBg($event)" [value]="productData ? productData.Colour : '#000000'">
+                        <input class="color-picker" type="color" id="color" required (change)="setColorBg($event)" [value]="productData ? picked_color : '#000000'">
                         <div class="color-area" *ngIf="picked_color" [style]="_color"><p>{{picked_color}}</p></div>
                     </div>
                 </div>

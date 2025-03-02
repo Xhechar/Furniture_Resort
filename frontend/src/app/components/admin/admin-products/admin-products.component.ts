@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ModalService } from '../../../services/modal.service';
+import { ProductsService } from '../../../services/products.service';
+import { Product } from '../../../interfaces/interfaces';
 
 @Component({
   selector: 'app-admin-products',
@@ -9,48 +11,38 @@ import { ModalService } from '../../../services/modal.service';
   templateUrl: './admin-products.component.html',
   styleUrl: './admin-products.component.css'
 })
-export class AdminProductsComponent {
+export class AdminProductsComponent implements OnInit {
   selectedProductIndex!: number;
-  products = [
-    {
-      ProductName: 'Sofa Set',
-      Category: 'Furniture',
-      Prize: 500,
-      StockQuantity: 50,
-      StockLimit: 10,
-      CustomPrize: 750,
-      IsActivated: true,
-      DateCreated: new Date('2023-12-25'),
-      IsCustommable: true,
-      OnOffer: true,
-      OnFlushSale: true,
-    },
-    {
-      ProductName: 'Sofa Set',
-      Category: 'Furniture',
-      Prize: 500,
-      StockQuantity: 50,
-      StockLimit: 10,
-      CustomPrize: true,
-      IsActivated: false,
-      DateCreated: new Date('2023-12-25'),
-      IsCustommable: false,
-      OnOffer: true,
-      OnFlushSale: false,
-    }
-    // Add more products here
-  ];
-  activeProducts = this.products.filter(product => product.IsActivated);
-  offerProducts = this.products.filter(product => product.OnOffer);
-  flushSaleProducts = this.products.filter(product => product.OnFlushSale);
+  products: Product[] = [];
+
+  activeProducts : Product[] = [];
+  offerProducts : Product[] = [];
+  flushSaleProducts : Product[] = [];
   containerpDisplay = {
     'display': 'block'
   };
 
-  constructor(private ms: ModalService) {}
+  constructor(private ms: ModalService, private ps: ProductsService) {}
+
+  ngOnInit(): void {
+    this.getProducts();
+  }
 
   toggleActivation(index: number) {
     this.selectedProductIndex = index;
+  }
+
+  getProducts() {
+    this.ps.getAllProducts().subscribe({
+      next: (value) => {
+        if (value.success) {          
+          this.products = value.products as Product[];
+          this.activeProducts = this.products.filter(product => product.IsActivated);
+          this.offerProducts = this.products.filter(product => product.OnOffer);
+          this.flushSaleProducts = this.products.filter(product => product.OnFlushSale);
+        }
+      }
+    })
   }
 
   removeFormValues() {
@@ -59,7 +51,6 @@ export class AdminProductsComponent {
 
   performAction(action: string, product: any) {
     console.log(`Performing ${action} on`, product);
-    // Implement functionality for Add to Flush, Offer, etc.
   }
 
   setContainerDisplay() {
