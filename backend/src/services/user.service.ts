@@ -107,10 +107,10 @@ export class UserService implements UserInterface {
       if (userExists.IsDeleted) {
         return {
           'success': false,
-          'error': 'Update failed. Your account has been terminated'
+          'error': 'Update failed. Your account has been terminated, contact admin.'
         }
       } else {
-        let { UserId, IsWelcomed, IsDeleted, DateCreated, HasOrder, Password, HasWishList, Orders, CustomOrders, WishListProducts, CartItems, Reviews, Progresses, Role, ...details } = user;
+        let { UserId, IsWelcomed, IsDeleted, DateCreated, HasOrder, Password, HasWishList, Orders, CustomOrders, WishListProducts, CartItems, Reviews, Progresses, Role, ProfileImage, Selected, BackgroundWallpaper, ...details } = user;
 
         let updateUser = await this.prisma.user.update({
           data: {
@@ -118,7 +118,7 @@ export class UserService implements UserInterface {
             ...details
           },
           where: {
-            UserId
+            UserId: userExists.UserId
           }
         });
 
@@ -236,12 +236,12 @@ export class UserService implements UserInterface {
         if (updateBackgroundPhoto) {
           return {
             'success': true,
-            'message': 'Profile updated successfully'
+            'message': 'Background picture updated successfully'
           }
         } else {
           return {
             'success': false,
-            'error': 'Unable to update background image.'
+            'error': 'Unable to update background picture.'
           }
         }
       }
@@ -252,6 +252,50 @@ export class UserService implements UserInterface {
       }
     }
   }
+
+  public async updateProfileImage(UserId: string, profilePhoto: string) {
+    let userExists = await this.prisma.user.findUnique({
+      where: {
+        UserId
+      }
+    });
+
+    if (userExists) {
+      if (userExists.IsDeleted) {
+        return {
+          'success': false,
+          'error': 'Update failed because account is terminated. Contact admin'
+        }
+      } else {
+        let updateProfileImage = await this.prisma.user.update({
+          data: {
+            ProfileImage: profilePhoto
+          },
+          where: {
+            UserId
+          }
+        });
+        if (updateProfileImage) {
+          return {
+            'success': true,
+            'message': 'Profile updated successfully'
+          }
+        } else {
+          return {
+            'success': false,
+            'error': 'Unable to update profile image.'
+          }
+        }
+      }
+      
+    } else {
+      return {
+        'success': false,
+        'error': 'User is not found'
+      }
+    }
+  }
+
   public async restoreSoftDeletedUser(UserId: string): Promise<{ success: boolean; error?: string; message?: string; }> {
     let userExists = await this.prisma.user.findUnique({
       where: {

@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { ExtendedRequest, getIdFromToken } from "../middlewares/verification.tokens";
 import { UserService } from "../services/user.service";
-import { RegistrationSchema } from "../validators/backend.input.validators";
+import { RegistrationSchema, UpdateUserSchema } from "../validators/backend.input.validators";
 
 const userService = new UserService();
 
@@ -26,7 +26,7 @@ export class UserController {
   async updateUser(req: ExtendedRequest, res: Response) {
     try {
 
-      let { error } = RegistrationSchema.validate(req.body);
+      let { error } = UpdateUserSchema.validate(req.body);
 
       if (error) res.status(401).json({ error: error.message });
 
@@ -66,6 +66,19 @@ export class UserController {
       });
     }
   }
+
+  async updateProfileImage(req: ExtendedRequest, res: Response) {
+    try {
+
+      res.status(201).json(await userService.updateProfileImage(getIdFromToken(req), req.body.profilePhoto));
+      
+    } catch (error) {
+      res.status(501).json({
+        'error': error
+      });
+    }
+  }
+
   async softDeleteSingleUser(req: ExtendedRequest, res: Response) {
     try {
       

@@ -76,7 +76,6 @@ export class NewproductComponent implements OnInit {
   }
 
   setFormValues(): void {
-    console.log(this.newProductForm.value);
     if (this.productData) {
       this.productId = this.productData.ProductId;
       this.furniture_images = this.productData.ProductImages.split(', ');
@@ -168,21 +167,15 @@ export class NewproductComponent implements OnInit {
     let color = event.target.value;
 
     fetch(`https://www.thecolorapi.com/id?hex=${color.replace("#", "")}`).then(res => res.json()).then((res) => {
-      this.picked_color = res.name.value;
+      this.picked_color = res.name.value + ', ' + color;
       this._color['background'] = color as string;
     });
   }
 
   setPickedColour(colorName: string) {
-    fetch(`https://www.thecolorapi.com/id?name=${encodeURIComponent(colorName)}`)
-    .then(res => res.json())
-    .then((res) => {
-      // this.picked_color = res.hex.value;
-      // this._color['background'] = res.hex.value;
-      console.log(res);
-      
-    })
-    .catch(error => console.error("Error fetching color:", error));
+    console.log(colorName);
+    this.picked_color = colorName;
+    this._color['background'] = colorName.split(', ')[1];
   } 
 
   setFurnitureImages(event: any) {

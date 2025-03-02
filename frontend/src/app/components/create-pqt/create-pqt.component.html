@@ -11,6 +11,7 @@
     </div>
     
     <form #productQtForm="ngForm" (ngSubmit)="createPQT(productQtForm.value)">
+      <h4>Product Make Time: <span>{{originalCount}} of {{pqtCount}}</span></h4>
       <div class="form-group">
         <label for="quantity">No of Items</label>
         <input

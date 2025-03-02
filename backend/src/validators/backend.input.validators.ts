@@ -74,6 +74,42 @@ export const RegistrationSchema = joi.object({
   })
 });
 
+export const UpdateUserSchema = joi.object({
+  Fullname: joi.string().required().min(5).messages({
+    'string.required': 'Fullname is required.',
+    'string.min': 'Fullname should have 5 characters or more'
+  }),
+  Email: joi.string().required().email().messages({
+    'string.required': 'Email is required.',
+    'string.email': 'Please enter a valid email address.'
+  }),
+  Mobile: joi.string().min(10).max(10).pattern(new RegExp('^[0-9]{10}$')).required().messages({
+    'string.required': 'Mobile number is required',
+    'string.min': 'Mobile number should be strictly 10 characters',
+    'string.max': 'Mobile number should be strictly 10 characters',
+    'string.pattern.base': 'Mobile number should only contain numbers'
+  }),
+  Country: joi.string().min(3).max(30).required().messages({
+    'string.required': 'Country Field cannot be empty',
+    'string.min': 'Country should have at least 3 characters or more',
+    'string.max': 'Country should have less than 39 characters'
+  }),
+  City: joi.string().min(3).max(30).required().messages({
+    'string.required': 'City Field cannot be empty',
+    'string.min': 'City should have at least 3 characters or more',
+    'string.max': 'City should have less than 39 characters'
+  }),
+  Gender: joi.string().min(3).max(30).required().messages({
+    'string.required': 'Gender Field cannot be empty',
+    'string.min': 'Gender should have at least 3 characters or more',
+    'string.max': 'Gender should have less than 39 characters'
+  }),
+  IdentificationNumber: joi.number().min(6).required().messages({
+    'number.required': 'Identification number is required',
+    'number.min': 'Identification number should have at least 6 characters or more'
+  })
+});
+
 export const ProductSchema = joi.object({
   ProductName: joi.string().min(3).max(30).required().messages({
     'string.required': 'Please enter Product Name.',

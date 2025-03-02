@@ -134,7 +134,7 @@
                   <i class="fa-solid fa-screwdriver-wrench menu-icon"></i>
                   Set Customizable
                 </button>
-                <button (click)="displayPqt(product.ProductName, (product.MakePeriods - 0))">
+                <button (click)="displayPqt(product.ProductName, (product.MakePeriods - (product.ProductQuantityTimes?.length || 0)))">
                   <i class="fa-solid fa-clock menu-icon"></i>
                   Add Make Time
                 </button>

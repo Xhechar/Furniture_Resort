@@ -104,12 +104,12 @@ export class ProductService implements ProductInterface {
     if (updateProduct == null) {
       return {
         'success': false,
-        'error': 'Unable to create product.'
+        'error': 'Unable to update product.'
       }
     } else {
       return {
         'success': true,
-        'message': 'Product created successfully.'
+        'message': 'Product updated successfully.'
       }
     }
   }

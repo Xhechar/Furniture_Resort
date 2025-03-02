@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ProductQuantityTime } from '../../interfaces/interfaces';
 import { ModalService } from '../../services/modal.service';
+import { PqtService } from '../../services/pqt.service';
 
 @Component({
   selector: 'app-create-pqt',
@@ -16,8 +17,11 @@ export class CreatePqtComponent implements OnInit {
   pqtShow: boolean = false;
   pqtData!: ProductQuantityTime;
   pqtCount: number = 0;
+  originalCount: number = 1;
 
-  constructor(private ms: ModalService) { }
+  @ViewChild('productQtForm') productQtForm!: NgForm;
+
+  constructor(private ms: ModalService, private pqt: PqtService) { }
   
   ngOnInit(): void {
     this.ms.pqtModalDetails$.subscribe(res => {
@@ -33,6 +37,30 @@ export class CreatePqtComponent implements OnInit {
   }
   createPQT(pqt: Partial<ProductQuantityTime>) {
     console.log('New ProductQuantityTime created:', pqt);
+
+    if (this.pqtCount !== this.originalCount) {
+      this.setModal();
+      this.originalCount++;
+      this.productQtForm.reset();
+    } else {
+      this.productQtForm.reset();
+      this.resetModal();
+      this.closeForm();
+    }
+  }
+
+  setModal() {
+    this.ms.updatePqtModalDetails({
+      pqtShow: true,
+      pqtData: null,
+      pqtCount: this.pqtCount,
+      pqtFurnitureName: this.furnitureName
+    });
+  }
+
+  resetModal() {
+    this.ms.updatePqtModalDetails({ pqtShow: false, pqtData: null, pqtCount: 0, pqtFurnitureName: '' });
+    this.originalCount = 1;
   }
 
   closeForm() {

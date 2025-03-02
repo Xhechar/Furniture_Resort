@@ -92,8 +92,8 @@
                     </div>
                     <div class="input-box1">
                         <label for="sizes">Colour</label>
-                        <input class="color-picker" type="color" id="color" required (change)="setColorBg($event)" [value]="productData ? picked_color : '#000000'">
-                        <div class="color-area" *ngIf="picked_color" [style]="_color"><p>{{picked_color}}</p></div>
+                        <input class="color-picker" type="color" id="color" required (change)="setColorBg($event)" [value]="picked_color ? picked_color.split(', ')[0] : '#f9f9f9'">
+                        <div class="color-area" *ngIf="picked_color" [style]="_color"><p>{{picked_color.split(', ')[0]}}</p></div>
                     </div>
                 </div>
 

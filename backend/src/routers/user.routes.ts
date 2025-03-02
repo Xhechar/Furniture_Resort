@@ -10,6 +10,7 @@ userRouter.post("/register", userController.createUser);
 userRouter.put("/update-user", verifyToken, verifyUser, userController.updateUser);
 userRouter.put("/update-user-role/:UserId", verifyToken, verifyAdmin, userController.updateUserRole);
 userRouter.put("/update-background-photo", verifyToken, verifyUser, userController.updateBackgroundPhoto);
+userRouter.put("/update-profile-photo", verifyToken, verifyUser, userController.updateProfileImage);
 userRouter.put("/soft-delete-single-user/:UserId", verifyToken, verifyAdmin, userController.softDeleteSingleUser);
 userRouter.put("/soft-delete-multiple-users", verifyToken, verifyAdmin, userController.softDeleteMultipleUsers);
 userRouter.delete("/delete-multiple-users", verifyToken, verifyAdmin, userController.deleteMultipleUsers);

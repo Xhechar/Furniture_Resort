@@ -27,6 +27,10 @@ export class UserService {
     return this.http.put<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}/update-background-photo`, { BackgroundUrl }, {headers: getAuthHeaders()});
   }
 
+  updateProfileImage(profilePhoto: string): Observable<{ success: boolean, error?: string, message?: string }> {
+    return this.http.put<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}/update-profile-photo`, { profilePhoto }, {headers: getAuthHeaders()});
+  }
+
   softDeleteSngleUser(UserId: string): Observable<{ success: boolean, error?: string, message?: string }> {
     return this.http.put<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}/soft-delete-single-user/${UserId}`, {}, {headers: getAuthHeaders()});
   }

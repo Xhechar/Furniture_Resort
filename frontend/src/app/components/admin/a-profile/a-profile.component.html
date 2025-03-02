@@ -1,12 +1,14 @@
+<app-notifications></app-notifications>
 <div class="profile-container">
   <div class="profile-header" [style.background-image]="'url(' + user.BackgroundWallpaper + ')'">
     <div class="upload-container">
-      <label for="image-upload" class="upload-label">
+      <label for="background-image-upload" class="upload-label">
         <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5V8.119c0-.704.349-1.36.922-1.748L9.36 3.387c.504-.347 1.132-.347 1.636 0l5.438 3.984c.573.388.922 1.044.922 1.748V16.5M15 21a3 3 0 110-6 3 3 0 010 6z" />
         </svg>
-        <span class="upload-text">Upload</span>
-        <input id="image-upload" type="file" accept="image/*" class="upload-input" />
+        <span class="upload-text">Upload Cover</span>
+        <i *ngIf="isBackgroundUploading" class="fas fa-spinner fa-spin loader-icon"></i>
+        <input id="background-image-upload" type="file" accept="image/*" class="upload-input" (change)="uploadBackgroundImage($event)"/>
       </label>
     </div>
   </div>
@@ -14,10 +16,14 @@
   <div class="profile-content">
     <div class="user-card">
       <div class="card-header">
-        <img [src]="user.ProfileImage" alt="User Profile" class="profile-img" />
-        <button class="edit-btn">
-          <i class="fas fa-edit"></i>
-        </button>
+        <div class="profile-img-container">
+          <img [src]="user.ProfileImage" [alt]="user.Fullname" class="profile-img" />
+          <label for="profile-image-upload" class="profile-edit-btn">
+            <i class="fas fa-camera"></i>
+            <i *ngIf="isProfileUploading" class="fas fa-spinner fa-spin loader-icon"></i>
+          </label>
+          <input id="profile-image-upload" type="file" accept="image/*" class="upload-input" (change)="uploadProfileImage($event)"/>
+        </div>
       </div>
       <div class="card-body">
         <h2 class="user-name">{{ user.Fullname }}</h2>
@@ -36,42 +42,155 @@
             <span class="value cart">{{ user.CartItems?.length || 0 }}</span>
           </div>
         </div>
-        <a [href]="'https://app.ahiregroup.com/user/' + user.UserId" class="profile-link">{{ 'https://app.ahiregroup.com/user/' + user.UserId }}</a>
+        <a [href]="'https://my.profile.com/user/' + user.UserId" class="profile-link">{{ 'https://my.profile.com/user/' + user.UserId }}</a>
       </div>
     </div>
-
+    
     <div class="account-settings">
-      <form class="profile-form">
+      <form #profileForm="ngForm" (ngSubmit)="updateProfile(profileForm.value)" class="profile-form">
         <div class="form-group">
-          <label for="fullname" class="form-label">Full Name</label>
-          <input type="text" id="fullname" class="form-input" [value]="user.Fullname" name="fullname" />
+          <label for="Fullname" class="form-label">Full Name</label>
+          <input 
+            type="text" 
+            id="Fullname" 
+            class="form-input" 
+            name="Fullname" 
+            [(ngModel)]="user.Fullname" 
+            #Fullname="ngModel"
+            required
+            minlength="3"
+            [ngClass]="{'input-error': Fullname.invalid && (Fullname.dirty || Fullname.touched)}"
+          />
+          <div *ngIf="Fullname.invalid && (Fullname.dirty || Fullname.touched)" class="error-message">
+            <div *ngIf="Fullname.errors?.['required']">Full name is required</div>
+            <div *ngIf="Fullname.errors?.['minlength']">Full name must be at least 3 characters</div>
+          </div>
         </div>
+        
         <div class="form-group">
-          <label for="email" class="form-label">Email Address</label>
-          <input type="email" id="email" class="form-input" [value]="user.Email" name="email" />
+          <label for="Email" class="form-label">Email Address</label>
+          <input 
+            type="Email" 
+            id="Email" 
+            class="form-input" 
+            name="Email" 
+            [(ngModel)]="user.Email" 
+            #Email="ngModel"
+            required
+            Email
+            [ngClass]="{'input-error': Email.invalid && (Email.dirty || Email.touched)}"
+          />
+          <div *ngIf="Email.invalid && (Email.dirty || Email.touched)" class="error-message">
+            <div *ngIf="Email.errors?.['required']">Email is required</div>
+            <div *ngIf="Email.errors?.['Email']">Please enter a valid Email address</div>
+          </div>
         </div>
+        
         <div class="form-group">
-          <label for="mobile" class="form-label">Phone Number</label>
-          <input type="text" id="mobile" class="form-input" [value]="user.Mobile" name="mobile" />
+          <label for="Mobile" class="form-label">Phone Number</label>
+          <input 
+            type="text" 
+            id="Mobile" 
+            class="form-input" 
+            name="Mobile" 
+            [(ngModel)]="user.Mobile" 
+            #Mobile="ngModel"
+            required
+            pattern="^[0-9]{10,15}$"
+            [ngClass]="{'input-error': Mobile.invalid && (Mobile.dirty || Mobile.touched)}"
+          />
+          <div *ngIf="Mobile.invalid && (Mobile.dirty || Mobile.touched)" class="error-message">
+            <div *ngIf="Mobile.errors?.['required']">Phone number is required</div>
+            <div *ngIf="Mobile.errors?.['pattern']">Please enter a valid phone number (10-15 digits)</div>
+          </div>
         </div>
+        
         <div class="form-group">
-          <label for="gender" class="form-label">Gender</label>
-          <input type="text" id="gender" class="form-input" [value]="user.Gender" name="gender" />
+          <label for="Gender" class="form-label">Gender</label>
+          <select 
+            id="Gender" 
+            class="form-input" 
+            name="Gender" 
+            [(ngModel)]="user.Gender" 
+            #Gender="ngModel"
+            required
+            [ngClass]="{'input-error': Gender.invalid && (Gender.dirty || Gender.touched)}"
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+            <option value="Prefer not to say">Prefer not to say</option>
+          </select>
+          <div *ngIf="Gender.invalid && (Gender.dirty || Gender.touched)" class="error-message">
+            <div *ngIf="Gender.errors?.['required']">Please select a Gender</div>
+          </div>
         </div>
+        
         <div class="form-group">
-          <label for="city" class="form-label">City</label>
-          <input type="text" id="city" class="form-input" [value]="user.City" name="city" />
+          <label for="City" class="form-label">City</label>
+          <input 
+            type="text" 
+            id="City" 
+            class="form-input" 
+            name="City" 
+            [(ngModel)]="user.City" 
+            #City="ngModel"
+            required
+            [ngClass]="{'input-error': City.invalid && (City.dirty || City.touched)}"
+          />
+          <div *ngIf="City.invalid && (City.dirty || City.touched)" class="error-message">
+            <div *ngIf="City.errors?.['required']">City is required</div>
+          </div>
         </div>
+        
         <div class="form-group">
-          <label for="country" class="form-label">Country</label>
-          <input type="text" id="country" class="form-input" [value]="user.Country" name="country" />
+          <label for="Country" class="form-label">Country</label>
+          <input 
+            type="text" 
+            id="Country" 
+            class="form-input" 
+            name="Country" 
+            [(ngModel)]="user.Country" 
+            #Country="ngModel"
+            required
+            [ngClass]="{'input-error': Country.invalid && (Country.dirty || Country.touched)}"
+          />
+          <div *ngIf="Country.invalid && (Country.dirty || Country.touched)" class="error-message">
+            <div *ngIf="Country.errors?.['required']">Country is required</div>
+          </div>
         </div>
+        
         <div class="form-group">
           <label for="id" class="form-label">ID Number</label>
-          <input type="text" id="id" class="form-input" [value]="user.IdentificationNumber" name="id" />
+          <input 
+            type="number" 
+            id="id" 
+            class="form-input" 
+            name="IdentificationNumber" 
+            [(ngModel)]="user.IdentificationNumber" 
+            #IdentificationNumber="ngModel"
+            required
+            minlength="5"
+            [ngClass]="{'input-error': IdentificationNumber.invalid && (IdentificationNumber.dirty || IdentificationNumber.touched)}"
+          />
+          <div *ngIf="IdentificationNumber.invalid && (IdentificationNumber.dirty || IdentificationNumber.touched)" class="error-message">
+            <div *ngIf="IdentificationNumber.errors?.['required']">ID Number is required</div>
+            <div *ngIf="IdentificationNumber.errors?.['minlength']">ID Number must be at least 5 characters</div>
+          </div>
         </div>
+        
         <div class="form-group form-actions">
-          <button type="submit" class="form-button">Update Profile</button>
+          <button 
+            type="submit" 
+            class="form-button"
+            [disabled]="profileForm.invalid || isUpdating"
+            [ngClass]="{'button-disabled': profileForm.invalid}"
+          >
+            <i class="fas fa-save"></i>
+            <span>Update Profile</span>
+            <i *ngIf="isUpdating" class="fas fa-spinner fa-spin loader-icon"></i>
+          </button>
         </div>
       </form>
     </div>
