@@ -77,7 +77,7 @@ export class ProductsService {
     return this.http.get<{ success: boolean, error?: string, message?: string, products?: Product[] | unknown[] }>(`${this.API_URL}get-all-activated-products-on-flushsale`, {headers: getAuthHeaders()});
   }
 
-  getSingleActivatedProduct(ProductId: string): Observable<{ success: boolean, error?: string, message?: string }> {
+  getSingleActivatedProduct(ProductId: string): Observable<{ success: boolean, error?: string, message?: string, product?: Product | null  }> {
     return this.http.get<{ success: boolean, error?: string, message?: string, product?: Product | null }>(`${this.API_URL}get-single-activated-product/${ProductId}`);
   }
 }

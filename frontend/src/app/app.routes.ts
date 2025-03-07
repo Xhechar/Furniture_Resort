@@ -50,7 +50,7 @@ export const routes: Routes = [
   { path: 'home', pathMatch: 'full', redirectTo: '' },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'single-product', component: SingleComponent },
+  { path: 'single-product/:ProductId', component: SingleComponent },
   { path: 'page-loader', component: PageloaderComponent },
   { path: 'verify-email', component: VerifymailComponent },
   { path: 'notifications', component: NotificationsComponent },

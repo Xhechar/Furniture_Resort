@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { Category, Product } from '../../interfaces/interfaces';
 import { ProductsService } from '../../services/products.service';
 import { NotificationsService } from '../../services/notifications.service';
 import { CategoryService } from '../../services/category.service';
+import { Router } from '@angular/router';
+import { NotificationsComponent } from "../notifications/notifications.component";
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [TopbarComponent, CommonModule, RouterLink],
+  imports: [TopbarComponent, CommonModule, NotificationsComponent],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.css'
 })
@@ -22,7 +23,8 @@ export class LandingComponent implements OnInit {
   constructor(
     private ps: ProductsService,
     private ns: NotificationsService,
-    private cs: CategoryService
+    private cs: CategoryService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -79,7 +81,7 @@ export class LandingComponent implements OnInit {
     this.ns.showMessage(`${product.ProductName} added to wishlist!`, true);
   }
 
-  quickView(product: Product) {
-    console.log('Quick view:', product);
+  quickView(ProductId: string) {
+    this.router.navigate(['single-product', ProductId]);
   }
 }
