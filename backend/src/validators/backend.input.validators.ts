@@ -172,7 +172,7 @@ export const ProductQuantityTimeSchema = joi.object({
   Period: joi.number().required().messages({
     'string.required': 'Period value is required'
   }),
-  Prize: joi.number().required().messages({
+  Price: joi.number().required().messages({
     'number.required': 'Prize value is required'
   })
 });

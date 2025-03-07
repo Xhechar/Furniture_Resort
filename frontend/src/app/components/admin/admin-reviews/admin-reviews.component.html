@@ -1,53 +1,207 @@
 <div class="stats-container">
-  <div class="stat-card blue" routerLink="created-products">
-    <i class="fa-solid fa-chair"></i>
+  <div class="stat-card" data-category="total" routerLink="created-products">
+    <div class="icon-container">
+      <i class="fa-solid fa-star"></i>
+    </div>
     <div class="stat-info">
-      <p class="title">Total Reviews</p>
-      <p class="value">{{reviews.length > 0 ? reviews.length : 0}}</p>
+      <h3 class="title">Total Reviews</h3>
+      <p class="value">{{0}}</p>
     </div>
   </div>
-  <div class="stat-card purple" routerLink="activated-products">
-    <i class='bx bx-list-check'></i>
-    <div class="stat-info">
-      <p class="title">Average Reviews</p>
-      <p class="value">{{reviews.length}}</p>
+
+  <div class="stat-card" data-category="active" routerLink="activated-products">
+    <div class="icon-container">
+      <i class="fa-solid fa-star-half-stroke"></i>
     </div>
-  </div>
-  <div class="stat-card violet" routerLink="on-offer-products">
-    <i class='bx bxs-offer' ></i>
     <div class="stat-info">
-      <p class="title">Products On Offer</p>
-      <p class="value">45</p>
-    </div>
-  </div>
-  <div class="stat-card green" routerLink="on-flush-products">
-    <i class='bx bxs-flag' ></i>
-    <div class="stat-info">
-      <p class="title">Products On Flush Sale</p>
-      <p class="value">25</p>
+      <h3 class="title">Average Reviews</h3>
+      <p class="value">{{0}}</p>
     </div>
   </div>
 </div>
 
-<div class="review-container">
-  <h2 class="review-title">Reviews and Ratings &nbsp;>></h2>
-
-  <div *ngFor="let review of reviews" class="review-card" [ngClass]="{'highlighted': review.highlighted}">
-    <div class="review-header">
-      <img class="review-avatar" [src]="review.avatar" alt="{{ review.name }}" />
-      <div>
-        <h3 class="review-name">{{ review.name }}</h3>
-        <p class="review-date">{{ review.date }}</p>
+<div class="reviews-dashboard">
+  <!-- Header section with stats -->
+  <div class="dashboard-header">
+    <h1 class="main-title">Customer Reviews</h1>
+    <div class="stats-container">
+      <div class="stat-card">
+        <i class="fa fa-star"></i>
+        <div class="stat-info">
+          <span class="stat-value">{{ getAverageRating() | number:'1.1-1' }}</span>
+          <span class="stat-label">Avg. Rating</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa fa-comment"></i>
+        <div class="stat-info">
+          <span class="stat-value">{{ reviews.length }}</span>
+          <span class="stat-label">Total Reviews</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa fa-check-circle"></i>
+        <div class="stat-info">
+          <span class="stat-value">{{ getPositiveReviewsPercentage() }}%</span>
+          <span class="stat-label">Positive Reviews</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa fa-calendar-alt"></i>
+        <div class="stat-info">
+          <span class="stat-value">{{ getRecentReviewsCount() }}</span>
+          <span class="stat-label">New This Week</span>
+        </div>
       </div>
     </div>
-    <p class="review-content">{{ review.content }}</p>
-    <div class="review-footer">
-      <div class="rating">
-        <span *ngFor="let star of [1,2,3,4,5]" class="star" [ngClass]="{'active': star <= review.rating}">★</span>
+  </div>
+
+  <!-- Filter and search section -->
+  <div class="filter-section">
+    <div class="search-box">
+      <i class="fa fa-search"></i>
+      <input 
+        type="text" 
+        placeholder="Search reviews..." 
+        [(ngModel)]="searchTerm" 
+        (input)="applyFilters()"
+      >
+    </div>
+    
+    <div class="filter-options">
+      <div class="filter-dropdown">
+        <label>Product:</label>
+        <select [(ngModel)]="filterProduct" (change)="applyFilters()">
+          <option value="">All Products</option>
+          <option *ngFor="let product of getUniqueProducts()" [value]="product.ProductId">
+            {{ product.ProductName }}
+          </option>
+        </select>
       </div>
-      <div class="review-actions">
-        <i style="color: green;" class="fa-regular fa-pen-to-square fa-bounce"></i>
-        <i style="color: red;" class="fa fa-thin fa-trash"></i>
+      
+      <div class="filter-dropdown">
+        <label>Rating:</label>
+        <select [(ngModel)]="filterRating" (change)="applyFilters()">
+          <option value="">All Ratings</option>
+          <option value="5">5 Stars</option>
+          <option value="4">4 Stars</option>
+          <option value="3">3 Stars</option>
+          <option value="2">2 Stars</option>
+          <option value="1">1 Star</option>
+        </select>
+      </div>
+      
+      <div class="filter-dropdown">
+        <label>Sort By:</label>
+        <select [(ngModel)]="sortOption" (change)="applyFilters()">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="highest">Highest Rating</option>
+          <option value="lowest">Lowest Rating</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rating distribution bar -->
+  <div class="rating-distribution">
+    <h3 class="distribution-title">Rating Distribution</h3>
+    <div class="rating-bars">
+      <div class="rating-bar-container" *ngFor="let num of [5,4,3,2,1]">
+        <div class="rating-label">{{ num }} <i class="fa fa-star"></i></div>
+        <div class="rating-bar-wrapper">
+          <div class="rating-bar" 
+              [style.width.%]="getRatingPercentage(num)"
+              [ngClass]="{'rating-high': num >= 4, 'rating-mid': num === 3, 'rating-low': num <= 2}">
+            <span class="rating-count">{{ getRatingCount(num) }}</span>
+          </div>
+        </div>
+        <div class="rating-percentage">{{ getRatingPercentage(num) }}%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews List -->
+  <div class="reviews-container">
+    <h2 class="section-title">Reviews <span class="count-badge">{{ filteredReviews.length }}</span></h2>
+    
+    <div *ngIf="filteredReviews.length === 0" class="no-reviews">
+      <i class="fa fa-search"></i>
+      <p>No reviews match your current filters</p>
+      <button class="reset-button" (click)="resetFilters()">Reset Filters</button>
+    </div>
+    
+    <div *ngFor="let review of filteredReviews" 
+        class="review-card" 
+        [ngClass]="{'highlighted': review.highlighted, 'new-review': isNewReview(review)}">
+      <div class="review-header">
+        <div class="reviewer-info">
+          <img class="review-avatar" [src]="review.User?.ProfileImage || 'assets/images/default-avatar.png'" 
+               alt="{{ review.User?.Fullname }}" />
+          <div>
+            <h3 class="review-name">{{ review.User?.Fullname || 'Anonymous User' }}</h3>
+            <p class="review-date">
+              <i class="fa fa-calendar-alt"></i> 
+              {{ formatDate(review.DateCreated) }}
+            </p>
+            <div class="user-badge" *ngIf="hasMultipleReviews(review.UserId)">
+              <i class="fa fa-award"></i> Frequent Reviewer
+            </div>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-label">Product:</div>
+          <div class="product-name">{{ review.Product?.ProductName || 'Unknown Product' }}</div>
+          <div class="product-category" *ngIf="review.Product?.Category">
+            {{ review.Product?.Category }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="review-content">
+        <p [innerHTML]="highlightSearchTerm(review.ReviewText)"></p>
+      </div>
+      
+      <div class="review-footer">
+        <div class="rating">
+          <span *ngFor="let star of [1,2,3,4,5]" 
+                class="star" 
+                [ngClass]="{'active': star <= review.Rating}">★</span>
+          <span class="rating-text">{{ review.Rating }}.0</span>
+        </div>
+        
+        <div class="review-actions">
+          <button class="action-button edit-button" (click)="editReview(review)">
+            <i class="fa-regular fa-pen-to-square"></i>
+            <span class="action-label">Edit</span>
+          </button>
+          <button class="action-button delete-button" (click)="confirmDeleteReview(review)">
+            <i class="fa fa-trash"></i>
+            <span class="action-label">Delete</span>
+          </button>
+          <button class="action-button highlight-button" (click)="toggleHighlight(review)">
+            <i class="fa" [ngClass]="review.highlighted ? 'fa-star' : 'fa-star-o'"></i>
+            <span class="action-label">{{ review.highlighted ? 'Featured' : 'Feature' }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Confirmation Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Confirm Deletion</h3>
+        <button class="close-button" (click)="cancelDelete()">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this review?</p>
+        <p class="warning-text">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="cancel-button" (click)="cancelDelete()">Cancel</button>
+        <button class="delete-button" (click)="deleteReview()">Delete</button>
       </div>
     </div>
   </div>

@@ -2,22 +2,24 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ModalService } from '../../../services/modal.service';
 import { Router } from '@angular/router';
-import { Product } from '../../../interfaces/interfaces';
+import { Product, ProductQuantityTime } from '../../../interfaces/interfaces';
 import { ProductsService } from '../../../services/products.service';
 import { NotificationsService } from '../../../services/notifications.service';
 import { NotificationsComponent } from '../../notifications/notifications.component';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { FormsModule } from '@angular/forms';
+import { PqtService } from '../../../services/pqt.service';
 
 @Component({
   selector: 'app-existing-products',
   standalone: true,
-  imports: [CommonModule, NotificationsComponent],
+  imports: [CommonModule, NotificationsComponent, FormsModule],
   templateUrl: './existing-products.component.html',
   styleUrl: './existing-products.component.css'
 })
 export class ExistingProductsComponent implements OnChanges, OnInit{
   selectedProducts: string[] = [];
   deletedProductId!: string;
+  expandedProductIndex: number = -1;
 
   message!: string;
   action!: string;
@@ -33,7 +35,7 @@ export class ExistingProductsComponent implements OnChanges, OnInit{
   furnitureName = '';
   animationState: 'visible' | 'void' = 'void';
 
-  constructor(private ms: ModalService, private router: Router, private ps: ProductsService, private ns: NotificationsService, private el: ElementRef) {
+  constructor(private ms: ModalService, private router: Router, private ps: ProductsService, private ns: NotificationsService, private el: ElementRef, private productQT: PqtService) {
     this.getProducts();
   }
 
@@ -77,6 +79,11 @@ export class ExistingProductsComponent implements OnChanges, OnInit{
               }
             });
           }
+          break;
+        }
+          
+        case 'delete pqt': {
+          this.deleteProductQuantityTime(this.deletedProductId);
           break;
         }
           
@@ -148,6 +155,7 @@ export class ExistingProductsComponent implements OnChanges, OnInit{
       next: (response) => {
         if (response.success) {
           this.products = response.products as Product[];
+          console.log(this.products);
         } else {
           this.ns.showMessage(response.error as string, false);
         }
@@ -355,5 +363,50 @@ export class ExistingProductsComponent implements OnChanges, OnInit{
       }
     });
     this.selectedProducts = [];
+  }
+
+  toggleProductDetails(index: number): void {
+    if (this.expandedProductIndex === index) {
+      this.expandedProductIndex = -1;
+    } else {
+      this.expandedProductIndex = index;
+    }
+  }
+
+  addNewProductQuantityTime(productId: string): void { }
+
+  saveProductQuantityTime(pqt: ProductQuantityTime): void {
+    let ns = this.ns;
+    let { Product, ProductQuantityTimeId, ProductId, ...required } = pqt;
+    this.productQT.updatePQT(pqt.ProductQuantityTimeId, {... required}).subscribe({
+      next(response) {
+        if (response.success) {
+          ns.showMessage(response.message as string, response.success);
+        } else {
+          ns.showMessage(response.error as string, false);
+        }
+      },
+      error(error) {
+        ns.showMessage(error.error.error as string, false);
+      }
+    })
+  }
+
+  deleteProductQuantityTime(pqtId: string): void {
+    console.log("Here");
+    
+    let ns = this.ns;
+    this.productQT.deletePQT(pqtId).subscribe({
+      next(response) {
+        if (response.success) {
+          ns.showMessage(response.message as string, response.success);
+        } else {
+          ns.showMessage(response.error as string, false);
+        }
+      },
+      error(error) {
+        ns.showMessage(error.error.error as string, false);
+      }
+    });
   }
 }

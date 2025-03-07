@@ -13,11 +13,11 @@ export class PqtService {
 
   constructor(private http: HttpClient) { }
 
-  createPQT(pqt: ProductQuantityTime): Observable<{ success: boolean, error?: string, message?: string }> {
-    return this.http.post<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}create`, pqt, {headers: getAuthHeaders()});
+  createPQT(ProductId: string, pqt: ProductQuantityTime): Observable<{ success: boolean, error?: string, message?: string }> {
+    return this.http.post<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}create-pqt/${ProductId}`, pqt, {headers: getAuthHeaders()});
   }
 
-  updatePQT(ProductQuantityTimeId: string, pqt: ProductQuantityTime): Observable<{ success: boolean, error?: string, message?: string }> {
+  updatePQT(ProductQuantityTimeId: string, pqt: Partial<ProductQuantityTime>): Observable<{ success: boolean, error?: string, message?: string }> {
     return this.http.put<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}update-pqt/${ProductQuantityTimeId}`, pqt, {headers: getAuthHeaders()});
   }
 

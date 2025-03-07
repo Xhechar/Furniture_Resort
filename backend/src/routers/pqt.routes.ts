@@ -6,7 +6,7 @@ export const pqtRouter = Router();
 
 const pqtController = new PQTController();
 
-pqtRouter.post('/create-pqt', verifyToken, verifyAdmin, pqtController.createPQT);
+pqtRouter.post('/create-pqt/:ProductId', verifyToken, verifyAdmin, pqtController.createPQT);
 pqtRouter.put('/update-pqt/:ProductQuantityTimeId', verifyToken, verifyAdmin, pqtController.updatePQT);
-pqtRouter.delete('delete-pqt/:ProductQuantityTimeId', verifyToken, verifyAdmin, pqtController.deletePQT);
+pqtRouter.delete('/delete-pqt/:ProductQuantityTimeId', verifyToken, verifyAdmin, pqtController.deletePQT);
 pqtRouter.get('/get-pqts-by-product/:ProductId', pqtController.getPQTByProductId);

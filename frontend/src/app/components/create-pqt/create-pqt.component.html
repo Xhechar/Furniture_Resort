@@ -1,3 +1,4 @@
+<app-notifications></app-notifications>
 <div class="overlay" [ngStyle]="pqtShow ? {'display': 'flex'} : {'display': 'none'}">
   <div class="product-qt-form-container">
     <div class="form-header">
@@ -39,18 +40,18 @@
         <input
           type="number"
           id="price"
-          name="Prze"
-          #Prize="ngModel"
+          name="Price"
+          #Price="ngModel"
           ngModel
           min="1"
           placeholder="Enter price for all the items"
           required
         />
-        <div *ngIf="Prize.invalid && (Prize.dirty || Prize.touched)" class="error">
-          <div *ngIf="Prize.hasError('required')">
+        <div *ngIf="Price.invalid && (Price.dirty || Price.touched)" class="error">
+          <div *ngIf="Price.hasError('required')">
             Price is required.
           </div>
-          <div *ngIf="Prize.hasError('min')">
+          <div *ngIf="Price.hasError('min')">
             Price should be at least 1.
           </div>
         </div>

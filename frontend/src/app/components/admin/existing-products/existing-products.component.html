@@ -64,82 +64,151 @@
     <!-- Products Container -->
     <div class="products-container" *ngIf="products && products.length > 0">
       <!-- Product Row -->
-      <div class="row product-row" *ngFor="let product of products; let i = index">
-        <!-- Checkbox -->
-        <div class="cell checkbox-cell">
-          <label class="custom-checkbox">
-            <input type="checkbox" (change)="setSelectedProduct(product.ProductId)">
-            <span class="checkmark"></span>
-          </label>
-        </div>
-        
-        <!-- Product Name -->
-        <div class="cell name-cell">
-          <span class="product-name">{{product.ProductName.toLocaleUpperCase()}}</span>
-        </div>
-        
-        <!-- Price -->
-        <div class="cell price-cell">
-          <span class="product-price">{{product.Prize | currency : "Ksh "}}</span>
-        </div>
-        
-        <!-- Stock -->
-        <div class="cell stock-cell">
-          <div class="stock-indicator" [class.low-stock]="product.StockQuantity < product.StockLimit">
-            <i class="fa-solid fa-circle-exclamation warning-icon" *ngIf="product.StockQuantity < product.StockLimit" title="Stock increase required"></i>
-            <span>{{product.StockQuantity}}</span>
+      <div class="product-expandable" *ngFor="let product of products; let i = index">
+        <div class="row product-row" (click)="toggleProductDetails(i)">
+          <!-- Checkbox -->
+          <div class="cell checkbox-cell" (click)="$event.stopPropagation()">
+            <label class="custom-checkbox">
+              <input type="checkbox" (change)="setSelectedProduct(product.ProductId)">
+              <span class="checkmark"></span>
+            </label>
           </div>
-        </div>
-        
-        <!-- Stock Limit -->
-        <div class="cell limit-cell">
-          <span>{{product.StockLimit}}</span>
-        </div>
-        
-        <!-- Custom Status -->
-        <div class="cell custom-cell">
-          <span class="status-badge" [class.status-true]="product.IsCustommable" [class.status-false]="!product.IsCustommable">
-            {{product.IsCustommable ? 'true' : 'false'}}
-          </span>
-        </div>
-        
-        <!-- Activation Status -->
-        <div class="cell active-cell">
-          <div class="status-container">
-            <i class="fa-solid fa-lightbulb toggle-icon" [class.inactive]="!product.IsActivated" (click)="activateProduct(product.ProductId)" title="Activate product"></i>
-            <i class="fa-regular fa-lightbulb toggle-icon" [class.active]="product.IsActivated" (click)="activateProduct(product.ProductId)" title="Deactivate product"></i>
-            <span class="status-badge" [class.status-true]="product.IsActivated" [class.status-false]="!product.IsActivated">
-              {{product.IsActivated ? 'Activated' : 'Inactive'}}
+          
+          <!-- Product Name -->
+          <div class="cell name-cell">
+            <span class="product-name">{{product.ProductName.toLocaleUpperCase()}}</span>
+            <i class="fa-solid fa-chevron-down expand-icon" [class.rotated]="expandedProductIndex === i"></i>
+          </div>
+          
+          <!-- Price -->
+          <div class="cell price-cell">
+            <span class="product-price">{{product.Prize | currency : "Ksh "}}</span>
+          </div>
+          
+          <!-- Stock -->
+          <div class="cell stock-cell">
+            <div class="stock-indicator" [class.low-stock]="product.StockQuantity < product.StockLimit">
+              <i class="fa-solid fa-circle-exclamation warning-icon" *ngIf="product.StockQuantity < product.StockLimit" title="Stock increase required"></i>
+              <span>{{product.StockQuantity}}</span>
+            </div>
+          </div>
+          
+          <!-- Stock Limit -->
+          <div class="cell limit-cell">
+            <span>{{product.StockLimit}}</span>
+          </div>
+          
+          <!-- Custom Status -->
+          <div class="cell custom-cell">
+            <span class="status-badge" [class.status-true]="product.IsCustommable" [class.status-false]="!product.IsCustommable">
+              {{product.IsCustommable ? 'true' : 'false'}}
             </span>
           </div>
-        </div>
-        
-        <!-- Actions -->
-        <div class="cell actions-cell">
-          <div class="action-buttons">
-            <i class="fa-regular fa-pen-to-square edit-icon" (click)="setUpdateValues(product.ProductId)" title="Edit"></i>
-            <i class="fa fa-trash delete-icon" (click)="openDeleteModal(product.ProductName, product.ProductId, 'Are you sure you want to delete, ', 'delete single')" title="Delete"></i>
-            <div class="menu-wrapper">
-              <i class="fa-solid fa-ellipsis-vertical options-icon" (click)="toggleMenu(i)" title="Options"></i>
-              <div class="menu-dropdown" [class.show-menu]="selectedMenuIndex === i">
-                <button (click)="toggleOnFlushSale(product.ProductId)">
-                  <i class="fa-solid fa-water menu-icon"></i>
-                  Add to Flush
-                </button>
-                <button (click)="toggleOnOffer(product.ProductId)">
-                  <i class="fa-solid fa-tag menu-icon"></i>
-                  Add to Offer
-                </button>
-                <button (click)="setProductCustomizable(product.ProductId)">
-                  <i class="fa-solid fa-screwdriver-wrench menu-icon"></i>
-                  Set Customizable
-                </button>
-                <button (click)="displayPqt(product.ProductName, (product.MakePeriods - (product.ProductQuantityTimes?.length || 0)))">
-                  <i class="fa-solid fa-clock menu-icon"></i>
-                  Add Make Time
-                </button>
+          
+          <!-- Activation Status -->
+          <div class="cell active-cell">
+            <div class="status-container" (click)="$event.stopPropagation()">
+              <i class="fa-solid fa-lightbulb toggle-icon" [class.inactive]="!product.IsActivated" (click)="activateProduct(product.ProductId)" title="Activate product"></i>
+              <i class="fa-regular fa-lightbulb toggle-icon" [class.active]="product.IsActivated" (click)="activateProduct(product.ProductId)" title="Deactivate product"></i>
+              <span class="status-badge status-text" [class.status-true]="product.IsActivated" [class.status-false]="!product.IsActivated">
+                {{product.IsActivated ? 'Activated' : 'Inactive'}}
+              </span>
+            </div>
+          </div>
+          
+          <!-- Actions -->
+          <div class="cell actions-cell" (click)="$event.stopPropagation()">
+            <div class="action-buttons">
+              <i class="fa-regular fa-pen-to-square edit-icon" (click)="setUpdateValues(product.ProductId)" title="Edit"></i>
+              <i class="fa fa-trash delete-icon" (click)="openDeleteModal(product.ProductName, product.ProductId, 'Are you sure you want to delete, ', 'delete single')" title="Delete"></i>
+              <div class="menu-wrapper">
+                <i class="fa-solid fa-ellipsis-vertical options-icon" (click)="toggleMenu(i)" title="Options"></i>
+                <div class="menu-dropdown" [class.show-menu]="selectedMenuIndex === i">
+                  <button (click)="toggleOnFlushSale(product.ProductId)">
+                    <i class="fa-solid fa-water menu-icon"></i>
+                    Add to Flush
+                  </button>
+                  <button (click)="toggleOnOffer(product.ProductId)">
+                    <i class="fa-solid fa-tag menu-icon"></i>
+                    Add to Offer
+                  </button>
+                  <button (click)="setProductCustomizable(product.ProductId)">
+                    <i class="fa-solid fa-screwdriver-wrench menu-icon"></i>
+                    Set Customizable
+                  </button>
+                  <button (click)="displayPqt(product.ProductName + ', ' + product.ProductId , (product.MakePeriods - (product.ProductQuantityTimes?.length || 0)))">
+                    <i class="fa-solid fa-clock menu-icon"></i>
+                    Add Make Time
+                  </button>
+                </div>
               </div>
             </div>
+          </div>
+        </div>
+        
+        <!-- Expandable Product Quantity Times Section -->
+        <div class="product-details" *ngIf="expandedProductIndex === i">
+          <div class="details-header">
+            <h3>product time line for creating : {{product.ProductName}}</h3>
+            <button class="add-pqt-btn" (click)="displayPqt(product.ProductName + ', ' + product.ProductId , (product.MakePeriods - (product.ProductQuantityTimes?.length || 0)))">
+              <i class="fa-solid fa-plus"></i> Add New
+            </button>
+          </div>
+          
+          <!-- PQT Form Container -->
+          <div class="pqt-form-container" *ngIf="product.ProductQuantityTimes && product.ProductQuantityTimes.length > 0">
+            <div class="pqt-form-header">
+              <div class="pqt-header-cell pqt-id">ID</div>
+              <div class="pqt-header-cell">Quantity</div>
+              <div class="pqt-header-cell">Price</div>
+              <div class="pqt-header-cell">Period (Days)</div>
+              <div class="pqt-header-cell pqt-actions">Actions</div>
+            </div>
+            
+            <div class="pqt-form-row" *ngFor="let pqt of product.ProductQuantityTimes; let pqtIndex = index">
+              <form #pqtForm="ngForm" (ngSubmit)="saveProductQuantityTime(pqtForm.value)" class="pqt-form">
+                <input type="hidden" name="ProductQuantityTimeId" [(ngModel)]="pqt.ProductQuantityTimeId">
+                
+                <div class="pqt-form-cell pqt-id">
+                  <span class="pqt-id-text">{{pqt.ProductQuantityTimeId | slice:0:8}}...</span>
+                </div>
+                
+                <div class="pqt-form-cell">
+                  <div class="form-input-wrapper">
+                    <input type="number" class="pqt-input" name="Quantity" [(ngModel)]="pqt.Quantity" min="1" required>
+                    <div class="input-focus-border"></div>
+                  </div>
+                </div>
+                
+                <div class="pqt-form-cell">
+                  <div class="form-input-wrapper">
+                    <input type="number" class="pqt-input" name="Price" [(ngModel)]="pqt.Price" min="0" required>
+                    <div class="input-focus-border"></div>
+                  </div>
+                </div>
+                
+                <div class="pqt-form-cell">
+                  <div class="form-input-wrapper">
+                    <input type="number" class="pqt-input" name="Period" [(ngModel)]="pqt.Period" min="1" required>
+                    <div class="input-focus-border"></div>
+                  </div>
+                </div>
+                
+                <div class="pqt-form-cell pqt-actions">
+                  <button type="submit" class="action-btn save-btn" [disabled]="!pqtForm.valid" name="Save changes">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                  </button>
+                  <button type="button" class="action-btn delete-btn" (click)="openDeleteModal('', pqt.ProductQuantityTimeId, 'Are you sure you want to delete this time line', 'delete pqt')" name="Delete">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          <div class="no-pqt" *ngIf="!product.ProductQuantityTimes || product.ProductQuantityTimes.length === 0">
+            <i class="fa-solid fa-hourglass-empty"></i>
+            <p>No time line available for this product.</p>
           </div>
         </div>
       </div>

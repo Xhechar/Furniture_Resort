@@ -59,7 +59,7 @@ export interface ProductQuantityTime {
   ProductQuantityTimeId: string,
   ProductId: string,
   Quantity: number,
-  Prize: number,
+  Price: number,
   Period: number,
   Product?: Product
 }

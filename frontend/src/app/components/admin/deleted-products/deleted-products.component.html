@@ -1,113 +1,177 @@
 <div class="progress-container">
-  <div *ngFor="let progress of progresses" class="progress-card">
-    <!-- Progress Status -->
-    <div class="progress-status" [ngClass]="getStatusClass(progress.Status)">
-      {{ progress.Status }}
+  <!-- No Progress Message -->
+  <div class="no-progress-message" *ngIf="progressList.length === 0">
+    <div class="empty-state">
+      <i class='bx bx-timer'></i>
+      <h3>No Progress Available</h3>
+      <p>There are currently no progress items to display.</p>
     </div>
+  </div>
 
-    <!-- Collapsible Header Section -->
-    <div class="progress-header" (click)="toggleDetails(progress.ProgressId)">
-      <div class="user-info">
-        <img src="https://i.pinimg.com/236x/98/a6/aa/98a6aadc34b3519d5c4e0a6150f0701f.jpg" alt="User Profile" class="profile-pic" />
-        <span class="user-name">{{ progress.User?.UserName }}</span>
+  <!-- Progress Display -->
+  <div class="progress-list" *ngIf="progressList.length > 0">
+    <h2 class="section-title">Product Progress Tracking</h2>
+    
+    <!-- Progress Cards -->
+    <div class="progress-cards">
+      <div class="progress-card" *ngFor="let progress of progressList; let i = index">
+        <div class="card-header">
+          <div class="product-info">
+            <img [src]="progress.Product ? progress.Product.ProductImages.split(', ')[0] : 'https://i.pinimg.com/736x/c4/a7/8f/c4a78f7bffbb0e4eb86d95d30ddc5afe.jpg'" 
+                 alt="Product Image" 
+                 (click)="showFullImage(progress.Product ? progress.Product.ProductImages.split(', ')[0] : 'https://i.pinimg.com/736x/c4/a7/8f/c4a78f7bffbb0e4eb86d95d30ddc5afe.jpg')">
+            <div class="product-details">
+              <h3>{{ progress.Product?.ProductName }}</h3>
+              <span class="status-badge" [ngClass]="getStatusClass(progress.Status)">
+                {{ progress.Status }}
+              </span>
+            </div>
+          </div>
+          <div class="user-info">
+            <img [src]="progress.User?.ProfileImage" 
+                 alt="User Profile" 
+                 class="user-avatar"
+                 (click)="showFullImage(progress.User?.ProfileImage)">
+            <div class="user-details">
+              <h4>{{ progress.User?.Fullname }}</h4>
+              <p>{{ progress.User?.Email }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-details">
+          <div class="detail-item">
+            <i class='bx bx-calendar'></i>
+            <span>Created: {{ formatDate(progress.DateCreated) }}</span>
+          </div>
+          <div class="detail-item">
+            <i class='bx bx-money'></i>
+            <span>Deposit: KSH {{ progress.CustomOrder?.Deposit }}</span>
+          </div>
+          <div class="detail-item">
+            <i class='bx bx-wallet'></i>
+            <span>Balance: KSH {{ progress.CustomOrder?.Balance }}</span>
+          </div>
+          <div class="detail-item">
+            <i class='bx bx-package'></i>
+            <span>Qty: {{ progress.CustomOrder?.Quantity }}</span>
+          </div>
+        </div>
+
+        <div class="progress-stages">
+          <div class="progress-tabs">
+            <button [ngClass]="{'active': selectedStage[i] === 'materials'}" 
+                    (click)="selectStage(i, 'materials')">
+              <i class='bx bx-cart'></i> Materials
+            </button>
+            <button [ngClass]="{'active': selectedStage[i] === 'progress'}" 
+                    (click)="selectStage(i, 'progress')">
+              <i class='bx bx-time'></i> Progress
+            </button>
+            <button [ngClass]="{'active': selectedStage[i] === 'final'}" 
+                    (click)="selectStage(i, 'final')">
+              <i class='bx bx-check-circle'></i> Final
+            </button>
+          </div>
+
+          <!-- Materials Images Section -->
+          <div class="stage-content" *ngIf="selectedStage[i] === 'materials'">
+            <h4 class="stage-title">Materials Purchased</h4>
+            <div class="image-gallery" *ngIf="getMaterialsImages(progress).length > 0">
+              <div class="image-item" *ngFor="let img of getMaterialsImages(progress)">
+                <img [src]="img" alt="Material Image" (click)="showFullImage(img)">
+                <button class="remove-image" (click)="removeImage(progress, 'materials', img)">
+                  <i class='bx bx-x'></i>
+                </button>
+              </div>
+            </div>
+            <div class="empty-gallery" *ngIf="getMaterialsImages(progress).length === 0">
+              <p>No material images uploaded yet</p>
+            </div>
+            <div class="upload-section">
+              <label class="custom-file-upload">
+                <input type="file" multiple (change)="onFileSelected($event, progress, 'materials')">
+                <i class='bx bx-upload'></i> Upload Materials Images
+              </label>
+            </div>
+          </div>
+
+          <!-- Progress Images Section -->
+          <div class="stage-content" *ngIf="selectedStage[i] === 'progress'">
+            <h4 class="stage-title">Production Progress</h4>
+            <div class="image-gallery" *ngIf="getProgressImages(progress).length > 0">
+              <div class="image-item" *ngFor="let img of getProgressImages(progress)">
+                <img [src]="img" alt="Progress Image" (click)="showFullImage(img)">
+                <button class="remove-image" (click)="removeImage(progress, 'progress', img)">
+                  <i class='bx bx-x'></i>
+                </button>
+              </div>
+            </div>
+            <div class="empty-gallery" *ngIf="getProgressImages(progress).length === 0">
+              <p>No progress images uploaded yet</p>
+            </div>
+            <div class="upload-section">
+              <label class="custom-file-upload">
+                <input type="file" multiple (change)="onFileSelected($event, progress, 'progress')">
+                <i class='bx bx-upload'></i> Upload Progress Images
+              </label>
+            </div>
+          </div>
+
+          <!-- Final Images Section -->
+          <div class="stage-content" *ngIf="selectedStage[i] === 'final'">
+            <h4 class="stage-title">Completed Product</h4>
+            <div class="image-gallery" *ngIf="getFinalImages(progress).length > 0">
+              <div class="image-item" *ngFor="let img of getFinalImages(progress)">
+                <img [src]="img" alt="Final Image" (click)="showFullImage(img)">
+                <button class="remove-image" (click)="removeImage(progress, 'final', img)">
+                  <i class='bx bx-x'></i>
+                </button>
+              </div>
+            </div>
+            <div class="empty-gallery" *ngIf="getFinalImages(progress).length === 0">
+              <p>No final images uploaded yet</p>
+            </div>
+            <div class="upload-section">
+              <label class="custom-file-upload">
+                <input type="file" multiple (change)="onFileSelected($event, progress, 'final')">
+                <i class='bx bx-upload'></i> Upload Final Images
+              </label>
+            </div>
+          </div>
+
+          <div class="stage-navigation">
+            <button [disabled]="isFirstStage(i)" (click)="navigateStage(i, 'prev')">
+              <i class='bx bx-chevron-left'></i> Previous
+            </button>
+            <button [disabled]="isLastStage(i)" (click)="navigateStage(i, 'next')">
+              Next <i class='bx bx-chevron-right'></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="action-btn update-btn" (click)="updateProgress(progress)">
+            <i class='bx bx-edit'></i> Update
+          </button>
+          <button class="action-btn message-btn" (click)="messageUser(progress.User)">
+            <i class='bx bx-message-detail'></i> Message
+          </button>
+          <button class="action-btn delete-btn" (click)="deleteProgress(progress)">
+            <i class='bx bx-trash'></i> Delete
+          </button>
+        </div>
       </div>
-      <div class="product-info">
-        <img [src]="'https://i.pinimg.com/236x/3f/22/19/3f22192fc0aacb86ab226b61053dd29a.jpg'" alt="Product" class="product-image" />
-        <span class="product-name">{{ progress.Product?.ProductName }}</span>
-      </div>
-      <button class="toggle-btn">
-        <i class="fas" [ngClass]="expandedProgressIds.includes(progress.ProgressId) ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-      </button>
     </div>
+  </div>
+</div>
 
-    <!-- Collapsible Details Section -->
-    <div class="progress-details" *ngIf="expandedProgressIds.includes(progress.ProgressId)">
-      <div class="order-details-container">
-        <div class="order-details-header">
-          <h2>Order Details</h2>
-        </div>
-        <div class="order-details-grid">
-          <div class="detail-item">
-            <span class="detail-label">Price:</span>
-            <span class="detail-value">$200.00</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Discount:</span>
-            <span class="detail-value">$20.00</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Quantity:</span>
-            <span class="detail-value">3</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Deposit:</span>
-            <span class="detail-value">$100.00</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Balance:</span>
-            <span class="detail-value">$80.00</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Mobile:</span>
-            <span class="detail-value">+1234567890</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Email:</span>
-            <span class="detail-value">user&#64;example.com</span>
-          </div>
-        </div>
-      </div>
-      <!-- Progress Area -->
-      <div class="progress-area">
-        <!-- Materials Images -->
-        <div class="progress-section">
-          <h4>Materials Images ({{ progress.MaterialsImages.length }})</h4>
-          <div class="images-container">
-            <img *ngFor="let image of progress.MaterialsImages" [src]="image" alt="Material Image" class="progress-image" />
-            <input type="file" class="upload-input" id="materials-upload-{{ progress.ProgressId }}" hidden />
-            <label for="materials-upload-{{ progress.ProgressId }}" class="upload-btn">Upload</label>
-          </div>
-        </div>
-
-        <!-- Progress Images -->
-        <div class="progress-section">
-          <h4>Progress Images ({{ progress.ProgressImages.length }})</h4>
-          <div class="images-container">
-            <img *ngFor="let image of progress.ProgressImages" [src]="image" alt="Progress Image" class="progress-image" />
-            <input type="file" class="upload-input" id="progress-upload-{{ progress.ProgressId }}" hidden />
-            <label for="progress-upload-{{ progress.ProgressId }}" class="upload-btn">Upload</label>
-          </div>
-        </div>
-
-        <!-- Final Images -->
-        <div class="progress-section">
-          <h4>Final Images ({{ progress.FinalImages.length }})</h4>
-          <div class="images-container">
-            <img *ngFor="let image of progress.FinalImages" [src]="image" alt="Final Image" class="progress-image" />
-            <input type="file" class="upload-input" id="final-upload-{{ progress.ProgressId }}" hidden />
-            <label for="final-upload-{{ progress.ProgressId }}" class="upload-btn">Upload</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Additional Details -->
-      <div class="progress-info">
-        <p><strong>Date Created:</strong> {{ progress.DateCreated }}</p>
-        <p><strong>Date Completed:</strong> {{ progress.DateCompleted || 'Not Completed' }}</p>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="action-buttons">
-        <button class="action-btn update-btn" (click)="onUpdate(progress.ProgressId)">
-          <i class="fas fa-edit"></i>
-        </button>
-        <button class="action-btn delete-btn" (click)="onDelete(progress.ProgressId)">
-          <i class="fas fa-trash-alt"></i>
-        </button>
-        <button class="action-btn message-btn" (click)="onMessage(progress.UserId)">
-          <i class="fas fa-envelope"></i>
-        </button>
-      </div>
-    </div>
+<!-- Full Image Modal -->
+<div class="full-image-modal" *ngIf="fullImageUrl">
+  <div class="modal-content">
+    <button class="close-modal" (click)="closeFullImage()">
+      <i class='bx bx-x'></i>
+    </button>
+    <img [src]="fullImageUrl" alt="Full size image">
   </div>
 </div>

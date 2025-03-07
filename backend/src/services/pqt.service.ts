@@ -25,7 +25,7 @@ export class PQTSerice implements PtQTInteface {
       data: {
         ProductQuantityTimeId: v4(),
         ProductId,
-        Price: pqt.Prize,
+        Price: pqt.Price,
         Quantity: pqt.Quantity,
         Period: pqt.Period
       }
@@ -43,7 +43,7 @@ export class PQTSerice implements PtQTInteface {
       }
     }
   }
-  public async updatePQT(ProductQuantityTimeId: string, pqt: ProductQuantityTime): Promise<{ success: boolean; error?: string; message?: string; }> {
+  public async updatePQT(ProductQuantityTimeId: string, pqt: Partial<ProductQuantityTime>): Promise<{ success: boolean; error?: string; message?: string; }> {
     let pqtExists = await this.prisma.productQuantityTime.findUnique({
       where: {
         ProductQuantityTimeId
@@ -60,7 +60,8 @@ export class PQTSerice implements PtQTInteface {
     let updatePQT = await this.prisma.productQuantityTime.update({
       data: {
         Quantity: pqt.Quantity,
-        Period: pqt.Period
+        Period: pqt.Period,
+        Price: pqt.Price
       },
       where: {
         ProductQuantityTimeId
