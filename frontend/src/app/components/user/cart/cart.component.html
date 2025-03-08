@@ -1,1 +1,174 @@
-<p>cart works!</p>
+<div class="cart-container">
+  <div class="cart-header">
+    <h1>Your Shopping Cart</h1>
+    <p *ngIf="cartItems.length > 0">{{ cartItems.length }} item(s) in your cart</p>
+    <p *ngIf="cartItems.length === 0" class="empty-cart-message">Your cart is empty. <a routerLink="/products">Continue shopping</a></p>
+  </div>
+
+  <div class="cart-content" *ngIf="cartItems.length > 0">
+    <div class="cart-items">
+      <div class="cart-item" *ngFor="let item of cartItems; let i = index">
+        <form #cartForm="ngForm" (ngSubmit)="updateCartItem(item, cartForm.value)">
+          <div class="item-details">
+            <div class="item-image">
+              <img [src]="item.Product?.ProductImages" [alt]="item.Product?.ProductName">
+              <div class="item-badges" *ngIf="item.Product">
+                <span class="offer-badge" *ngIf="item.Product.OnOffer">OFFER</span>
+                <span class="flush-badge" *ngIf="item.Product.OnFlushSale">FLUSH SALE</span>
+              </div>
+            </div>
+            <div class="item-info">
+              <h3>{{ item.Product?.ProductName }}</h3>
+              <p class="item-desc">{{ item.Product?.ShortDesc }}</p>
+              
+              <div class="item-actions">
+                <div class="quantity-selector">
+                  <label for="quantity-{{i}}">Quantity:</label>
+                  <div class="quantity-controls">
+                    <button type="button" class="quantity-btn" (click)="decrementQuantity(item)" [disabled]="item.Quantity <= 1">
+                      <i class='bx bx-minus'></i>
+                    </button>
+                    <input 
+                      type="number" 
+                      id="quantity-{{i}}" 
+                      name="quantity" 
+                      [(ngModel)]="item.Quantity" 
+                      min="1" 
+                      [max]="item.Product?.StockQuantity || 1" 
+                      (change)="calculateItemPrice(item)"
+                    >
+                    <button type="button" class="quantity-btn" (click)="incrementQuantity(item)" [disabled]="item.Product ? (item.Quantity >= item.Product.StockQuantity) : true">
+                      <i class='bx bx-plus'></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="order-type-selector">
+                  <label for="orderType-{{i}}">Order Type:</label>
+                  <select 
+                    id="orderType-{{i}}" 
+                    name="orderType" 
+                    [(ngModel)]="item.OrderType"
+                    (change)="calculateItemPrice(item)"
+                  >
+                    <option value="normal">Normal Order</option>
+                    <option value="custom" *ngIf="item.Product?.IsCustommable">Custom Order</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="item-meta">
+                <span *ngIf="item.Product?.Category"><i class='bx bx-category'></i> {{ item.Product?.Category }}</span>
+                <span *ngIf="item.Product?.Colour"><i class='bx bx-palette'></i> {{ item.Product?.Colour }}</span>
+                <span *ngIf="item.Product ? (item.Product.StockQuantity <= item.Product.StockLimit) : true" class="low-stock">
+                  <i class='bx bx-error'></i> Low Stock ({{ item.Product?.StockQuantity }} left)
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="item-pricing">
+            <div class="price-details">
+              <div class="original-price" *ngIf="item.Discount > 0">
+                <span>Original Price:</span>
+                <span>{{ item.Product?.Prize | currency }}</span>
+              </div>
+              <div class="discount" *ngIf="item.Discount > 0">
+                <span>Discount ({{ item.Discount }}%):</span>
+                <span>-{{ calculateDiscount(item) | currency }}</span>
+              </div>
+              <div class="final-price">
+                <span>Price:</span>
+                <span [ngClass]="{'discounted': item.Discount > 0}">
+                  {{ calculateItemPriceAfterDiscount(item) | currency }}
+                </span>
+              </div>
+              <div class="subtotal">
+                <span>Subtotal:</span>
+                <span>{{ calculateSubtotal(item) | currency }}</span>
+              </div>
+
+              <div *ngIf="item.OrderType === 'custom' && item.Product?.IsCustommable" class="custom-order-info">
+                <hr>
+                <div class="deposit-info">
+                  <span>Deposit ({{ calculateDepositPercentage(item) }}%):</span>
+                  <span>{{ calculateDeposit(item) | currency }}</span>
+                </div>
+                <div class="balance-info">
+                  <span>Balance:</span>
+                  <span>{{ calculateBalance(item) | currency }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="item-actions-right">
+              <button type="submit" class="update-btn" title="Update Cart">
+                <i class='bx bx-refresh'></i>
+              </button>
+              <button type="button" class="remove-btn" (click)="removeFromCart(item)" title="Remove from Cart">
+                <i class='bx bx-trash'></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <h2>Order Summary</h2>
+      
+      <div class="summary-normal-order" *ngIf="hasNormalOrders()">
+        <h3>Normal Orders</h3>
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span>{{ calculateNormalOrdersSubtotal() | currency }}</span>
+        </div>
+        <div class="summary-row" *ngIf="calculateTotalDiscount() > 0">
+          <span>Total Discount:</span>
+          <span>-{{ calculateTotalDiscount() | currency }}</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total to Pay:</span>
+          <span>{{ calculateNormalOrdersTotal() | currency }}</span>
+        </div>
+
+        <button class="checkout-btn" (click)="checkoutNormalOrders()">
+          <i class='bx bx-credit-card'></i> Checkout Normal Orders
+        </button>
+      </div>
+
+      <div class="summary-custom-order" *ngIf="hasCustomOrders()">
+        <h3>Custom Orders</h3>
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span>{{ calculateCustomOrdersSubtotal() | currency }}</span>
+        </div>
+        <div class="summary-row" *ngIf="calculateCustomOrdersDiscount() > 0">
+          <span>Total Discount:</span>
+          <span>-{{ calculateCustomOrdersDiscount() | currency }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Total Deposit Due Now:</span>
+          <span>{{ calculateTotalDeposit() | currency }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Total Balance:</span>
+          <span>{{ calculateTotalBalance() | currency }}</span>
+        </div>
+
+        <button class="checkout-btn custom" (click)="checkoutCustomOrders()">
+          <i class='bx bx-palette'></i> Checkout Custom Orders
+        </button>
+      </div>
+
+      <div class="cart-actions">
+        <button class="continue-shopping" routerLink="/products">
+          <i class='bx bx-left-arrow-alt'></i> Continue Shopping
+        </button>
+        <button class="clear-cart" (click)="clearCart()" *ngIf="cartItems.length > 0">
+          <i class='bx bx-trash'></i> Clear Cart
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

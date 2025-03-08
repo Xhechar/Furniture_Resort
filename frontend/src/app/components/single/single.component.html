@@ -1,4 +1,5 @@
 <app-topbar></app-topbar>
+<app-notifications></app-notifications>
 <div class="product-detail-container">
   <!-- First Section: Product Gallery and Details -->
   <section class="product-main">
@@ -24,9 +25,9 @@
         <h1 class="product-title">{{ product.ProductName }}</h1>
         
         <div class="product-price-container">
-          <span class="product-price" [class.discounted]="product.OnOffer">{{ product.Prize | currency }}</span>
+          <span class="product-price" [class.discounted]="product.OnOffer">{{ product.Prize | currency : 'Ksh ' }}</span>
           <span class="product-discount-price" *ngIf="product.OnOffer">
-            {{ calculateDiscountedPrice() | currency }}
+            {{ calculateDiscountedPrice() | currency: 'Ksh ' }}
           </span>
         </div>
         
@@ -57,7 +58,7 @@
         <div class="product-attributes" *ngIf="product.Colour || product.Sizes">
           <div class="color-selection" *ngIf="product.Colour">
             <h3>Color:</h3>
-            <span class="color-option">{{ product.Colour }}</span>
+            <span class="color-option">{{ product.Colour.split(', ')[0] }}</span>
           </div>
           
           <div class="size-selection" *ngIf="product.Sizes">
@@ -124,7 +125,7 @@
           <h2>Product Details</h2>
           <ul class="product-details-list">
             <li><strong>Category:</strong> {{ product.Category }}</li>
-            <li *ngIf="product.Colour"><strong>Color:</strong> {{ product.Colour }}</li>
+            <li *ngIf="product.Colour"><strong>Color:</strong> {{ product.Colour.split(', ')[0] }}</li>
             <li *ngIf="product.Sizes"><strong>Sizes:</strong> {{ product.Sizes }}</li>
             <li><strong>Stock Quantity:</strong> {{ product.StockQuantity }}</li>
             <li *ngIf="product.OnOffer"><strong>Discount:</strong> {{ product.Discount }}%</li>
@@ -138,7 +139,7 @@
             <p>This product can be customized to your preferences.</p>
             
             <div class="custom-price">
-              <strong>Custom Price:</strong> {{ product.CustomPrize | currency }}
+              <strong>Custom Price:</strong> {{ product.CustomPrize | currency : 'Ksh ' }}
               <span *ngIf="product.Deposit > 0">(Requires {{ product.Deposit | currency }} deposit)</span>
             </div>
             
@@ -200,9 +201,9 @@
         <div class="product-details">
           <h3 class="product-name">{{ product.ProductName }}</h3>
           <div class="product-price-container">
-            <span class="product-price" [class.discounted]="product.OnOffer">{{ product.Prize | currency }}</span>
+            <span class="product-price" [class.discounted]="product.OnOffer">{{ product.Prize | currency : 'Ksh ' }}</span>
             <span class="product-discount-price" *ngIf="product.OnOffer">
-              {{ (product.Prize - (product.Prize * product.Discount / 100)) | currency }}
+              {{ (product.Prize - (product.Prize * product.Discount / 100)) | currency : 'Ksh ' }}
             </span>
           </div>
           

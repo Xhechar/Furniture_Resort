@@ -894,7 +894,9 @@ export class ProductService implements ProductInterface {
     }
   }
   public async getSingleActivatedProduct(ProductId: string, UserId?: string): Promise<{ success: boolean; error?: string; message?: string; product?: Product | unknown; }> {
-    if (UserId == '') {
+    console.log(UserId);
+    
+    if (UserId == '' || undefined) {
       let productExists = await this.prisma.product.findUnique({
         where: {
           ProductId
@@ -912,10 +914,12 @@ export class ProductService implements ProductInterface {
         }
       }
   
-      return {
-        'success': true,
-        'message': 'Product successfully retrieved.',
-        'product': productExists
+      else {
+        return {
+          'success': true,
+          'message': 'Product successfully retrieved.',
+          'product': productExists
+        }
       }
     }
 

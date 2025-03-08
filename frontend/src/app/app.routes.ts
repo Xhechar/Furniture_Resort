@@ -64,7 +64,7 @@ export const routes: Routes = [
     { path: 'my-reviews', component: MyreviewsComponent },
     { path: 'orders', component: OrdersComponent },
     { path: 'products', component: ProductsComponent },
-    { path: 'my-profile', component: ProfileComponent },
+    { path: 'my-profile', component: AProfileComponent },
     { path: 'my-progresses', component: UserProgressesComponent },
     { path: 'my-messages', component: UserMessagesComponent },
     { path: 'my-wishlist', component: UserWishlistsComponent },

@@ -30,6 +30,7 @@ export class SingleComponent implements OnInit {
 
     // Load dummy product data
     this.loadProductData(productId);
+    console.log(`the id is ${productId} =>`, this.product);
     this.loadSimilarProducts();
     this.calculateAverageRating();
   }
@@ -40,6 +41,7 @@ export class SingleComponent implements OnInit {
       next: (value) => {
         if (value.success) {
           this.product = value.product as Product;
+          console.log(this.product);
           this.selectedImage = this.product.ProductImages.split(', ')[0];
         } else {
           this.ns.showMessage(value.error as string, false);
@@ -188,105 +190,119 @@ export class SingleComponent implements OnInit {
   }
 
   loadSimilarProducts(): void {
-    // Dummy similar products data
-    this.similarProducts = [
-      {
-        ProductId: 'product2',
-        ProductName: 'Modern Lounge Chair',
-        ProductImages: "https://i.pinimg.com/236x/23/c6/27/23c627933154523f2f7b38c18876cc4f.jpg",
-        ShortDesc: 'Contemporary lounge chair with sleek design and premium comfort.',
-        LongDesc: 'A modern take on classic comfort.',
-        Sizes: 'Standard',
-        Category: 'Lounge Chairs',
-        Colour: 'Grey',
-        Prize: 499.99,
-        StockQuantity: 8,
-        StockLimit: 3,
-        CustomPrize: 649.99,
-        OnOffer: true,
-        OnFlushSale: false,
-        Discount: 10,
-        MakePeriods: 10,
-        Deposit: 150,
-        DateCreated: new Date('2024-01-20'),
-        IsActivated: true,
-        IsCustommable: true,
-        Reviews: [
-          {
-            ReviewId: 'rev4',
-            ProductId: 'product2',
-            UserId: 'user1',
-            ReviewText: 'Comfortable and stylish.',
-            Rating: 5,
-            DateCreated: '2024-02-25'
-          }
-        ]
+
+    this.ps.getAllActivatedProducts().subscribe({
+      next: (products) => {
+        if (products.success) {
+          this.similarProducts = (products.products as Product[]).filter(product => product.Category === this.product.Category);
+        } else {
+          this.ns.showMessage(products.error as string, false);
+        }
       },
-      {
-        ProductId: 'product3',
-        ProductName: 'Classic Rocking Chair',
-        ProductImages: "https://i.pinimg.com/236x/23/c6/27/23c627933154523f2f7b38c18876cc4f.jpg",
-        ShortDesc: 'Traditional wooden rocking chair with curved runners and comfortable seat.',
-        LongDesc: 'A timeless classic for any home.',
-        Sizes: 'Standard',
-        Category: 'Rocking Chairs',
-        Colour: 'Oak',
-        Prize: 449.99,
-        StockQuantity: 15,
-        StockLimit: 5,
-        CustomPrize: 599.99,
-        OnOffer: false,
-        OnFlushSale: true,
-        Discount: 0,
-        MakePeriods: 12,
-        Deposit: 120,
-        DateCreated: new Date('2024-01-25'),
-        IsActivated: true,
-        IsCustommable: true,
-        Reviews: [
-          {
-            ReviewId: 'rev5',
-            ProductId: 'product3',
-            UserId: 'user2',
-            ReviewText: 'Perfect for my front porch.',
-            Rating: 4,
-            DateCreated: '2024-03-01'
-          }
-        ]
-      },
-      {
-        ProductId: 'product4',
-        ProductName: 'Vintage Dining Chair',
-        ProductImages: "https://i.pinimg.com/236x/23/c6/27/23c627933154523f2f7b38c18876cc4f.jpg",
-        ShortDesc: 'Elegant dining chair with vintage-inspired design and comfortable upholstery.',
-        LongDesc: 'Add sophistication to your dining area.',
-        Sizes: 'Standard',
-        Category: 'Dining Chairs',
-        Colour: 'Mahogany',
-        Prize: 349.99,
-        StockQuantity: 24,
-        StockLimit: 10,
-        CustomPrize: 449.99,
-        OnOffer: true,
-        OnFlushSale: false,
-        Discount: 5,
-        MakePeriods: 8,
-        Deposit: 100,
-        DateCreated: new Date('2024-02-05'),
-        IsActivated: true,
-        IsCustommable: true,
-        Reviews: [
-          {
-            ReviewId: 'rev6',
-            ProductId: 'product4',
-            UserId: 'user3',
-            ReviewText: 'Beautiful chairs for my dining set.',
-            Rating: 5,
-            DateCreated: '2024-03-10'
-          }
-        ]
+      error: (error) => {
+        this.ns.showMessage(error.error.message, false);
       }
-    ];
+    });
+
+    // Dummy similar products data
+    // this.similarProducts = [
+    //   {
+    //     ProductId: 'product2',
+    //     ProductName: 'Modern Lounge Chair',
+    //     ProductImages: "https://i.pinimg.com/236x/23/c6/27/23c627933154523f2f7b38c18876cc4f.jpg",
+    //     ShortDesc: 'Contemporary lounge chair with sleek design and premium comfort.',
+    //     LongDesc: 'A modern take on classic comfort.',
+    //     Sizes: 'Standard',
+    //     Category: 'Lounge Chairs',
+    //     Colour: 'Grey',
+    //     Prize: 499.99,
+    //     StockQuantity: 8,
+    //     StockLimit: 3,
+    //     CustomPrize: 649.99,
+    //     OnOffer: true,
+    //     OnFlushSale: false,
+    //     Discount: 10,
+    //     MakePeriods: 10,
+    //     Deposit: 150,
+    //     DateCreated: new Date('2024-01-20'),
+    //     IsActivated: true,
+    //     IsCustommable: true,
+    //     Reviews: [
+    //       {
+    //         ReviewId: 'rev4',
+    //         ProductId: 'product2',
+    //         UserId: 'user1',
+    //         ReviewText: 'Comfortable and stylish.',
+    //         Rating: 5,
+    //         DateCreated: '2024-02-25'
+    //       }
+    //     ]
+    //   },
+    //   {
+    //     ProductId: 'product3',
+    //     ProductName: 'Classic Rocking Chair',
+    //     ProductImages: "https://i.pinimg.com/236x/23/c6/27/23c627933154523f2f7b38c18876cc4f.jpg",
+    //     ShortDesc: 'Traditional wooden rocking chair with curved runners and comfortable seat.',
+    //     LongDesc: 'A timeless classic for any home.',
+    //     Sizes: 'Standard',
+    //     Category: 'Rocking Chairs',
+    //     Colour: 'Oak',
+    //     Prize: 449.99,
+    //     StockQuantity: 15,
+    //     StockLimit: 5,
+    //     CustomPrize: 599.99,
+    //     OnOffer: false,
+    //     OnFlushSale: true,
+    //     Discount: 0,
+    //     MakePeriods: 12,
+    //     Deposit: 120,
+    //     DateCreated: new Date('2024-01-25'),
+    //     IsActivated: true,
+    //     IsCustommable: true,
+    //     Reviews: [
+    //       {
+    //         ReviewId: 'rev5',
+    //         ProductId: 'product3',
+    //         UserId: 'user2',
+    //         ReviewText: 'Perfect for my front porch.',
+    //         Rating: 4,
+    //         DateCreated: '2024-03-01'
+    //       }
+    //     ]
+    //   },
+    //   {
+    //     ProductId: 'product4',
+    //     ProductName: 'Vintage Dining Chair',
+    //     ProductImages: "https://i.pinimg.com/236x/23/c6/27/23c627933154523f2f7b38c18876cc4f.jpg",
+    //     ShortDesc: 'Elegant dining chair with vintage-inspired design and comfortable upholstery.',
+    //     LongDesc: 'Add sophistication to your dining area.',
+    //     Sizes: 'Standard',
+    //     Category: 'Dining Chairs',
+    //     Colour: 'Mahogany',
+    //     Prize: 349.99,
+    //     StockQuantity: 24,
+    //     StockLimit: 10,
+    //     CustomPrize: 449.99,
+    //     OnOffer: true,
+    //     OnFlushSale: false,
+    //     Discount: 5,
+    //     MakePeriods: 8,
+    //     Deposit: 100,
+    //     DateCreated: new Date('2024-02-05'),
+    //     IsActivated: true,
+    //     IsCustommable: true,
+    //     Reviews: [
+    //       {
+    //         ReviewId: 'rev6',
+    //         ProductId: 'product4',
+    //         UserId: 'user3',
+    //         ReviewText: 'Beautiful chairs for my dining set.',
+    //         Rating: 5,
+    //         DateCreated: '2024-03-10'
+    //       }
+    //     ]
+    //   }
+    // ];
   }
 
   calculateAverageRating(): void {
@@ -334,7 +350,7 @@ export class SingleComponent implements OnInit {
 
   calculateDiscountedPrice(): number {
     if (this.product.OnOffer) {
-      return this.product.Prize - (this.product.Prize * this.product.Discount / 100);
+      return this.product.Prize - (this.product.Discount);
     }
     return this.product.Prize;
   }

@@ -237,7 +237,7 @@ export class ProductsController {
   async getSingleActivatedProduct(req: ExtendedRequest, res: Response) {
     try {
       
-      let result = await productService.getSingleActivatedProduct(getIdFromToken(req), req.params.ProductId);
+      let result = await productService.getSingleActivatedProduct(req.params.ProductId, getIdFromToken(req));
 
       res.status(201).json(result);
       
