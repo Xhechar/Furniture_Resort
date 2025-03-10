@@ -140,7 +140,7 @@
             
             <div class="custom-price">
               <strong>Custom Price:</strong> {{ product.CustomPrize | currency : 'Ksh ' }}
-              <span *ngIf="product.Deposit > 0">(Requires {{ product.Deposit | currency }} deposit)</span>
+              <span *ngIf="product.Deposit > 0">(Requires {{ product.Deposit | currency : 'Ksh ' }} deposit)</span>
             </div>
             
             <div class="make-periods">
@@ -149,14 +149,14 @@
                 <thead>
                   <tr>
                     <th>Quantity</th>
-                    <th>Price</th>
+                    <th>Price Per</th>
                     <th>Manufacturing Time (Days)</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let period of product.ProductQuantityTimes">
                     <td>{{ period.Quantity }}</td>
-                    <td>{{ period.Price | currency }}</td>
+                    <td>{{ period.Price | currency : 'Ksh ' }}</td>
                     <td>{{ period.Period }}</td>
                   </tr>
                 </tbody>

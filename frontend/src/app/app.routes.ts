@@ -86,12 +86,14 @@ export const routes: Routes = [
     },
     { path: 'user-reviews', component: AdminReviewsComponent },
     { path: 'user-progresses', component: AdminProgressesComponent, children: [
+      { path: '', component: DeletedProductsComponent },
       { path: 'all-progresses', component: DeletedProductsComponent },
       { path: 'user-completed-progresses', component: AdminCompletedProgressesComponent },
     ]
     },
     { path: 'admin-messages', component: AdminMessagesComponent },
     { path: 'user-orders', component: UserOrdersComponent, children: [
+      { path: '', component: OnOffersComponent },
       { path: 'normal-orders', component: OnOffersComponent },
       { path: 'delivered-orders', component: AdminDeliveredOrdersComponent },
       { path: 'user-custom-orders', component: AdminCustomOrdersComponent },
@@ -101,6 +103,7 @@ export const routes: Routes = [
     { path: 'user-categories', component: AdminCategoriesComponent },
     {
       path: 'users', component: UsersComponent, children: [
+        { path: '', component: AdminAllUsersComponent},
         { path: 'all-users', component: AdminAllUsersComponent},
         { path: 'deleted-users', component: DeletedUsersComponent },
       ]

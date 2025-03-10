@@ -139,7 +139,7 @@
           <img class="review-avatar" [src]="review.User?.ProfileImage || 'assets/images/default-avatar.png'" 
                alt="{{ review.User?.Fullname }}" />
           <div>
-            <h3 class="review-name">{{ review.User?.Fullname || 'Anonymous User' }}</h3>
+            <h3 class="review-name">{{ review.User ? review.User.Fullname.split(' ')[0] || 'Anonymous User' : '' }}</h3>
             <p class="review-date">
               <i class="fa fa-calendar-alt"></i> 
               {{ formatDate(review.DateCreated) }}
