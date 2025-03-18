@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TopBar } from '../../../interfaces/interfaces';
 import { HandlerService } from '../../../services/handler.service';
@@ -12,9 +12,6 @@ import { HandlerService } from '../../../services/handler.service';
   styleUrl: './admin-side-bar.component.css'
 })
 export class AdminSideBarComponent {
-  // users - update role, delete users (multiple), restore, getdeleted, allnusers
-  //products - categories, 
-  //orders -custom & orders, delivered, custom delivered
   menuItems = [
     { value: 'Dashboard', route: 'dashboard', icon: 'bx bxs-dashboard' },
     { value: 'Products', route: 'products', icon: 'bx bx-list-ul' },
@@ -29,11 +26,11 @@ export class AdminSideBarComponent {
   ];
 
   selectedIndex = 0;
-
+  
   constructor(private router: Router, private hs: HandlerService) {
-    const currentRoute = this.router.url;
+    const currentRoute = this.router.url.split('/').pop() || '';
     const foundIndex = this.menuItems.findIndex((item) => item.route === currentRoute);
-    if (foundIndex!== -1) {
+    if (foundIndex !== -1) {
       this.selectedIndex = foundIndex;
     }
   }

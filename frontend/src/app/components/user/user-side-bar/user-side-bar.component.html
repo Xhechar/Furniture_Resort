@@ -1,10 +1,23 @@
 <div class="body">
-  <div class="sidebar">
-      <div class="sidebar-header">
-        <img src="../../../logo/company-logo.png" alt="">
+  <div class="sidebar" [class.collapsed]="isSidebarCollapsed">
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <span class="full-logo" *ngIf="!isSidebarCollapsed">Ndagani SF</span>
+        <span class="mini-logo" *ngIf="isSidebarCollapsed">NSF</span>
       </div>
-      <ul class="menu">
-          <li class="menu-item" (click)="setIndex(i)" *ngFor="let menu of menuItems,  let i = index" [routerLink]="menu.route" [class.active]="selectedIndex === i"><i [ngClass]="menu.icon"></i> {{menu.value}}</li>
-      </ul>
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <i class='bx bx-chevron-left'></i>
+      </button>
+    </div>
+    <ul class="menu">
+      <li class="menu-item" (click)="setIndex(i)" *ngFor="let menu of menuItems, let i = index"
+        [routerLink]="menu.route" [class.active]="selectedIndex === i">
+        <div class="icon-container">
+          <i [ngClass]="menu.icon"></i>
+        </div>
+        <span class="menu-text" *ngIf="!isSidebarCollapsed">{{menu.value}}</span>
+        <div class="tooltip" *ngIf="isSidebarCollapsed">{{menu.value}}</div>
+      </li>
+    </ul>
   </div>
 </div>

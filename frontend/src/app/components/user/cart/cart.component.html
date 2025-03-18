@@ -71,32 +71,32 @@
             <div class="price-details">
               <div class="original-price" *ngIf="item.Discount > 0">
                 <span>Original Price:</span>
-                <span>{{ item.Product?.Prize | currency }}</span>
+                <span>{{ item.Product?.Prize | currency : 'Ksh ' }}</span>
               </div>
               <div class="discount" *ngIf="item.Discount > 0">
                 <span>Discount ({{ item.Discount }}%):</span>
-                <span>-{{ calculateDiscount(item) | currency }}</span>
+                <span>-{{ calculateDiscount(item) | currency : 'Ksh ' }}</span>
               </div>
               <div class="final-price">
                 <span>Price:</span>
                 <span [ngClass]="{'discounted': item.Discount > 0}">
-                  {{ calculateItemPriceAfterDiscount(item) | currency }}
+                  {{ calculateItemPriceAfterDiscount(item) | currency : 'Ksh ' }}
                 </span>
               </div>
               <div class="subtotal">
                 <span>Subtotal:</span>
-                <span>{{ calculateSubtotal(item) | currency }}</span>
+                <span>{{ calculateSubtotal(item) | currency : 'Ksh ' }}</span>
               </div>
 
               <div *ngIf="item.OrderType === 'custom' && item.Product?.IsCustommable" class="custom-order-info">
                 <hr>
                 <div class="deposit-info">
                   <span>Deposit ({{ calculateDepositPercentage(item) }}%):</span>
-                  <span>{{ calculateDeposit(item) | currency }}</span>
+                  <span>{{ calculateDeposit(item) | currency : 'Ksh ' }}</span>
                 </div>
                 <div class="balance-info">
                   <span>Balance:</span>
-                  <span>{{ calculateBalance(item) | currency }}</span>
+                  <span>{{ calculateBalance(item) | currency : 'Ksh ' }}</span>
                 </div>
               </div>
             </div>
@@ -121,15 +121,15 @@
         <h3>Normal Orders</h3>
         <div class="summary-row">
           <span>Subtotal:</span>
-          <span>{{ calculateNormalOrdersSubtotal() | currency }}</span>
+          <span>{{ calculateNormalOrdersSubtotal() | currency : 'Ksh ' }}</span>
         </div>
         <div class="summary-row" *ngIf="calculateTotalDiscount() > 0">
           <span>Total Discount:</span>
-          <span>-{{ calculateTotalDiscount() | currency }}</span>
+          <span>-{{ calculateTotalDiscount() | currency : 'Ksh ' }}</span>
         </div>
         <div class="summary-row total">
           <span>Total to Pay:</span>
-          <span>{{ calculateNormalOrdersTotal() | currency }}</span>
+          <span>{{ calculateNormalOrdersTotal() | currency : 'Ksh ' }}</span>
         </div>
 
         <button class="checkout-btn" (click)="checkoutNormalOrders()">
@@ -141,19 +141,19 @@
         <h3>Custom Orders</h3>
         <div class="summary-row">
           <span>Subtotal:</span>
-          <span>{{ calculateCustomOrdersSubtotal() | currency }}</span>
+          <span>{{ calculateCustomOrdersSubtotal() | currency : 'Ksh ' }}</span>
         </div>
         <div class="summary-row" *ngIf="calculateCustomOrdersDiscount() > 0">
           <span>Total Discount:</span>
-          <span>-{{ calculateCustomOrdersDiscount() | currency }}</span>
+          <span>-{{ calculateCustomOrdersDiscount() | currency : 'Ksh ' }}</span>
         </div>
         <div class="summary-row">
           <span>Total Deposit Due Now:</span>
-          <span>{{ calculateTotalDeposit() | currency }}</span>
+          <span>{{ calculateTotalDeposit() | currency : 'Ksh ' }}</span>
         </div>
         <div class="summary-row">
           <span>Total Balance:</span>
-          <span>{{ calculateTotalBalance() | currency }}</span>
+          <span>{{ calculateTotalBalance() | currency : 'Ksh ' }}</span>
         </div>
 
         <button class="checkout-btn custom" (click)="checkoutCustomOrders()">

@@ -2,19 +2,55 @@
 <app-topbar></app-topbar>
 <div class="entire-contents">
     <section class="landing-area">
-        <div class="left-area">
-            <div class="text-content">
-                <h3>Latest Collection.</h3>
-                <h1>Sofas &#38; Beds</h1>
-                <p>Your, shopping companion. Make your home beautiful.</p>
+      <div class="left-area">
+        <div class="furniture-showcase">
+          <div class="showcase-item active" id="showcase-1">
+            <div class="showcase-image"></div>
+            <div class="showcase-details">
+              <span class="furniture-category">Premium Sofa</span>
+              <h3 class="furniture-name">Nordic Comfort</h3>
+              <p class="furniture-price">Ksh 1,299</p>
             </div>
+          </div>
+          <div class="showcase-item" id="showcase-2">
+            <div class="showcase-image"></div>
+            <div class="showcase-details">
+              <span class="furniture-category">Luxury Bed</span>
+              <h3 class="furniture-name">Serene Dreams</h3>
+              <p class="furniture-price">Ksh 1,499</p>
+            </div>
+          </div>
+          <div class="showcase-item" id="showcase-3">
+            <div class="showcase-image"></div>
+            <div class="showcase-details">
+              <span class="furniture-category">Designer Table</span>
+              <h3 class="furniture-name">Urban Edge</h3>
+              <p class="furniture-price">Ksh 899</p>
+            </div>
+          </div>
         </div>
-        <div class="right-area">
-            <button class="home-btn">
-                <p>Shop Now</p>
-                <img src="../../../icons/arrow_forward_ios_25dp_FFF_FILL0_wght400_GRAD0_opsz24.png" alt="right-arrow">
-            </button>
+        <div class="slider-controls">
+          <div class="slider-dot active" data-slide="showcase-1"></div>
+          <div class="slider-dot" data-slide="showcase-2"></div>
+          <div class="slider-dot" data-slide="showcase-3"></div>
         </div>
+        <div class="brand-overlay">
+          <h4 class="brand-name">Ndagani<span> SF</span></h4>
+        </div>
+      </div>
+    
+      <div class="right-area">
+        <div class="text-content">
+          <span class="highlight-text">Latest Collection</span>
+          <h1>Elegant Living Solutions</h1>
+          <p>Transform your space with our carefully curated furniture pieces. Quality craftsmanship meets modern design for
+            your dream home.</p>
+          <button class="shop-now-btn">
+            Shop Collection
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
     </section>
 
     <section class="featured-products">
@@ -130,23 +166,37 @@
     </section>
 
     <section class="join-us-section">
-        <div class="left-content">
-          <h2>Get in, <br><span>Join Us</span></h2>
-          <p>Sign up for the newsletter and receive 10% off your first order.</p>
-          <form>
-            <input type="text" placeholder="John Doe" class="input-field" />
-            <input type="email" placeholder="johndoe@abcdef.com" class="input-field" />
-            <button type="submit" class="sign-up-btn">SUBSCRIBE NOW</button>
-          </form>
-          <p class="terms">
-            By subscribing you agree to our <a href="#">Terms & Conditions</a> and
-            <a href="#">Privacy & Cookies Policy</a>.
-          </p>
+      <div class="left-content">
+        <h2 class="animated-title">Get in, <br><span>Join Us</span></h2>
+        <p class="subtitle">Sign up for the newsletter and receive 10% off your first order.</p>
+        <form class="signup-form">
+          <div class="input-group">
+            <input type="text" placeholder="John Doe" class="input-field" required />
+            <span class="input-focus-border"></span>
+          </div>
+          <div class="input-group">
+            <input type="email" placeholder="johndoe@abcdef.com" class="input-field" required />
+            <span class="input-focus-border"></span>
+          </div>
+          <button type="submit" class="sign-up-btn">
+            <span>SUBSCRIBE NOW</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" width="24" height="24">
+              <path d="M21.883 12l-7.527 6.235.644.765 9-7.521-9-7.479-.645.764 7.529 6.236h-21.884v1h21.883z" />
+            </svg>
+          </button>
+        </form>
+        <p class="terms">
+          By subscribing you agree to our <a href="#" class="terms-link">Terms & Conditions</a> and
+          <a href="#" class="terms-link">Privacy & Cookies Policy</a>.
+        </p>
+      </div>
+      <div class="right-content">
+        <div class="image-container">
+          <img src="../../../furniture_images/02dac7ae52e14088380b82234c2e71cb-removebg-preview.png"
+            alt="Decorative furniture" />
         </div>
-        <div class="right-content">
-          <img src="../../../furniture_images/02dac7ae52e14088380b82234c2e71cb-removebg-preview.png" alt="Decorative furniture" />
-        </div>
-      </section>
+      </div>
+    </section>
       
       <section class="models-section">
         <div class="models-info">
@@ -158,11 +208,17 @@
             design team.
           </p>
           <button class="models-button">
-            EXPLORE LATEST CHATTELS <span>&rarr;</span>
+            <span class="btn-text">EXPLORE LATEST CHATTELS</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" width="24" height="24">
+              <path d="M21.883 12l-7.527 6.235.644.765 9-7.521-9-7.479-.645.764 7.529 6.236h-21.884v1h21.883z" />
+            </svg>
           </button>
         </div>
         <div class="models-image-container">
-          <img style="height: 80%;" src="../../../furniture_images/accessories-removebg-preview.png" alt="Furniture showcase" class="models-image" />
+          <div class="image-wrapper">
+            <img src="../../../furniture_images/accessories-removebg-preview.png" alt="Furniture showcase"
+              class="models-image" />
+          </div>
         </div>
         <div class="models-highlights">
           <h2 class="highlights-title">
@@ -173,11 +229,9 @@
             way and we all want our mattress to adapt perfectly to our body.
           </p>
           <div class="highlights-editorial">
-            <img
-              src="../../../profile_images/reese.jpeg"
-              alt="Editorial staff profile"
-              class="editorial-avatar"
-            />
+            <div class="editorial-avatar-container">
+              <img src="../../../profile_images/reese.jpeg" alt="Editorial staff profile" class="editorial-avatar" />
+            </div>
             <span class="editorial-name">Kevin Odhiambo</span>
           </div>
         </div>
@@ -185,7 +239,7 @@
       
       <div class="footer-promo-section">
         <div class="footer-promo-header">
-          <h2>Chattels on <span class="footer-highlight">OFFER</span></h2>
+          <h2>Furniture on <span class="footer-highlight">OFFER</span></h2>
         </div>
         <div class="footer-product-gallery">
           <div class="footer-product-card" style="height: 40vh; width: 30%;">
@@ -210,14 +264,14 @@
           </div>
           <div class="footer-info-box">
             <h3>Contact Info</h3>
-            <p><strong>Eldoret (Kenya)</strong><br>
+            <p><strong>Tharaka Nithi (Kenya)</strong><br>
               1-3 Moi Avenue<br>
-              Eldoret City, Langas<br>
+              Tharaka Nithi County, Langas<br>
               BOX 30100
             </p>
-            <p><strong>Nairobi (Kenya)</strong><br>
+            <p><strong>Chuka (Kenya)</strong><br>
               340 Nairobi<br>
-              X - Furniture Chattels<br>
+              NDAGANI SMART FURNITURES<br>
               KENYA
             </p>
           </div>

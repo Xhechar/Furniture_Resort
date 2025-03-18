@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { HandlerService } from '../../../services/handler.service';
 import { TopBar } from '../../../interfaces/interfaces';
@@ -29,19 +29,47 @@ export class UserSideBarComponent {
   ];
 
   selectedIndex = 0;
+  isSidebarCollapsed = false;
+  screenWidth: number;
 
   constructor(private router: Router, private hs: HandlerService) {
-    const currentRoute = this.router.url;
+    this.screenWidth = window.innerWidth;
+    this.checkScreenSize();
+    
+    const currentRoute = this.router.url.split('/').pop() || '';
     const foundIndex = this.menuItems.findIndex((item) => item.route === currentRoute);
-    if (foundIndex!== -1) {
+    if (foundIndex !== -1) {
       this.selectedIndex = foundIndex;
     }
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.screenWidth = window.innerWidth;
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize() {
+    if (this.screenWidth <= 768) {
+      this.isSidebarCollapsed = true;
+    }
+  }
+
+  toggleSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
+
   setIndex(index: number) {
     this.selectedIndex = index;
+    
+    // If on mobile, collapse sidebar after selection
+    if (this.screenWidth <= 768) {
+      this.isSidebarCollapsed = true;
+    }
+    
+    const routeParts = this.router.url.split('/');
     let navPath: TopBar = {
-      parent: `${this.router.url.split('/')[1]}`,
+      parent: routeParts.length > 1 ? routeParts[1] : '',
       child: this.menuItems[index].value
     }
     this.hs.setTopBar(navPath);

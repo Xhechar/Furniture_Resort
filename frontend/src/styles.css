@@ -7,6 +7,10 @@
   box-sizing: border-box;
 }
 
+p {
+  color: var(--text-color);
+}
+
 button {
   background-color: #544820;
   color: #ffffff;
@@ -19,6 +23,7 @@ button {
 :root {
   --primary: #544820;
   --primary-light: rgba(84, 72, 32, 0.1);
+  --primary-dark: hsl(46, 45%, 20%);
   --accent: hsl(47, 71%, 52%);
   --accent-hover: hsl(47, 71%, 45%);
   --white: #ffffff;
@@ -52,4 +57,14 @@ button {
   --revenue-bg: rgba(61, 174, 88, 0.15);
   
   --border-radius: 12px;
+
+  --primary-color: hsl(47, 71%, 52%);
+  --secondary-color: #372f15;
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --transition-speed: 0.3s;
+  --text-lighter: #fff;
+  --transition-speed: 0.3s;
+  --sidebar-width: 18rem;
+  --sidebar-collapsed-width: 6.5rem;
 }

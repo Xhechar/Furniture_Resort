@@ -1,19 +1,32 @@
-<div class="top-bar">
+<div class="top-bar" [ngClass]="{'scrolled': isScrolled}">
   <div class="logo-holder">
+    <a routerLink="/" class="logo-text">
+      <span class="full">Ndagani </span><span class="small">NSF</span> <span class="full">Smart Furniture</span>
+    </a>
   </div>
   <div class="right-items">
-    <div class="middle-section">
-      <div routerLink="/home" class="text"><p>Home</p></div>
-      <div routerLink="/login" class="text"><p>Login</p></div>
-      <div routerLink="/signup" class="text"><p>Sign Up</p></div>
-      <div href="#" class="text"><p>Products</p></div>
-      <div href="#" class="text"><p>Services</p></div>
-      <div href="#" class="text"><p>Contact Us</p></div>
-    </div>
+    <nav class="middle-section" [ngClass]="{'active': mobileMenuOpen}">
+      <div class="nav-item"><a routerLink="/home" routerLinkActive="active">Home</a></div>
+      <div class="nav-item"><a routerLink="/products" routerLinkActive="active">Products</a></div>
+      <div class="nav-item"><a routerLink="/collections" routerLinkActive="active">Collections</a></div>
+      <div class="nav-item"><a routerLink="/services" routerLinkActive="active">Services</a></div>
+      <div class="nav-item"><a routerLink="/about" routerLinkActive="active">About Us</a></div>
+      <div class="nav-item"><a routerLink="/contact" routerLinkActive="active">Contact</a></div>
+    </nav>
     <div class="end-section">
-      <img src="../../../icons/person_25dp_544820_FILL0_wght400_GRAD0_opsz24.png" alt="search-bar">
-      <img src="../../../icons/search_25dp_544820_FILL0_wght400_GRAD0_opsz24.png" alt="profile">
-      <img src="../../../icons/local_mall_25dp_544820_FILL0_wght400_GRAD0_opsz24.png" alt="cart-logo">
+      <div class="icon-btn">
+        <i class="fas fa-search"></i>
+      </div>
+      <div class="icon-btn" routerLink="/login">
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="icon-btn cart-icon" routerLink="/cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count">{{cartItemCount}}</span>
+      </div>
     </div>
+    <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+      <i class="fas" [ngClass]="mobileMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+    </button>
   </div>
 </div>

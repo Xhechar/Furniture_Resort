@@ -1,3 +1,4 @@
+<app-notifications></app-notifications>
 <div class="top-bar">
     <h2>{{parent}}&nbsp;><span> {{child}}</span></h2>
   <div class="profile-area">
@@ -10,11 +11,11 @@
     </nav>
     <div class="profile">
       <div class="name-and-date">
-        <h3>Felix Okoth</h3>
-        <p>Today, 25th July 2021</p>
+        <h3>{{user ? user.Fullname : 'Collins Ongolo'}}</h3>
+        <p>{{now | date : 'fullDate'}}</p>
       </div>
       <div class="img-container">
-        <img src="https://i.pinimg.com/236x/75/b5/2a/75b52a1d81e6a976ad994c5d9a117674.jpg" alt="">
+        <img [src]="user.ProfileImage" alt="profile">
       </div>
     </div>
   </div>

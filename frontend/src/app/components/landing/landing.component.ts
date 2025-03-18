@@ -20,6 +20,10 @@ export class LandingComponent implements OnInit {
   categories: Category[] = [];
   loading = true;
 
+  currentSlide = 'showcase-1';
+  showcaseInterval: any;
+  activeCategory: string = '';
+
   constructor(
     private ps: ProductsService,
     private ns: NotificationsService,
@@ -27,9 +31,69 @@ export class LandingComponent implements OnInit {
     private router: Router
   ) {}
 
+  startSlideshow(): void {
+    // Change slides every 5 seconds
+    this.showcaseInterval = setInterval(() => {
+      let nextSlideNum = parseInt(this.currentSlide.split('-')[1]) + 1;
+      if (nextSlideNum > 3) nextSlideNum = 1;
+      this.changeSlide(`showcase-${nextSlideNum}`);
+    }, 10000);
+  }
+
+  changeSlide(slideId: string): void {
+    // Clear existing interval and start a new one
+    clearInterval(this.showcaseInterval);
+    this.startSlideshow();
+    
+    // Update current slide
+    this.currentSlide = slideId;
+    
+    // Remove active class from all items
+    document.querySelectorAll('.showcase-item').forEach(item => {
+      item.classList.remove('active');
+    });
+    
+    // Add active class to selected item
+    const selectedItem = document.getElementById(slideId);
+    if (selectedItem) {
+      selectedItem.classList.add('active');
+    }
+    
+    // Update slider dots
+    document.querySelectorAll('.slider-dot').forEach(dot => {
+      dot.classList.remove('active');
+      if (dot.getAttribute('data-slide') === slideId) {
+        dot.classList.add('active');
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Clean up interval when component is destroyed
+    if (this.showcaseInterval) {
+      clearInterval(this.showcaseInterval);
+    }
+  }
+
   ngOnInit() {
     this.getProducts();
     this.getCategories();
+
+    this.startSlideshow();
+
+    // Set up event listeners for the slider dots
+    const sliderDots = document.querySelectorAll('.slider-dot');
+    sliderDots.forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const slideId = target.getAttribute('data-slide');
+        if (slideId) {
+          this.changeSlide(slideId);
+        }
+      });
+    });
+
+    this.addAnimationOnScroll();
   }
 
   getProducts() {
@@ -83,5 +147,26 @@ export class LandingComponent implements OnInit {
 
   quickView(ProductId: string) {
     this.router.navigate(['single-product', ProductId]);
+  }
+
+  setActiveCategory(category: string): void {
+    this.activeCategory = category;
+  }
+
+  private addAnimationOnScroll(): void {
+    // You could implement intersection observer here for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    // Select all elements to animate
+    document.querySelectorAll('.left-images > div, .right-images > div').forEach(el => {
+      observer.observe(el);
+    });
   }
 }
