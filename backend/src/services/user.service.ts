@@ -85,7 +85,7 @@ export class UserService implements UserInterface {
     if (createUser) {
       return {
         'success': true,
-        'message': `${createUser.Fullname.split(' ')[0]}, your registraation was successfull. Login ...`
+        'message': `${createUser.Fullname.split(' ')[0]}, registration was successfull. Login ...`
       }
     } else {
       return {

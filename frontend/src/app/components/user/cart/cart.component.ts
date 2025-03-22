@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Cart, CustomOrder, Order } from '../../../interfaces/interfaces';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../../services/cart.service';
 import { OrderService } from '../../../services/order.service';
 import { NotificationsService } from '../../../services/notifications.service';
@@ -10,142 +10,45 @@ import { NotificationsService } from '../../../services/notifications.service';
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
 })
 export class CartComponent implements OnInit {
   cartItems: Cart[] = [];
   isLoading = false;
-  
-  // Dummy data for development and testing
-  dummyCartItems: Cart[] = [
-    {
-      CartId: '1',
-      ProductId: 'p1',
-      UserId: 'u1',
-      Quantity: 2,
-      Discount: 10,
-      Price: 1500,
-      OrderType: 'normal',
-      DateCreated: new Date().toISOString(),
-      Product: {
-        ProductId: 'p1',
-        ProductName: 'Leather Armchair',
-        ProductImages: 'assets/images/products/armchair.jpg',
-        ShortDesc: 'Premium leather armchair with wooden accents',
-        LongDesc: 'Handcrafted premium leather armchair with solid oak wooden accents and premium cushioning for maximum comfort.',
-        Sizes: 'Standard',
-        Category: 'Furniture',
-        Colour: 'Brown',
-        Prize: 1500,
-        StockQuantity: 15,
-        StockLimit: 5,
-        CustomPrize: 1800,
-        OnOffer: true,
-        OnFlushSale: false,
-        Discount: 10,
-        MakePeriods: 14,
-        Deposit: 600,
-        DateCreated: new Date(),
-        IsActivated: true,
-        IsCustommable: true
-      }
-    },
-    {
-      CartId: '2',
-      ProductId: 'p2',
-      UserId: 'u1',
-      Quantity: 1,
-      Discount: 0,
-      Price: 850,
-      OrderType: 'custom',
-      DateCreated: new Date().toISOString(),
-      Product: {
-        ProductId: 'p2',
-        ProductName: 'Coffee Table',
-        ProductImages: 'assets/images/products/coffee-table.jpg',
-        ShortDesc: 'Modern coffee table with storage',
-        LongDesc: 'Elegant modern coffee table with built-in storage compartments. Made of high-quality wood with a glass top.',
-        Sizes: 'Large',
-        Category: 'Furniture',
-        Colour: 'Walnut',
-        Prize: 850,
-        StockQuantity: 8,
-        StockLimit: 3,
-        CustomPrize: 1000,
-        OnOffer: false,
-        OnFlushSale: false,
-        Discount: 0,
-        MakePeriods: 7,
-        Deposit: 400,
-        DateCreated: new Date(),
-        IsActivated: true,
-        IsCustommable: true
-      }
-    },
-    {
-      CartId: '3',
-      ProductId: 'p3',
-      UserId: 'u1',
-      Quantity: 3,
-      Discount: 15,
-      Price: 350,
-      OrderType: 'normal',
-      DateCreated: new Date().toISOString(),
-      Product: {
-        ProductId: 'p3',
-        ProductName: 'Throw Pillow Set',
-        ProductImages: 'assets/images/products/pillows.jpg',
-        ShortDesc: 'Set of 3 decorative throw pillows',
-        LongDesc: 'Luxurious set of 3 decorative throw pillows with premium fabric covers and hypoallergenic filling.',
-        Sizes: 'Standard',
-        Category: 'Home Decor',
-        Colour: 'Assorted',
-        Prize: 350,
-        StockQuantity: 25,
-        StockLimit: 5,
-        CustomPrize: 450,
-        OnOffer: true,
-        OnFlushSale: true,
-        Discount: 15,
-        MakePeriods: 3,
-        Deposit: 150,
-        DateCreated: new Date(),
-        IsActivated: true,
-        IsCustommable: true
-      }
-    }
-  ];
 
   constructor(
     private cartService: CartService,
     private orderService: OrderService,
     private notificationService: NotificationsService,
-    private router: Router
+    private router: Router,
+    private ns: NotificationsService
   ) {}
 
   ngOnInit(): void {
-    // For real implementation, use loadCartItems()
-    // For development with dummy data, use the following:
-    this.cartItems = this.dummyCartItems;
+    this.loadCartItems();
     this.calculateAllPrices();
   }
 
   loadCartItems(): void {
-    // this.isLoading = true;
-    // this.cartService.getCartItems().subscribe({
-    //   next: (items) => {
-    //     this.cartItems = items;
-    //     this.calculateAllPrices();
-    //     this.isLoading = false;
-    //   },
-    //   error: (error) => {
-    //     this.notificationService.showError('Failed to load cart items');
-    //     this.isLoading = false;
-    //     console.error('Error loading cart items:', error);
-    //   }
-    // });
+    this.isLoading = true;
+    this.cartService.getUserCart().subscribe({
+      next: (value) => {
+        if(value.success) {
+          this.ns.showMessage(value.message as string, value.success);
+          this.cartItems = value.carts as Cart[];
+          this.isLoading = false;
+        } else {
+          this.ns.showMessage(value.error as string, false);
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        this.ns.showMessage(error.error.error as string, false);
+        this.isLoading = false;
+      }
+    });
   }
 
   incrementQuantity(item: Cart): void {
@@ -163,14 +66,12 @@ export class CartComponent implements OnInit {
   }
 
   calculateItemPrice(item: Cart): void {
-    // This will trigger price recalculations based on quantity and order type
-    // The actual calculations are done in the methods below
     this.calculateSubtotal(item);
   }
 
   calculateDiscount(item: Cart): number {
     if (!item.Product) return 0;
-    return (item.Product.Prize * item.Discount) / 100;
+    return item.Discount;
   }
 
   calculateItemPriceAfterDiscount(item: Cart): number {

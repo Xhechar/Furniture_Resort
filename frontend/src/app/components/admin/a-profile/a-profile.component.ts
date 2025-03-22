@@ -48,10 +48,10 @@ export class AProfileComponent implements OnInit {
       let formData = new FormData();
 
       formData.append('file', image);
-      formData.append('upload_preset', 'furniture-site-images');
-      formData.append('cloud_name', 'dakyiye2e');
+      formData.append('upload_preset', 'furniture_api');
+      formData.append('cloud_name', 'dbdsfkcev');
 
-      fetch('https://api.cloudinary.com/v1_1/dakyiye2e/image/upload', {
+      fetch('https://api.cloudinary.com/v1_1/dbdsfkcev/image/upload', {
         method: 'POST',
         body: formData
       }).then(res => res.json()).then(res => {
@@ -88,10 +88,10 @@ export class AProfileComponent implements OnInit {
       let formData = new FormData();
 
       formData.append('file', image);
-      formData.append('upload_preset', 'furniture-site-images');
-      formData.append('cloud_name', 'dakyiye2e');
+      formData.append('upload_preset', 'furniture_api');
+      formData.append('cloud_name', 'dbdsfkcev');
 
-      fetch('https://api.cloudinary.com/v1_1/dakyiye2e/image/upload', {
+      fetch('https://api.cloudinary.com/v1_1/dbdsfkcev/image/upload', {
         method: 'POST',
         body: formData
       }).then(res => res.json()).then(res => {

@@ -16,7 +16,7 @@ span {
   left: 0;
   bottom: 0;
   overflow-x: hidden;
-  z-index: 100;
+  z-index: 80;
 }
 
 .sidebar {

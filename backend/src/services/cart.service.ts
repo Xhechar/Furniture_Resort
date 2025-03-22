@@ -30,7 +30,21 @@ export class CartService implements CartInterface {
       }
     }
 
-    let { UserId, CartId, ProductId, DateCreated, User, Product, ...r_cart } = cart;
+    let productExists = await this.prisma.cart.findFirst({
+      where: {
+        ProductId: productId,
+        UserId: userId
+      }
+    });
+
+    if (productExists) {
+      return {
+        'success': false,
+        'error': 'Item already exists in your cart.'
+      }
+    }
+
+    let { UserId, CartId, ProductId, DateCreated, User, Product, Quantity, OrderType, ...r_cart } = cart;
 
     let createCart = await this.prisma.cart.create({
       data: {
@@ -117,7 +131,126 @@ export class CartService implements CartInterface {
         'message': 'Item successfully updated.'
       }
     }
+  }
 
+  public async updateCartProductQuantity(userId: string, cartId: string, Quantity: number): Promise<{ success: boolean; error?: string; message?: string; }> {
+
+    let cartExists = await this.prisma.cart.findUnique({
+      where: {
+        UserId: userId,
+        CartId: cartId
+      }
+    });
+
+    if (cartExists == null) {
+      return {
+        'success': false,
+        'error': 'Cart item specified not found.'
+      }
+    }
+
+    let userExists = await this.prisma.user.findUnique({
+      where: {
+        UserId: cartExists.UserId
+      }
+    });
+
+    if (userExists == null) {
+      return {
+        'success': false,
+        'error': 'Login inorder to update itemm in cart.'
+      }
+    }
+
+    if (userExists.IsDeleted) {
+      return {
+        'success': false,
+        'error': `${userExists.Fullname}, account is inactive.`
+      }
+    }
+
+    let updateCart = await this.prisma.cart.update({
+      data: {
+        Quantity
+      },
+      where: {
+        CartId: cartId,
+        UserId: userId,
+        ProductId: cartExists.CartId
+      }
+    });
+
+    if (updateCart == null) {
+      return {
+        'success': false,
+        'error': 'Unable to update quantity.'
+      }
+    } else {
+      return {
+        'success': true,
+        'message': 'Quantity successfully updated.'
+      }
+    }
+  }
+
+  public async updateCartProductOrderType(userId: string, cartId: string, OrderType: string): Promise<{ success: boolean; error?: string; message?: string; }> {
+
+    let cartExists = await this.prisma.cart.findUnique({
+      where: {
+        UserId: userId,
+        CartId: cartId
+      }
+    });
+
+    if (cartExists == null) {
+      return {
+        'success': false,
+        'error': 'Cart item specified not found.'
+      }
+    }
+
+    let userExists = await this.prisma.user.findUnique({
+      where: {
+        UserId: cartExists.UserId
+      }
+    });
+
+    if (userExists == null) {
+      return {
+        'success': false,
+        'error': 'Login inorder to update itemm in cart.'
+      }
+    }
+
+    if (userExists.IsDeleted) {
+      return {
+        'success': false,
+        'error': `${userExists.Fullname}, account is inactive.`
+      }
+    }
+
+    let updateCart = await this.prisma.cart.update({
+      data: {
+        OrderType
+      },
+      where: {
+        CartId: cartId,
+        UserId: userId,
+        ProductId: cartExists.CartId
+      }
+    });
+
+    if (updateCart == null) {
+      return {
+        'success': false,
+        'error': 'Unable to update order type.'
+      }
+    } else {
+      return {
+        'success': true,
+        'message': `Order type successfully updated to ${updateCart.OrderType}.`
+      }
+    }
   }
   public async deleteCart(userId: string, cartId: string): Promise<{ success: boolean; error?: string; message?: string; }> {
     let cartExists = await this.prisma.cart.findUnique({
@@ -171,6 +304,61 @@ export class CartService implements CartInterface {
       return {
         'success': true,
         'message': 'Item removed successfully from cart.'
+      }
+    }
+  }
+
+  public async clearCart(userId: string): Promise<{ success: boolean; error?: string; message?: string; }> {
+    let cartExists = await this.prisma.cart.findMany({
+      where: {
+        UserId: userId
+      }
+    });
+
+    if (cartExists == null || cartExists.length === 0) {
+      return {
+        'success': false,
+        'error': 'Cart is currently empty.'
+      }
+    }
+
+    let userExists = await this.prisma.user.findUnique({
+      where: {
+        UserId: userId
+      }
+    });
+
+    if (userExists == null) {
+      return {
+        'success': false,
+        'error': 'Login inorder to delete item in cart.'
+      }
+    }
+
+    if (userExists.IsDeleted) {
+      return {
+        'success': false,
+        'error': `${userExists.Fullname}, account is inactive.`
+      }
+    }
+
+    let clearCart = await this.prisma.cart.deleteMany({
+      where: {
+        CartId: {
+          in: cartExists.map(cart => cart.CartId)
+        }
+      }
+    });
+
+    if (clearCart == null) {
+      return {
+        'success': false,
+        'error': 'Unable to clear items from cart.'
+      }
+    } else {
+      return {
+        'success': true,
+        'message': 'Items removed successfully from cart.'
       }
     }
   }

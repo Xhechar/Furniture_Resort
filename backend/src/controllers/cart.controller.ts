@@ -23,6 +23,47 @@ export class CartController {
     try {
 
       let result = await cartService.updateCart(getIdFromToken(req), req.params.CartId, req.body);
+
+      res.status(201).json(result);
+      
+    } catch (error) {
+      res.status(501).json({
+        error: error
+      })
+    }
+  }
+  async updateCartProductQuantity(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await cartService.updateCartProductQuantity(getIdFromToken(req), req.params.CartId, req.body.Quantity);
+      
+      res.status(201).json(result);
+
+    } catch (error) {
+      res.status(501).json({
+        error: error
+      })
+    }
+  }
+  async updateCartProductOrderType(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await cartService.updateCartProductOrderType(getIdFromToken(req), req.params.CartId, req.body.OrderType);
+
+      res.status(201).json(result);
+      
+    } catch (error) {
+      res.status(501).json({
+        error: error
+      })
+    }
+  }
+  async clearCart(req: ExtendedRequest, res: Response) {
+    try {
+
+      let result = await cartService.clearCart(getIdFromToken(req));
+
+      res.status(201).json(result);
       
     } catch (error) {
       res.status(501).json({

@@ -1,3 +1,4 @@
+<app-logout></app-logout>
 <div class="body">
   <div class="sidebar" [class.collapsed]="isSidebarCollapsed">
     <div class="sidebar-header">
@@ -17,6 +18,13 @@
         </div>
         <span class="menu-text" *ngIf="!isSidebarCollapsed">{{menu.value}}</span>
         <div class="tooltip" *ngIf="isSidebarCollapsed">{{menu.value}}</div>
+      </li>
+      <li class="menu-item" (click)="showLogoutModal()">
+        <div class="icon-container">
+          <i class="bx bx-log-out"></i>
+        </div>
+        <span class="menu-text" *ngIf="!isSidebarCollapsed">Logout</span>
+        <div class="tooltip">logout</div>
       </li>
     </ul>
   </div>

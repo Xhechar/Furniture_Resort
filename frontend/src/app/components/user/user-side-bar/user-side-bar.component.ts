@@ -3,11 +3,13 @@ import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { HandlerService } from '../../../services/handler.service';
 import { TopBar } from '../../../interfaces/interfaces';
+import { ModalService } from '../../../services/modal.service';
+import { LogoutComponent } from '../../logout/logout.component';
 
 @Component({
   selector: 'app-user-side-bar',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, LogoutComponent],
   templateUrl: './user-side-bar.component.html',
   styleUrl: './user-side-bar.component.css',
 })
@@ -24,15 +26,14 @@ export class UserSideBarComponent {
     },
     { value: 'Messages', route: 'my-messages', icon: 'bx bx-conversation' },
     { value: 'Wishlists', route: 'my-wishlist', icon: 'bx bx-bookmarks' },
-    { value: 'Profile', route: 'my-profile', icon: 'bx bx-user-pin' },
-    { value: 'Logout', route: '/logout', icon: 'bx bx-log-out' },
+    { value: 'Profile', route: 'my-profile', icon: 'bx bx-user-pin' }
   ];
 
   selectedIndex = 0;
   isSidebarCollapsed = false;
   screenWidth: number;
 
-  constructor(private router: Router, private hs: HandlerService) {
+  constructor(private router: Router, private hs: HandlerService, private ms: ModalService) {
     this.screenWidth = window.innerWidth;
     this.checkScreenSize();
     
@@ -73,5 +74,9 @@ export class UserSideBarComponent {
       child: this.menuItems[index].value
     }
     this.hs.setTopBar(navPath);
+  }
+
+  showLogoutModal() : void {
+    this.ms.toggleLogout(true);
   }
 }

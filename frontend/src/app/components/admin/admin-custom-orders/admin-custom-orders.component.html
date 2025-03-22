@@ -13,14 +13,14 @@
   <div class="xhr-custom-orders-row" *ngFor="let customOrder of customOrders">
     <div class="xhr-custom-orders-col">
       <div class="xhr-user-details">
-        <img [src]="customOrder.User?.profileImage || 'default-profile.jpg'" alt="User Profile" class="xhr-user-profile" />
+        <img [src]="customOrder.User.profileImage || 'default-profile.jpg'" alt="User Profile" class="xhr-user-profile" />
         <div class="xhr-user-info">
-          <p>{{ customOrder.User?.FullName }}</p>
-          <p class="xhr-user-contact">{{ customOrder.User?.Email }}</p>
+          <p>{{ customOrder.User.FullName }}</p>
+          <p class="xhr-user-contact">{{ customOrder.User.Email }}</p>
         </div>
       </div>
     </div>
-    <div class="xhr-custom-orders-col">{{ customOrder.Product?.name }}</div>
+    <div class="xhr-custom-orders-col">{{ customOrder.Product.name }}</div>
     <div class="xhr-custom-orders-col">{{ customOrder.Quantity }}</div>
     <div class="xhr-custom-orders-col">{{ customOrder.Price | currency : 'Ksh ' }}</div>
     <div class="xhr-custom-orders-col">{{ customOrder.Discount | currency : 'Ksh ' }}</div>

@@ -188,7 +188,7 @@ export class NewproductComponent implements OnInit {
     fetch('https://api.remove.bg/v1.0/removebg', {
       method: 'POST',
       headers: {
-        'X-Api-Key': 'GNZNUuaWome9v8nDsFzGsFgy'
+        'X-Api-Key': 'LJRyRowV6X9jxdkW62pN6jta'
       },
       body: formData
     })
@@ -196,10 +196,10 @@ export class NewproductComponent implements OnInit {
       .then(res => {
         const cloudinaryForm = new FormData();
         cloudinaryForm.append('file', res);
-        cloudinaryForm.append('cloud_name', 'dakyiye2e');
-        cloudinaryForm.append('upload_preset', 'furniture-site-images');
+        cloudinaryForm.append('cloud_name', 'dbdsfkcev');
+        cloudinaryForm.append('upload_preset', 'furniture_api');
   
-        return fetch('https://api.cloudinary.com/v1_1/dakyiye2e/image/upload', {
+        return fetch('https://api.cloudinary.com/v1_1/dbdsfkcev/image/upload', {
           method: 'POST',
           body: cloudinaryForm
         });
@@ -210,7 +210,7 @@ export class NewproductComponent implements OnInit {
         this.set_loader = 0;
       })
       .catch(err => {
-        this.ns.showMessage(err, false);
+        this.ns.showMessage(err as string, false);
         this.set_loader = 0;
       });
   

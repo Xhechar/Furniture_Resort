@@ -149,7 +149,7 @@ model Cart {
   Quantity            Int      @default(1)
   Discount            Float
   Price               Float
-  OrderType           String
+  OrderType           String   @default("normal")
   DateCreated         DateTime @default(now())
   User                User     @relation(fields: [UserId], references: [UserId])
   Product             Product  @relation(fields: [ProductId], references: [ProductId])

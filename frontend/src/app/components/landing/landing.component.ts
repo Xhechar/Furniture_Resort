@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { CommonModule } from '@angular/common';
-import { Category, Product } from '../../interfaces/interfaces';
+import { Cart, Category, Product } from '../../interfaces/interfaces';
 import { ProductsService } from '../../services/products.service';
 import { NotificationsService } from '../../services/notifications.service';
 import { CategoryService } from '../../services/category.service';
 import { Router } from '@angular/router';
 import { NotificationsComponent } from "../notifications/notifications.component";
+import { CartService } from '../../services/cart.service';
+import { WishlistsService } from '../../services/wishlists.service';
 
 @Component({
   selector: 'app-landing',
@@ -28,7 +30,9 @@ export class LandingComponent implements OnInit {
     private ps: ProductsService,
     private ns: NotificationsService,
     private cs: CategoryService,
-    private router: Router
+    private router: Router,
+    private cts: CartService,
+    private ws: WishlistsService
   ) {}
 
   startSlideshow(): void {
@@ -135,14 +139,34 @@ export class LandingComponent implements OnInit {
     });
   }
 
-  addToCart(product: Product) {
-    console.log('Adding to cart:', product);
-    this.ns.showMessage(`${product.ProductName} added to cart!`, true);
+  addToCart(ProductId: string, cart: Partial<Cart>) {
+    this.cts.createCart(ProductId, cart).subscribe({
+      next: (response) => {
+        if(response.success) {
+          this.ns.showMessage(response.message as string, response.success);
+        } else {
+          this.ns.showMessage(response.error as string, false);
+        }
+      }, 
+      error: (err) => {
+        this.ns.showMessage(err.error.error as string, false);
+      }
+    });
   }
 
-  addToWishlist(product: Product) {
-    console.log('Adding to wishlist:', product);
-    this.ns.showMessage(`${product.ProductName} added to wishlist!`, true);
+  addToWishlist(ProductId: string) {
+    this.ws.createWishlist(ProductId).subscribe({
+      next: (response) => {
+        if(response.success) {
+          this.ns.showMessage(response.message as string, response.success);
+        } else {
+          this.ns.showMessage(response.error as string, false);
+        }
+      },
+      error: (err) => {
+        this.ns.showMessage(err.error.error as string, false);
+      }
+    });
   }
 
   quickView(ProductId: string) {

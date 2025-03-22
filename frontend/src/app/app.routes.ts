@@ -63,6 +63,7 @@ export const routes: Routes = [
     { path: 'cart', component: CartComponent },
     { path: 'my-reviews', component: MyreviewsComponent },
     { path: 'orders', component: OrdersComponent },
+    { path: '', component: ProductsComponent },
     { path: 'products', component: ProductsComponent },
     { path: 'my-profile', component: AProfileComponent },
     { path: 'my-progresses', component: UserProgressesComponent },

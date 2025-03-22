@@ -60,6 +60,7 @@
 }
 
 .empty-cart-message a:hover {
+  cursor: pointer;
   color: var(--accent-hover);
   text-decoration: underline;
 }

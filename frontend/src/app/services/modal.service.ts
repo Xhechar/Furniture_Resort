@@ -24,6 +24,11 @@ export class ModalService {
 
   pqtModalDetails$: Observable<PqtModalDetails | null> = this.pqtModalDetails.asObservable();
 
+  //logout
+
+  private isVisible = new BehaviorSubject<boolean>(false);
+  isVisible$: Observable<boolean> = this.isVisible.asObservable();
+
   constructor() { }
 
   openModal(actionType: ActionType) {
@@ -50,5 +55,11 @@ export class ModalService {
 
   resetPqtModalDetails() {
     this.pqtModalDetails.next(null);
+  }
+
+  //logout
+
+  toggleLogout(visible: boolean) {
+    this.isVisible.next(visible);
   }
 }

@@ -1,29 +1,191 @@
-<div class="filter-container">
-  
-    <div class="filter-group input">
-        <input type="text" placeholder="Search any furniture . . .">
+<!-- Promotional Slider Section -->
+<section class="promo-slider-container">
+  <div class="promo-slider">
+    <div class="promo-slide" *ngFor="let promo of promotions; let i = index" [ngClass]="{'active': currentSlide === i}"
+      [style.background-color]="promo.bgColor">
+      <div class="promo-content">
+        <h2>{{promo.title}}</h2>
+        <p>{{promo.description}}</p>
+        <div class="promo-buttons">
+          <button class="promo-btn primary-btn" (click)="navigateToPromo(promo.id)">
+            Shop Now
+            <i class="fas fa-arrow-right"></i>
+          </button>
+          <button class="promo-btn secondary-btn" (click)="quickViewPromo(promo.id)">
+            Learn More
+          </button>
+        </div>
+      </div>
+      <div class="promo-image">
+        <img [src]="promo.image" [alt]="promo.title">
+      </div>
+    </div>
+  </div>
+
+  <div class="slider-controls">
+    <div class="slider-dots">
+      <span *ngFor="let dot of promotions; let i = index" class="dot" [ngClass]="{'active': currentSlide === i}"
+        (click)="setSlide(i)"></span>
+    </div>
+    <div class="slider-arrows">
+      <button class="arrow-btn prev" (click)="prevSlide()">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="arrow-btn next" (click)="nextSlide()">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Filter Section -->
+<section class="filter-container">
+  <div class="filter-header" (click)="toggleFilters()">
+    <h3>Filter Products</h3>
+    <i class="fas" [ngClass]="{'fa-chevron-down': !showFilters, 'fa-chevron-up': showFilters}"></i>
+  </div>
+
+  <div class="filter-body" [ngClass]="{'filter-expanded': showFilters}">
+    <div class="filter-group">
+      <h4>Categories</h4>
+      <div class="filter-options">
+        <label class="filter-option" *ngFor="let category of categories">
+          <input type="checkbox" [value]="category.CategoryId" (change)="filterByCategory($event, category.CategoryId)">
+          <span class="checkmark"></span>
+          <span class="option-text">{{category.CategoryName}}</span>
+        </label>
+      </div>
     </div>
 
     <div class="filter-group">
-      <label for="category">Category:</label>
-      <select id="category" class="filter-dropdown">
-        <option value="">All</option>
-        <option value="sofa">Sofas</option>
-        <option value="chair">Chairs</option>
-        <option value="table">Tables</option>
-        <option value="bed">Beds</option>
-      </select>
+      <h4>Price Range</h4>
+      <div class="price-filter">
+        <div class="price-inputs">
+          <div class="price-input">
+            <label>Min</label>
+            <input type="number" [(ngModel)]="priceRange.min" (change)="filterByPrice()">
+          </div>
+          <div class="price-input">
+            <label>Max</label>
+            <input type="number" [(ngModel)]="priceRange.max" (change)="filterByPrice()">
+          </div>
+        </div>
+        <div class="price-slider">
+          <input type="range" [(ngModel)]="priceRange.min" [min]="0" [max]="maxPrice" (input)="filterByPrice()">
+          <input type="range" [(ngModel)]="priceRange.max" [min]="0" [max]="maxPrice" (input)="filterByPrice()">
+        </div>
+      </div>
     </div>
-  
+
     <div class="filter-group">
-      <label for="price">Price:</label>
-      <select id="price" class="filter-dropdown">
-        <option value="">Any</option>
-        <option value="low">Under $100</option>
-        <option value="mid">$100 - $500</option>
-        <option value="high">Above $500</option>
+      <h4>Rating</h4>
+      <div class="rating-options">
+        <label class="rating-option" *ngFor="let rating of [5,4,3,2,1]">
+          <input type="radio" name="rating" [value]="rating" (change)="filterByRating(rating)">
+          <span class="star-rating">
+            <i class="fas fa-star" *ngFor="let star of [].constructor(rating)"></i>
+            <i class="far fa-star" *ngFor="let star of [].constructor(5-rating)"></i>
+          </span>
+          <span class="option-text">& Up</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button class="filter-btn apply-btn" (click)="applyFilters()">Apply Filters</button>
+      <button class="filter-btn reset-btn" (click)="resetFilters()">Reset All</button>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="featured-products">
+  <div class="section-title">
+    <h1>Our Best Collections</h1>
+    <div class="title-underline"></div>
+  </div>
+
+  <div class="products-count">
+    <span>Showing {{filteredProducts.length || 0}} of {{products.length || 0}} products</span>
+    <div class="sort-options">
+      <label for="sort-select">Sort by:</label>
+      <select id="sort-select" (change)="sortProducts($event)">
+        <option value="default">Featured</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="newest">Newest First</option>
       </select>
     </div>
-    <button class="clear-filters">Clear Filters</button>
   </div>
-  
+
+  <div id="products" class="products-area" *ngIf="filteredProducts && filteredProducts.length > 0">
+    <div class="product-card" *ngFor="let product of filteredProducts; let i = index" [attr.data-index]="i">
+      <div class="product-badge" *ngIf="product.Discount > 0">
+        <span>{{product.Discount}}% OFF</span>
+      </div>
+
+      <div class="product-image">
+        <img [src]="product.ProductImages.split(', ')[0]" [alt]="product.ProductName">
+        <div class="quick-actions">
+          <button class="action-btn wishlist-btn" title="Add to Wishlist" (click)="toggleWishlist(product.ProductId)">
+            <i class="fas" [ngClass]="isInWishlist(product.ProductId) ? 'fa-heart' : 'fa-heart-o'"></i>
+          </button>
+          <button class="action-btn view-btn" title="Quick View" (click)="quickView(product.ProductId)">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button class="action-btn compare-btn" title="Compare" (click)="addToCompare(product.ProductId)">
+            <i class="fas fa-exchange-alt"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="product-details">
+        <div class="product-title">
+          <h2>{{product.ProductName | uppercase}}</h2>
+        </div>
+
+        <div class="descrition-and-more">
+          <div class="description">
+            <p>{{product.ShortDesc}}</p>
+          </div>
+          <div class="more" (click)="quickView(product.ProductId)">
+            <p>More</p>
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </div>
+
+        <div class="price-and-button">
+          <div class="price-and-rating">
+            <div class="price">
+              <p *ngIf="product.Discount > 0" class="original-price">Ksh. {{(product.Prize / (1 -
+                product.Discount/100)).toFixed(0)}}</p>
+              <p class="current-price">Ksh. {{product.Prize}}</p>
+            </div>
+            <div class="rating">
+              <p>{{5.0}}</p>
+              <div class="stars">
+                <i class="fas fa-star" *ngFor="let star of [].constructor(ceilRating(5))"></i>
+                <i class="fas fa-star-half-alt" *ngIf="(5) % 1 >= 0.5"></i>
+                <i class="far fa-star" *ngFor="let star of [].constructor(ceilRating(5))"></i>
+              </div>
+            </div>
+          </div>
+          <div class="button-container">
+            <button class="add-cart"
+              (click)="addToCart(product.ProductId, {Discount: product.Discount, Price: product.Prize})">
+              <span>Add To Cart</span>
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-products" *ngIf="!filteredProducts || filteredProducts.length === 0">
+    <i class="fas fa-search"></i>
+    <h3>No products found</h3>
+    <p>Try adjusting your filters or browse our categories</p>
+    <button class="reset-search-btn" (click)="resetFilters()">Reset Filters</button>
+  </div>
+</section>

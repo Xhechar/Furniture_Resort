@@ -9,7 +9,7 @@
   position: fixed;
   top: 0;
   backdrop-filter: blur(2px);
-  z-index: 10;
+  z-index: 110;
 }
 
 .category-form-container {

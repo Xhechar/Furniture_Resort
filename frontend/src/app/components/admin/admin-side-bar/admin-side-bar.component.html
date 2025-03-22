@@ -1,3 +1,4 @@
+<app-logout></app-logout>
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="logo-text">
@@ -15,5 +16,11 @@
         <span class="menu-text">{{menu.value}}</span>
       </li>
     </ul>
+    <li class="menu-item" (click)="displayLogoutModal()">
+      <div class="icon-box">
+        <i class="bx bxs-log-out"></i>
+      </div>
+      <span class="menu-text">Logout</span>
+    </li>
   </div>
 </div>

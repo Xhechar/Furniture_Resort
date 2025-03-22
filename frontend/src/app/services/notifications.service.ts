@@ -22,7 +22,7 @@ export class NotificationsService {
 
     setTimeout(() => {
       this.clearNotification();
-    }, 3000);
+    }, 6000);
   }
 
   clearNotification() {

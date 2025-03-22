@@ -3,11 +3,13 @@ import { Component, HostListener } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TopBar } from '../../../interfaces/interfaces';
 import { HandlerService } from '../../../services/handler.service';
+import { LogoutComponent } from '../../logout/logout.component';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'app-admin-side-bar',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, LogoutComponent],
   templateUrl: './admin-side-bar.component.html',
   styleUrl: './admin-side-bar.component.css'
 })
@@ -21,13 +23,12 @@ export class AdminSideBarComponent {
     { value: 'Users', route: 'users', icon: 'bx bxs-group' },
     { value: 'Orders', route: 'user-orders', icon: 'bx bx-task' },
     { value: 'Categories', route: 'user-categories', icon: 'bx bxs-basket' },
-    { value: 'Profile', route: 'a-profile', icon: 'bx bxs-user-circle' },
-    { value: 'Logout', route: '/logout', icon: 'bx bxs-log-out' },
+    { value: 'Profile', route: 'a-profile', icon: 'bx bxs-user-circle' }
   ];
 
   selectedIndex = 0;
   
-  constructor(private router: Router, private hs: HandlerService) {
+  constructor(private router: Router, private hs: HandlerService, private ms: ModalService) {
     const currentRoute = this.router.url.split('/').pop() || '';
     const foundIndex = this.menuItems.findIndex((item) => item.route === currentRoute);
     if (foundIndex !== -1) {
@@ -42,5 +43,9 @@ export class AdminSideBarComponent {
       child: this.menuItems[index].value
     }
     this.hs.setTopBar(navPath);
+  }
+
+  displayLogoutModal() {
+    this.ms.toggleLogout(true);
   }
 }

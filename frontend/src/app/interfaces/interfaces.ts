@@ -233,3 +233,18 @@ export interface PqtModalDetails {
   pqtData: ProductQuantityTime | null,
   pqtFurnitureName: string
 }
+
+//Additional Interfaces
+
+export interface PromoSlide {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  bgColor: string;
+}
+
+export interface PriceRange {
+  min: number;
+  max: number;
+}

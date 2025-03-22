@@ -31,11 +31,11 @@ export class LoginComponent {
           if (response.Role == 'user') {
             setTimeout(() => {
               this.router.navigate(['/user']);
-            }, 6000);
+            }, 6500);
           } else if (response.Role == 'admin') {
             setTimeout(() => {
               this.router.navigate(['/admin']);
-            }, 6000);
+            }, 6500);
           }
         } else {
           this._ns.showMessage(response.error as string, response.success);
