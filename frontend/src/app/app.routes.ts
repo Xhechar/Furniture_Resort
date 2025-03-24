@@ -10,7 +10,6 @@ import { CartComponent } from './components/user/cart/cart.component';
 import { MyreviewsComponent } from './components/user/myreviews/myreviews.component';
 import { OrdersComponent } from './components/user/orders/orders.component';
 import { ProductsComponent } from './components/user/products/products.component';
-import { ProfileComponent } from './components/user/profile/profile.component';
 import { SinglereviewComponent } from './components/user/singlereview/singlereview.component';
 import { AProfileComponent } from './components/admin/a-profile/a-profile.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
@@ -69,7 +68,8 @@ export const routes: Routes = [
     { path: 'my-progresses', component: UserProgressesComponent },
     { path: 'my-messages', component: UserMessagesComponent },
     { path: 'my-wishlist', component: UserWishlistsComponent },
-    { path: 'create-review', component: SinglereviewComponent }
+    { path: 'create-review', component: SinglereviewComponent },
+    { path: 'single-product/:ProductId', component: SingleComponent }
   ]
   },
   { path: 'admin', component: AdminComponent, children: [

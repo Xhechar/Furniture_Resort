@@ -5,6 +5,7 @@ import { Category, PriceRange, Product, PromoSlide } from '../../../interfaces/i
 import { FormsModule } from '@angular/forms';
 import { ProductsService } from '../../../services/products.service';
 import { NotificationsService } from '../../../services/notifications.service';
+import { CategoryService } from '../../../services/category.service';
 
 @Component({
   selector: 'app-products',
@@ -52,14 +53,13 @@ export class ProductsComponent implements OnInit, OnDestroy {
   currentSlide: number = 0;
   slideInterval: any;
   
-  constructor(private ps: ProductsService, private ns: NotificationsService) {}
+  constructor(private ps: ProductsService, private ns: NotificationsService, private cs: CategoryService) {}
   
   ngOnInit(): void {
     this.fetchProducts();
     
     this.fetchCategories();
     
-    // Initialize slider
     this.startSlideShow();
   }
   
@@ -92,14 +92,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
   
   fetchCategories(): void {
-    // Mock data for example
-    this.categories = [
-      { CategoryId: '1', CategoryName: "Kitchen & Dining" },
-      { CategoryId: '2', CategoryName: "Home Décor" },
-      { CategoryId: '3', CategoryName: "Textiles" },
-      { CategoryId: '4', CategoryName: "Furniture" },
-      { CategoryId: '5', CategoryName: "Wall Art" }
-    ];
   }
   
   calculateMaxPrice(): void {

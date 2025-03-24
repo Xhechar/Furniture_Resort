@@ -121,7 +121,7 @@
   <div id="products" class="products-area" *ngIf="filteredProducts && filteredProducts.length > 0">
     <div class="product-card" *ngFor="let product of filteredProducts; let i = index" [attr.data-index]="i">
       <div class="product-badge" *ngIf="product.Discount > 0">
-        <span>{{product.Discount}}% OFF</span>
+        <span>{{((product.Discount * 100)/ product.Prize).toFixed(2)}}% OFF</span>
       </div>
 
       <div class="product-image">
@@ -157,9 +157,8 @@
         <div class="price-and-button">
           <div class="price-and-rating">
             <div class="price">
-              <p *ngIf="product.Discount > 0" class="original-price">Ksh. {{(product.Prize / (1 -
-                product.Discount/100)).toFixed(0)}}</p>
-              <p class="current-price">Ksh. {{product.Prize}}</p>
+              <p *ngIf="product.Discount > 0" class="original-price">{{product.Prize | currency : 'Ksh '}}</p>
+              <p class="current-price">{{(product.Prize - product.Discount) | currency : 'Ksh '}}</p>
             </div>
             <div class="rating">
               <p>{{5.0}}</p>
