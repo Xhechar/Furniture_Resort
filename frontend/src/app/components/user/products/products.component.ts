@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { Category, PriceRange, Product, PromoSlide } from '../../../interfaces/interfaces';
+import { Router, RouterLink } from '@angular/router';
+import { Cart, Category, PriceRange, Product, PromoSlide, Review, Wishlist } from '../../../interfaces/interfaces';
 import { FormsModule } from '@angular/forms';
 import { ProductsService } from '../../../services/products.service';
 import { NotificationsService } from '../../../services/notifications.service';
 import { CategoryService } from '../../../services/category.service';
+import { WishlistsService } from '../../../services/wishlists.service';
+import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-products',
@@ -16,6 +18,7 @@ import { CategoryService } from '../../../services/category.service';
 })
 export class ProductsComponent implements OnInit, OnDestroy {
   products: Product[] = [];
+  productRatings: number[] = [];
   filteredProducts: Product[] = [];
   wishlist: string[] = [];
   compareList: number[] = [];
@@ -53,7 +56,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   currentSlide: number = 0;
   slideInterval: any;
   
-  constructor(private ps: ProductsService, private ns: NotificationsService, private cs: CategoryService) {}
+  constructor(private ps: ProductsService, private ns: NotificationsService, private cs: CategoryService, private router: Router, private ws: WishlistsService, private cts: CartService) {}
   
   ngOnInit(): void {
     this.fetchProducts();
@@ -64,7 +67,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    // Clear slider interval when component is destroyed
     this.clearSlideInterval();
   }
 
@@ -78,6 +80,29 @@ export class ProductsComponent implements OnInit, OnDestroy {
       next: (response) => {
         if(response.success) {
           this.products = response.products as Product[];
+          this.filteredProducts = [...this.products];
+          this.products.forEach(product => {
+            const reviews = product.Reviews || [];
+            const sum = reviews.reduce((acc, review) => acc + review.Rating, 0);
+            const average = reviews.length > 0 ? sum / reviews.length : 0;
+            this.productRatings.push(average);
+          });
+        } else {
+          this.ns.showMessage(response.error as string, false);
+        }
+      },
+      error: (error) => {
+        this.ns.showMessage(error.error.error as string, false);
+      }
+    });
+    // this.calculateMaxPrice();
+  }
+  
+  fetchCategories(): void {
+    this.cs.getAllCategories().subscribe({
+      next: (response) => {
+        if(response.success) {
+          this.categories = response.categories as Category[];
         } else {
           this.ns.showMessage(response.error as string, false);
         }
@@ -86,21 +111,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
         this.ns.showMessage(error.error.error as string, false);
       }
     })
-
-    this.filteredProducts = [...this.products];
-    this.calculateMaxPrice();
-  }
-  
-  fetchCategories(): void {
   }
   
   calculateMaxPrice(): void {
     const maxProductPrice = Math.max(...this.products.map(p => p.Prize));
-    this.maxPrice = Math.ceil(maxProductPrice / 1000) * 1000; // Round up to nearest thousand
+    this.maxPrice = Math.ceil(maxProductPrice);
     this.priceRange.max = this.maxPrice;
   }
   
-  // Slider functions
   startSlideShow(): void {
     this.slideInterval = setInterval(() => {
       this.nextSlide();
@@ -128,7 +146,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
   
   navigateToPromo(id: string): void {
-    console.log('Navigate to promo:', id);
     // Implementation would depend on router setup
   }
   
@@ -136,7 +153,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
     // Implementation would depend on modal/dialog setup
   }
   
-  // Filter functions
   toggleFilters(): void {
     this.showFilters = !this.showFilters;
   }
@@ -150,34 +166,24 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
   
   filterByPrice(): void {
-    console.log('Filter by price range:', this.priceRange);
+    this.filteredProducts = this.products.filter(p => p.Prize >= this.priceRange.min && p.Prize <= this.priceRange.max);
   }
   
   filterByRating(rating: number): void {
     this.selectedRating = rating;
+    this.filteredProducts = this.products.filter(p => p.Reviews ? p.Reviews?.reduce((acc: number, curr: Review) => acc + curr.Rating, 0) : 0 >= this.selectedRating!);
   }
   
   applyFilters(): void {
-    // Start with all products
     let filtered = [...this.products];
-    
-    // Apply category filter if categories are selected
+
     if (this.selectedCategories.length > 0) {
-      // This is a mock implementation since we don't have category IDs in the product data
-      // In a real app, you would filter based on product category IDs
       filtered = filtered.filter(p => {
-        // Mock association between products and categories
-        const productCategories = [
-          { productId: '1', categoryIds: ['1', '2'] },
-          { productId: '2', categoryIds: ['1'] },
-          { productId: '3', categoryIds: ['2', '3'] },
-          { productId: '4', categoryIds: ['2', '5'] }
-        ];
         
-        const productCategoryIds = productCategories
-          .find(pc => pc.productId === p.ProductId)?.categoryIds || [];
+        // const productCategoryIds = productCategories
+        //   .find(pc => pc.productId === p.ProductId)?.categoryIds || [];
         
-        return this.selectedCategories.some(id => productCategoryIds.includes(id));
+        return' this.selectedCategories.some(id => productCategoryIds.includes(id));'
       });
     }
     
@@ -236,48 +242,69 @@ export class ProductsComponent implements OnInit, OnDestroy {
         this.filteredProducts.sort((a, b) => b.Prize - a.Prize);
         break;
       case 'newest':
-        // This would typically use a 'createdAt' or similar date field
-        // For this example, we'll use the ProductId as a proxy for newness
         this.filteredProducts.sort((a, b) => b.DateCreated.getDate() - a.DateCreated.getDate());
         break;
-      default: // 'default' - Featured
-        // Reset to original order
+      default:
         this.filteredProducts = [...this.products];
         break;
     }
   }
   
-  // Product interaction functions
   quickView(productId: string): void {
-    // Implementation would depend on modal/dialog setup
+    this.router.navigate(['user/user-single-product', productId]);
   }
   
   toggleWishlist(productId: string): void {
-    if (this.isInWishlist(productId)) {
-      this.wishlist = this.wishlist.filter(id => id !== productId);
-    } else {
-      this.wishlist.push(productId);
-    }
+    this.ws.createWishlist(productId).subscribe({
+      next: (response) => {
+        if(response.success) {
+          this.ns.showMessage(response.message as string, response.success);
+        } else {
+          this.ns.showMessage(response.error as string, false);
+        }
+      },
+      error: (err) => {
+        this.ns.showMessage(err.error.error as string, false);
+      }
+    });
   }
   
   isInWishlist(productId: string): boolean {
-    return this.wishlist.includes(productId);
+    let usersWishlist: Wishlist[] = [];
+    this.ws.getWishlistByUserId().subscribe({
+      next: (response) => {
+        if(response.success) {
+          usersWishlist = response.wishlists as Wishlist[];
+        } else {
+          // this.ns.showMessage(response.error as string, false);
+        }
+      },
+      error: (err) => {
+        this.ns.showMessage(err.error.error as string, false);
+      }
+    });
+
+    usersWishlist.filter(wl => wl.ProductId === productId);
+
+    return usersWishlist.length === 1 ? true : false;
   }
   
   addToCompare(productId: string): void {
-    // if (this.compareList.includes(productId)) {
-    //   this.compareList = this.compareList.filter(id => id !== productId);
-    // } else {
-    //   // Limit compare list to 4 items
-    //   if (this.compareList.length >= 4) {
-    //     this.compareList.shift(); // Remove the oldest item
-    //   }
-    //   this.compareList.push(productId);
-    // }
-    // console.log('Compare list:', this.compareList);
+    this.ns.showMessage('Product added successfully to compare list.', true);
   }
   
-  addToCart(productId: string, pricing: { Discount: number, Price: number }): void {
-    //
+  addToCart(productId: string, cart: Partial<Cart>): void {
+    this.cts.createCart(productId, cart).subscribe({
+      next: (response) => {
+        if(response.success) {
+          this.ns.showMessage(response.message as string, response.success);
+        } else {
+          this.ns.showMessage(response.error as string, response.success);
+        }
+      },
+      error: (error) => {
+        this.ns.showMessage(error.error.error as string, false);
+      }
+    })
   }
 }

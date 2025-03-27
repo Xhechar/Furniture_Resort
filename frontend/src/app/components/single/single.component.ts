@@ -11,7 +11,7 @@ import { NotificationsComponent } from '../notifications/notifications.component
 @Component({
   selector: 'app-single',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TopbarComponent, NotificationsComponent],
+  imports: [CommonModule, FormsModule, RouterLink, NotificationsComponent],
   templateUrl: './single.component.html',
   styleUrl: './single.component.css'
 })

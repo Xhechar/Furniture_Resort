@@ -161,11 +161,10 @@
               <p class="current-price">{{(product.Prize - product.Discount) | currency : 'Ksh '}}</p>
             </div>
             <div class="rating">
-              <p>{{5.0}}</p>
+              <p>{{productRatings[i]}}</p>
               <div class="stars">
-                <i class="fas fa-star" *ngFor="let star of [].constructor(ceilRating(5))"></i>
-                <i class="fas fa-star-half-alt" *ngIf="(5) % 1 >= 0.5"></i>
-                <i class="far fa-star" *ngFor="let star of [].constructor(ceilRating(5))"></i>
+                <i class="fas fa-star" *ngFor="let star of [].constructor(productRatings[i])"></i>
+                <i class="far fa-star" *ngFor="let star of [].constructor(5 - productRatings[i])"></i>
               </div>
             </div>
           </div>

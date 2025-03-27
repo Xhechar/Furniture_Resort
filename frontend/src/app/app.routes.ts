@@ -69,7 +69,7 @@ export const routes: Routes = [
     { path: 'my-messages', component: UserMessagesComponent },
     { path: 'my-wishlist', component: UserWishlistsComponent },
     { path: 'create-review', component: SinglereviewComponent },
-    { path: 'single-product/:ProductId', component: SingleComponent }
+    { path: 'user-single-product/:ProductId', component: SingleComponent }
   ]
   },
   { path: 'admin', component: AdminComponent, children: [
