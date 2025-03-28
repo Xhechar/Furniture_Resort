@@ -67,4 +67,19 @@ button {
   --transition-speed: 0.3s;
   --sidebar-width: 18rem;
   --sidebar-collapsed-width: 6.5rem;
+
+  --soft-gold: #D4AF37;
+    --rich-brown: #40312D;
+    --sage-green: #8A9A5B;
+    --deep-terracotta: #A0522D;
+    --muted-blue: #6B8E9F;
+  
+    /* Enhanced shadows and transitions */
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+    /* Responsive sizing */
+    --base-font-size: 16px;
+    --border-radius: 12px;
 }

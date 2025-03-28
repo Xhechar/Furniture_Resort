@@ -1,1 +1,133 @@
-<p>user-progresses works!</p>
+<div class="custom-orders-container">
+    <h2 class="page-title">
+        <i class="fas fa-clipboard-list"></i> My Custom Orders
+    </h2>
+
+    <div *ngIf="customOrders.length === 0" class="no-orders">
+        <i class="fas fa-box-open"></i>
+        <p>No custom orders found</p>
+    </div>
+
+    <div *ngFor="let order of customOrders" class="custom-order-card">
+        <div class="order-header">
+            <div class="product-info">
+                <img [src]="splitImages(order.Product ? order.Product.ProductImages: '')[0]" alt="{{ order.Product?.ProductName }}"
+                    class="product-image">
+                <div class="product-details">
+                    <h3>{{ order.Product?.ProductName }}</h3>
+                    <p>{{ order.Product?.ShortDesc }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-details">
+            <div class="pricing-info">
+                <div class="price-breakdown">
+                    <div class="price-item">
+                        <span>Total Price</span>
+                        <strong>KES {{ order.Price | number:'1.2-2' }}</strong>
+                    </div>
+                    <div class="price-item">
+                        <span>Deposit Paid</span>
+                        <strong>KES {{ order.Deposit | number:'1.2-2' }}</strong>
+                    </div>
+                    <div class="price-item">
+                        <span>Remaining Balance</span>
+                        <strong>KES {{ order.Balance | number:'1.2-2' }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-header">
+                    <h4>Order Progress</h4>
+                </div>
+
+                <ng-container *ngFor="let progress of order.Progresses">
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress" [style.width.%]="calculateProgressPercentage(progress)"></div>
+                        </div>
+
+                        <div class="progress-stages">
+                            <div class="stage"
+                                [class.active]="progress.MaterialsImages && progress.MaterialsImages.trim() !== ''">
+                                <i class="fas fa-cubes"></i>
+                                <span>Materials</span>
+                            </div>
+                            <div class="stage"
+                                [class.active]="progress.ProgressImages && progress.ProgressImages.trim() !== ''">
+                                <i class="fas fa-hammer"></i>
+                                <span>In Progress</span>
+                            </div>
+                            <div class="stage"
+                                [class.active]="progress.FinalImages && progress.FinalImages.trim() !== ''">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Final Product</span>
+                            </div>
+                        </div>
+
+                        <!-- Image Galleries -->
+                        <div class="image-galleries">
+                            <div class="gallery-section"
+                                *ngIf="progress.MaterialsImages && progress.MaterialsImages.trim() !== ''">
+                                <h5>Materials</h5>
+                                <div class="gallery">
+                                    <div *ngFor="let image of splitImages(progress.MaterialsImages)"
+                                        class="gallery-item" (click)="openImageModal(image)">
+                                        <img [src]="image" alt="Material Image">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="gallery-section"
+                                *ngIf="progress.ProgressImages && progress.ProgressImages.trim() !== ''">
+                                <h5>In Progress</h5>
+                                <div class="gallery">
+                                    <div *ngFor="let image of splitImages(progress.ProgressImages)" class="gallery-item"
+                                        (click)="openImageModal(image)">
+                                        <img [src]="image" alt="Progress Image">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="gallery-section"
+                                *ngIf="progress.FinalImages && progress.FinalImages.trim() !== ''">
+                                <h5>Final Product</h5>
+                                <div class="gallery">
+                                    <div *ngFor="let image of splitImages(progress.FinalImages)" class="gallery-item"
+                                        (click)="openImageModal(image)">
+                                        <img [src]="image" alt="Final Image">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="!progress.MaterialsImages && !progress.ProgressImages && !progress.FinalImages"
+                                class="no-images">
+                                <i class="fas fa-image"></i>
+                                <p>No images available for this stage</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Complete Payment Button -->
+                    <div class="payment-section" *ngIf="order.Balance > 0">
+                        <button class="complete-payment-btn" (click)="completePayment(order)">
+                            <i class="fas fa-money-bill-wave"></i> Complete Payment
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div *ngIf="isImageModalOpen" class="image-modal" (click)="closeImageModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <button class="close-btn" (click)="closeImageModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <img [src]="selectedImage" alt="Full Image">
+        </div>
+    </div>
+</div>

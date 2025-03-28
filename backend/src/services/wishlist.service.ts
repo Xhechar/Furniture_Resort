@@ -164,7 +164,7 @@ export class WishlistService implements WishlistInterface {
       include: {
         Product: true
       }
-    });
+    });''
 
     if (wishlistExists == null || wishlistExists.length == 0) {
       return {

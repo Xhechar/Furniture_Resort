@@ -1,1 +1,166 @@
-<p>orders works!</p>
+<app-notifications></app-notifications>
+<div class="orders-container">
+    <!-- Header with Stats and Toggles -->
+    <div class="orders-header">
+        <div class="orders-stats">
+            <div class="stat-card">
+                <i class="fa-solid fa-shopping-cart"></i>
+                <div class="stat-content">
+                    <h3>{{ totalOrders }}</h3>
+                    <p>Total Orders</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fa-solid fa-check-circle"></i>
+                <div class="stat-content">
+                    <h3>{{ completedOrders }}</h3>
+                    <p>Completed Orders</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="bx bx-star"></i>
+                <div class="stat-content">
+                    <h3>{{ reviewsCount }}</h3>
+                    <p>Total Reviews</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="orders-filter">
+            <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterOrders()" placeholder="Search orders..."
+                class="search-input">
+            <div class="order-type-toggle">
+                <button (click)="activeOrderType = 'normal'" [class.active]="activeOrderType === 'normal'">
+                    Normal Orders
+                </button>
+                <button (click)="activeOrderType = 'custom'" [class.active]="activeOrderType === 'custom'">
+                    Custom Orders
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="orders-table">
+        <!-- Normal Orders -->
+        <ng-container *ngIf="activeOrderType === 'normal'">
+            <div *ngFor="let order of filteredNormalOrders" class="order-card">
+                <div class="order-image">
+                    <img [src]="order.Product ? order.Product.ProductImages.split(',')[0] : ''" alt="Product Image">
+                </div>
+                <div class="order-details">
+                    <h3>{{ order.Product?.ProductName }}</h3>
+                    <div class="order-info">
+                        <span>
+                            <i class="fa-solid fa-calendar"></i>
+                            {{ order.DateCreated | date:'mediumDate' }}
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-dollar-sign"></i>
+                            {{ order.AmountPaid | currency }}
+                        </span>
+                        <span [ngClass]="{
+                'status-delivered': order.DeliveryStatus === 'Delivered',
+                'status-pending': order.DeliveryStatus !== 'Delivered'
+              }">
+                            <i class="fa-solid fa-truck"></i>
+                            {{ order.DeliveryStatus }}
+                        </span>
+                    </div>
+                </div>
+                <div class="order-actions">
+                    <button *ngIf="order.DeliveryStatus === 'Delivered'" (click)="openReviewModal(order)"
+                        class="review-btn">
+                        <i class="bx bx-star"></i> Leave Review
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- Custom Orders -->
+        <ng-container *ngIf="activeOrderType === 'custom'">
+            <div *ngFor="let order of filteredCustomOrders" class="order-card">
+                <div class="order-image">
+                    <img [src]="order.Product ? order.Product.ProductImages.split(',')[0] : ''" alt="Product Image">
+                </div>
+                <div class="order-details">
+                    <h3>{{ order.Product?.ProductName }}</h3>
+                    <div class="order-info">
+                        <span>
+                            <i class="fa-solid fa-calendar"></i>
+                            {{ order.DateCreated | date:'mediumDate' }}
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-dollar-sign"></i>
+                            {{ order.Price | currency }}
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-credit-card"></i>
+                            Deposit: {{ order.Deposit | currency }}
+                        </span>
+                        <span [ngClass]="{
+                'status-delivered': order.DeliveryStatus,
+                'status-pending': !order.DeliveryStatus
+              }">
+                            <i class="fa-solid fa-truck"></i>
+                            {{ order.DeliveryStatus ? 'Delivered' : 'In Progress' }}
+                        </span>
+                    </div>
+                </div>
+                <div class="order-actions">
+                    <button *ngIf="order.DeliveryStatus" (click)="openReviewModal(order)" class="review-btn">
+                        <i class="bx bx-star"></i> Leave Review
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
+
+<!-- Review Modal -->
+<div *ngIf="showReviewModal" class="review-modal-backdrop" (click)="closeReviewModal($event)">
+    <div class="review-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Leave a Review</h2>
+            <button (click)="closeReviewModal()" class="close-btn">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+
+        <form #reviewForm="ngForm" (ngSubmit)="submitReview()">
+            <div class="form-group">
+                <label for="ReviewText">Review</label>
+                <textarea name="ReviewText" [(ngModel)]="newReview.ReviewText" #reviewText="ngModel" required
+                    minlength="10" maxlength="500" placeholder="Write your review here..."></textarea>
+                <div *ngIf="reviewText.invalid && (reviewText.dirty || reviewText.touched)" class="error-message">
+                    <small *ngIf="reviewText.errors?.['required']">
+                        Review is required
+                    </small>
+                    <small *ngIf="reviewText.errors?.['minlength']">
+                        Review must be at least 10 characters
+                    </small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Rating">Rating</label>
+                <div class="star-rating">
+                    <i *ngFor="let star of [1,2,3,4,5]" [ngClass]="{
+              'fa-solid fa-star': star <= newReview.Rating,
+              'fa-regular fa-star': star > newReview.Rating
+            }" (click)="newReview.Rating = star"></i>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" [disabled]="reviewForm.invalid" class="submit-btn">
+                    Submit Review
+                </button>
+                <button type="button" (click)="closeReviewModal()" class="cancel-btn">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
