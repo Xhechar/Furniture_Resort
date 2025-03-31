@@ -176,11 +176,13 @@ export class ProgressService implements ProgressInterface {
 
     if (updateProgressStatus) {
       return {
-        'success': true
+        'success': true,
+        'message': 'Progress status updated successfully.'
       }
     } else {
       return {
-        'success': false
+        'success': false,
+        'error': 'Unable to complete progress'
       }
     }
   }

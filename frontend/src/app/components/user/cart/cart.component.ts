@@ -259,7 +259,7 @@ export class CartComponent implements OnInit {
       Balance: this.calculateBalance(item),
       DateCreated: new Date().toISOString(),
       DateModified: new Date(),
-      DeliveryStatus: false
+      DeliveryStatus: 'penging'
     }));
     
     // For real implementation

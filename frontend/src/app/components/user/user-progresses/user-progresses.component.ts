@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { CustomOrder, Progress } from '../../../interfaces/interfaces';
+import { CustomOrder, MpesaReferalsBalance, Progress } from '../../../interfaces/interfaces';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CustomOrderService } from '../../../services/custom-order.service';
 import { NotificationsService } from '../../../services/notifications.service';
 import { NotificationsComponent } from "../../notifications/notifications.component";
+import { ProgressService } from '../../../services/progress.service';
 
 @Component({
   selector: 'app-user-progresses',
@@ -21,7 +22,7 @@ export class UserProgressesComponent implements OnInit {
   
   isImageModalOpen: boolean = false;
 
-  constructor(private cos: CustomOrderService, private ns: NotificationsService) { }
+  constructor(private cos: CustomOrderService, private ns: NotificationsService, private ps:ProgressService) { }
 
   ngOnInit(): void { }
 
@@ -48,7 +49,11 @@ export class UserProgressesComponent implements OnInit {
 
   completePayment(customOrder: CustomOrder): void {
 
-    this.cos.updateCustomOrderStatus(customOrder.CustomOrderId).subscribe({
+    let referal: MpesaReferalsBalance = {
+      Balance: customOrder.Balance
+    }
+
+    this.cos.updateCustomOrder(customOrder.CustomOrderId, referal).subscribe({
       next: (response) => {
         if (response.success) {
           this.ns.showMessage(response.message as string, response.success);

@@ -108,7 +108,7 @@ export interface CustomOrder {
   DateModified: Date,
   DepMpesaCode?: string,
   BalMpesaCode?: string,
-  DeliveryStatus: boolean,
+  DeliveryStatus: string,
   User?: User,
   Product?: Product,
   Progresses?: Progress[]

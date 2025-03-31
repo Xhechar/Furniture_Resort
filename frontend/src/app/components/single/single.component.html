@@ -160,7 +160,7 @@
               </table>
             </div>
             
-            <button class="custom-order-btn">
+            <button class="custom-order-btn" (click)="addCustomProductToCart()">
               <i class="fas fa-tools"></i> Request Custom Order
             </button>
           </div>
@@ -183,7 +183,7 @@
         <div class="product-image">
           <img [src]="product.ProductImages.split(', ')[0]" alt="{{ product.ProductName }}">
           <div class="product-actions-overlay">
-            <button class="action-btn wishlist-btn" (click)="addToWishlist(product)">
+            <button class="action-btn wishlist-btn" (click)="addToWishlist()">
               <i class="far fa-heart"></i>
             </button>
             <button class="action-btn view-btn" [routerLink]="['/single-product', product.ProductId]">

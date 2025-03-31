@@ -76,7 +76,9 @@ export class UserSideBarComponent {
     this.hs.setTopBar(navPath);
   }
 
-  showLogoutModal() : void {
+  showLogoutModal(): void {
+    console.log("I'm definately clicked.");
+    
     this.ms.toggleLogout(true);
   }
 }

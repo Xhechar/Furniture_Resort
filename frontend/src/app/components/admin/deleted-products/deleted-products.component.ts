@@ -135,7 +135,7 @@ export class DeletedProductsComponent implements OnInit{
         DateCreated: '2025-02-15',
         DateModified: new Date(),
         DepMpesaCode: 'MP12345678',
-        DeliveryStatus: false,
+        DeliveryStatus: 'pending',
         User: users[0],
         Product: products[0]
       },
@@ -151,7 +151,7 @@ export class DeletedProductsComponent implements OnInit{
         DateCreated: '2025-02-20',
         DateModified: new Date(),
         DepMpesaCode: 'MP23456789',
-        DeliveryStatus: false,
+        DeliveryStatus: 'pending',
         User: users[1],
         Product: products[1]
       }
@@ -402,7 +402,7 @@ export class DeletedProductsComponent implements OnInit{
       
       // In a real app, you might also update the custom order's delivery status
       if (progress.CustomOrder) {
-        progress.CustomOrder.DeliveryStatus = true;
+        progress.CustomOrder.DeliveryStatus = 'delivered';
       }
     } else if (progress.ProgressImages && progress.ProgressImages.length > 0) {
       progress.Status = 'In Progress';

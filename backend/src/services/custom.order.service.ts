@@ -140,7 +140,7 @@ export class CustomOrderService implements CustomOrderInterface {
     let updateCustomOrder = await this.prisma.customOrder.update({
       data: {
         Balance: referal.Balance,
-        BalMpesaCode: referal.BalMpesaCode
+        BalMpesaCode: referal.BalMpesaCode || ''
       },
       where: {
         CustomOrderId: customOrderExists.CustomOrderId,

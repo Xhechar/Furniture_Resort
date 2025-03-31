@@ -1,5 +1,5 @@
-import { PrismaClient, Wishlist } from "@prisma/client";
-import { Cart, Category, CustomOrder, LoginDetails, Messages, MpesaReferals, MpesaReferalsBalance, Order, orderDetails, Product, ProductQuantityTime, Progress, Recovery, RecoveryDetails, Review, TokenDetails, User } from "./backend.interfaces";
+import { Cart, PrismaClient, Wishlist } from "@prisma/client";
+import { Category, CustomOrder, LoginDetails, Messages, MpesaReferals, MpesaReferalsBalance, Order, orderDetails, Product, ProductQuantityTime, Progress, Recovery, RecoveryDetails, Review, TokenDetails, User } from "./backend.interfaces";
 
 export interface UserInterface {
   prisma: PrismaClient,

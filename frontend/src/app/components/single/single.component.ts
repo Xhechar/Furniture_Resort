@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Product } from '../../interfaces/interfaces';
+import { Cart, Product } from '../../interfaces/interfaces';
 import { ProductsService } from '../../services/products.service';
 import { NotificationsService } from '../../services/notifications.service';
 import { NotificationsComponent } from '../notifications/notifications.component';
+import { CartService } from '../../services/cart.service';
+import { WishlistsService } from '../../services/wishlists.service';
 
 @Component({
   selector: 'app-single',
@@ -22,7 +24,7 @@ export class SingleComponent implements OnInit {
   activeTab: string = 'description';
   averageRating: number = 0;
 
-  constructor(private route: ActivatedRoute, private ps: ProductsService, private ns: NotificationsService) { }
+  constructor(private route: ActivatedRoute, private ps: ProductsService, private ns: NotificationsService, private cs: CartService, private ws: WishlistsService) { }
 
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('ProductId') as string;
@@ -217,13 +219,49 @@ export class SingleComponent implements OnInit {
   }
 
   addToCart(): void {
-    
+    let chosenCart: Partial<Cart> = {
+      Quantity: this.quantity,
+      Discount: this.product.Discount,
+      Price: this.product.Prize,
+      OrderType: 'normal'
+    }
+    this.cs.createCart(this.product.ProductId, chosenCart).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.ns.showMessage(response.message as string, response.success);
+        } else {
+          this.ns.showMessage(response.error as string, false);
+        }
+      },
+      error: (error) => {
+        this.ns.showMessage(error.error.error as string, false);
+      }
+    })
   }
 
-  addToWishlist(product?: Product): void {
-    const selectedProduct = product || this.product;
-    console.log(`Added ${selectedProduct.ProductName} to wishlist`);
-    // Implement actual wishlist functionality here
+  addCustomProductToCart(): void {
+    let chosenCart: Partial<Cart> = {
+      Quantity: this.quantity,
+      Discount: this.product.Discount,
+      Price: this.product.Prize,
+      OrderType: 'custom'
+    }
+    this.cs.createCart(this.product.ProductId, chosenCart).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.ns.showMessage(response.message as string, response.success);
+        } else {
+          this.ns.showMessage(response.error as string, false);
+        }
+      },
+      error: (error) => {
+        this.ns.showMessage(error.error.error as string, false);
+      }
+    })
+  }
+
+  addToWishlist(): void {
+    this.ws.createWishlist(this.product.ProductId as string)
   }
 
   setActiveTab(tab: string): void {

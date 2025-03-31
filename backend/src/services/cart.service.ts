@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-import { Cart } from "../interfaces/backend.interfaces";
+import { Cart, PrismaClient } from "@prisma/client";
 import { CartInterface } from "../interfaces/services.coupling.interfaces";
 import { v4 } from "uuid";
 import lodach from 'lodash';
@@ -44,13 +43,14 @@ export class CartService implements CartInterface {
       }
     }
 
-    let { UserId, CartId, ProductId, DateCreated, User, Product, Quantity, OrderType, ...r_cart } = cart;
+    let { UserId, CartId, ProductId, DateCreated, OrderType, Quantity, ...r_cart } = cart;
 
     let createCart = await this.prisma.cart.create({
       data: {
         CartId: v4(),
         ProductId: productId,
         UserId: userId,
+        OrderType: cart.OrderType || 'normal',
         ...r_cart
       }
     });
@@ -104,19 +104,16 @@ export class CartService implements CartInterface {
     }
 
 
-    let { UserId, CartId, ProductId, DateCreated, User, Product, ...r_cart } = cart;
+    let { UserId, CartId, ProductId, Quantity, Discount, DateCreated, ...r_cart } = cart;
 
     let updateCart = await this.prisma.cart.update({
       data: {
-        CartId: cartExists.CartId,
-        UserId: cartExists.UserId,
-        ProductId: cartExists.ProductId,
         ...r_cart
       },
       where: {
         CartId: cartId,
         UserId: userId,
-        ProductId: cartExists.CartId
+        ProductId: cartExists.ProductId
       }
     });
 
