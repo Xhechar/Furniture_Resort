@@ -2,40 +2,50 @@
 <div class="orders-container">
     <!-- Header with Stats and Toggles -->
     <div class="orders-header">
+        <h2 class="section-title">Your Orders</h2>
+        
         <div class="orders-stats">
             <div class="stat-card">
-                <i class="fa-solid fa-shopping-cart"></i>
+                <div class="stat-icon">
+                    <i class='bx bxs-cart'></i>
+                </div>
                 <div class="stat-content">
                     <h3>{{ totalOrders }}</h3>
                     <p>Total Orders</p>
                 </div>
             </div>
             <div class="stat-card">
-                <i class="fa-solid fa-check-circle"></i>
+                <div class="stat-icon">
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
                 <div class="stat-content">
                     <h3>{{ completedOrders }}</h3>
                     <p>Completed Orders</p>
                 </div>
             </div>
             <div class="stat-card">
-                <i class="bx bx-star"></i>
+                <div class="stat-icon">
+                    <i class="bx bx-star"></i>
+                </div>
                 <div class="stat-content">
-                    <h3>{{ reviewsCount }}</h3>
-                    <p>Total Reviews</p>
+                    <h3>{{ inCompleteOrders }}</h3>
+                    <p>Remaining Orders</p>
                 </div>
             </div>
         </div>
 
         <!-- Search and Filter -->
         <div class="orders-filter">
-            <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterOrders()" placeholder="Search orders..."
-                class="search-input">
+            <div class="search-container">
+                <i class="fa-solid fa-search search-icon"></i>
+                <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterOrders()" placeholder="Search orders..." class="search-input">
+            </div>
             <div class="order-type-toggle">
                 <button (click)="activeOrderType = 'normal'" [class.active]="activeOrderType === 'normal'">
-                    Normal Orders
+                    <i class="fa-solid fa-box"></i> Normal Orders
                 </button>
                 <button (click)="activeOrderType = 'custom'" [class.active]="activeOrderType === 'custom'">
-                    Custom Orders
+                    <i class="fa-solid fa-palette"></i> Custom Orders
                 </button>
             </div>
         </div>
@@ -50,28 +60,27 @@
                     <img [src]="order.Product ? order.Product.ProductImages.split(',')[0] : ''" alt="Product Image">
                 </div>
                 <div class="order-details">
-                    <h3>{{ order.Product?.ProductName }}</h3>
+                    <h3 class="product-name">{{ order.Product?.ProductName }}</h3>
                     <div class="order-info">
-                        <span>
+                        <span class="info-item">
                             <i class="fa-solid fa-calendar"></i>
                             {{ order.DateCreated | date:'mediumDate' }}
                         </span>
-                        <span>
+                        <span class="info-item">
                             <i class="fa-solid fa-dollar-sign"></i>
                             {{ order.AmountPaid | currency }}
                         </span>
-                        <span [ngClass]="{
-                'status-delivered': order.DeliveryStatus === 'Delivered',
-                'status-pending': order.DeliveryStatus !== 'Delivered'
-              }">
+                        <span class="info-item delivery-status" [ngClass]="{
+                            'status-delivered': order.DeliveryStatus === 'Delivered',
+                            'status-pending': order.DeliveryStatus !== 'Delivered'
+                        }">
                             <i class="fa-solid fa-truck"></i>
                             {{ order.DeliveryStatus }}
                         </span>
                     </div>
                 </div>
                 <div class="order-actions">
-                    <button *ngIf="order.DeliveryStatus === 'Delivered'" (click)="openReviewModal(order)"
-                        class="review-btn">
+                    <button *ngIf="order.DeliveryStatus === 'Delivered'" (click)="openReviewModal(order)" class="review-btn">
                         <i class="bx bx-star"></i> Leave Review
                     </button>
                 </div>
@@ -80,29 +89,29 @@
 
         <!-- Custom Orders -->
         <ng-container *ngIf="activeOrderType === 'custom'">
-            <div *ngFor="let order of filteredCustomOrders" class="order-card">
+            <div *ngFor="let order of filteredCustomOrders" class="order-card custom">
                 <div class="order-image">
                     <img [src]="order.Product ? order.Product.ProductImages.split(',')[0] : ''" alt="Product Image">
                 </div>
                 <div class="order-details">
-                    <h3>{{ order.Product?.ProductName }}</h3>
+                    <h3 class="product-name">{{ order.Product?.ProductName }}</h3>
                     <div class="order-info">
-                        <span>
+                        <span class="info-item">
                             <i class="fa-solid fa-calendar"></i>
                             {{ order.DateCreated | date:'mediumDate' }}
                         </span>
-                        <span>
+                        <span class="info-item">
                             <i class="fa-solid fa-dollar-sign"></i>
                             {{ order.Price | currency }}
                         </span>
-                        <span>
+                        <span class="info-item">
                             <i class="fa-solid fa-credit-card"></i>
                             Deposit: {{ order.Deposit | currency }}
                         </span>
-                        <span [ngClass]="{
-                'status-delivered': order.DeliveryStatus,
-                'status-pending': !order.DeliveryStatus
-              }">
+                        <span class="info-item delivery-status" [ngClass]="{
+                            'status-delivered': order.DeliveryStatus,
+                            'status-pending': !order.DeliveryStatus
+                        }">
                             <i class="fa-solid fa-truck"></i>
                             {{ order.DeliveryStatus ? 'Delivered' : 'In Progress' }}
                         </span>
@@ -115,6 +124,14 @@
                 </div>
             </div>
         </ng-container>
+
+        <!-- Empty state -->
+        <div *ngIf="(activeOrderType === 'normal' && filteredNormalOrders.length === 0) || 
+                  (activeOrderType === 'custom' && filteredCustomOrders.length === 0)" 
+             class="empty-state">
+            <i class="fa-solid fa-box-open"></i>
+            <p>No orders found</p>
+        </div>
     </div>
 </div>
 
@@ -130,9 +147,9 @@
 
         <form #reviewForm="ngForm" (ngSubmit)="submitReview()">
             <div class="form-group">
-                <label for="ReviewText">Review</label>
+                <label for="ReviewText">Your Feedback</label>
                 <textarea name="ReviewText" [(ngModel)]="newReview.ReviewText" #reviewText="ngModel" required
-                    minlength="10" maxlength="500" placeholder="Write your review here..."></textarea>
+                    minlength="10" maxlength="500" placeholder="Tell us about your experience..."></textarea>
                 <div *ngIf="reviewText.invalid && (reviewText.dirty || reviewText.touched)" class="error-message">
                     <small *ngIf="reviewText.errors?.['required']">
                         Review is required
@@ -144,21 +161,22 @@
             </div>
 
             <div class="form-group">
-                <label for="Rating">Rating</label>
+                <label for="Rating">Your Rating</label>
                 <div class="star-rating">
                     <i *ngFor="let star of [1,2,3,4,5]" [ngClass]="{
-              'fa-solid fa-star': star <= newReview.Rating,
-              'fa-regular fa-star': star > newReview.Rating
-            }" (click)="newReview.Rating = star"></i>
+                        'fa-solid fa-star': star <= newReview.Rating,
+                        'fa-regular fa-star': star > newReview.Rating
+                        }" (click)="newReview.Rating = star">
+                    </i>
                 </div>
             </div>
 
             <div class="form-actions">
                 <button type="submit" [disabled]="reviewForm.invalid" class="submit-btn">
-                    Submit Review
+                    <i class="fa-solid fa-paper-plane"></i> Submit Review
                 </button>
                 <button type="button" (click)="closeReviewModal()" class="cancel-btn">
-                    Cancel
+                    <i class="fa-solid fa-times"></i> Cancel
                 </button>
             </div>
         </form>

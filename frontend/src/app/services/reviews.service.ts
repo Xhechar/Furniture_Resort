@@ -12,9 +12,9 @@ export class ReviewsService {
 
   constructor(private http: HttpClient) { }
 
-  createReview(review: Review): Observable<{ success: boolean; error?: string; message?: string }> {
+  createReview(ProductId: string, review: Review): Observable<{ success: boolean; error?: string; message?: string }> {
     return this.http.post<{ success: boolean; error?: string; message?: string }>(
-      `${this.API_URL}create-review`,
+      `${this.API_URL}create-review/${ProductId}`,
       review,
       { headers: getAuthHeaders() }
     );

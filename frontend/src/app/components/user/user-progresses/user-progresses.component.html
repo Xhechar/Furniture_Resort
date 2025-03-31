@@ -1,11 +1,12 @@
+<app-notifications></app-notifications>
 <div class="custom-orders-container">
     <h2 class="page-title">
-        <i class="fas fa-clipboard-list"></i> My Custom Orders
+        <i class="fas fa-clipboard-list"></i> Custom Order Progress
     </h2>
 
     <div *ngIf="customOrders.length === 0" class="no-orders">
         <i class="fas fa-box-open"></i>
-        <p>No custom orders found</p>
+        <p>No custom orders progresses found</p>
     </div>
 
     <div *ngFor="let order of customOrders" class="custom-order-card">
@@ -30,6 +31,10 @@
                     <div class="price-item">
                         <span>Deposit Paid</span>
                         <strong>KES {{ order.Deposit | number:'1.2-2' }}</strong>
+                    </div>
+                    <div class="price-item">
+                        <span>Discount</span>
+                        <strong>KES {{ order.Product?.Discount| number:'1.2-2' }}</strong>
                     </div>
                     <div class="price-item">
                         <span>Remaining Balance</span>

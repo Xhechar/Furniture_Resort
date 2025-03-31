@@ -1,14 +1,10 @@
-.body {
-  display: flex;
-}
-
 .sidebar {
   width: var(--sidebar-width);
-  padding: 20px 15px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  background: var(--primary-color);
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  background: var(--accent);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
   position: fixed;
   top: 0;
   left: 0;
@@ -16,119 +12,169 @@
   transition: width var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
   overflow-x: hidden;
   z-index: 100;
-  overflow-y: auto;
-  scrollbar-width: thin;
 }
 
 .sidebar.collapsed {
   width: var(--sidebar-collapsed-width);
-  padding: 20px 10px;
 }
 
 .sidebar-header {
-  height: 15vh;
+  height: 120px;
   width: 100%;
-  background-color: transparent;
+  background-color: var(--accent-hover);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2vh;
   position: relative;
+  padding: 20px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  z-index: 5;
+}
+
+.sidebar.collapsed .sidebar-header {
+  padding: 20px 10px;
 }
 
 .logo-container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   overflow: hidden;
+  padding-left: 0.5rem;
 }
 
 .full-logo {
   font-weight: 800;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   letter-spacing: 2px;
-  color: var(--primary-dark);
+  color: var(--primary);
   white-space: nowrap;
   opacity: 1;
   transform: translateX(0);
   transition: opacity var(--transition-speed), transform var(--transition-speed);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .mini-logo {
   font-weight: 800;
-  font-size: 1.5rem;
-  color: var(--primary-dark);
+  font-size: 1.7rem;
+  color: var(--primary);
   opacity: 1;
   transition: opacity var(--transition-speed);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .toggle-btn {
   position: absolute;
-  right: 0;
-  background: transparent;
+  right: 10px;
+  background: rgba(84, 72, 32, 0.2);
   border: none;
   cursor: pointer;
-  color: var(--primary-dark);
+  color: var(--primary);
   font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 5px;
-  transition: transform var(--transition-speed);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  transition: all var(--transition-speed);
+}
+
+.toggle-btn:hover {
+  background: rgba(84, 72, 32, 0.4);
+  transform: scale(1.1);
 }
 
 .sidebar.collapsed .toggle-btn {
   transform: rotate(180deg);
 }
 
+.sidebar.collapsed .toggle-btn:hover {
+  transform: rotate(180deg) scale(1.1);
+}
+
 .menu {
   list-style: none;
-  padding: 0;
+  padding: 15px;
   margin: 0;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--accent);
+  flex: 1;
+  padding-bottom: 80px;
+}
+
+/* Styled scrollbar for Chrome, Safari and Opera */
+.menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.menu::-webkit-scrollbar-track {
+  background: var(--accent);
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 6px;
 }
 
 .menu-item {
-  padding: 12px;
-  margin-bottom: 8px;
+  padding: 14px;
+  margin-bottom: 2px;
   font-size: 14px;
   display: flex;
   align-items: center;
-  color: var(--text-dark);
-  border-radius: 8px;
+  color: var(--primary);
+  border-radius: 10px;
   transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  opacity: 0.85;
+  height: auto;
+  min-height: 62px;
 }
 
 .icon-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
+  min-width: 2.5rem;
   height: 2.5rem;
   border-radius: 8px;
   transition: all var(--transition-speed);
+  background: rgba(84, 72, 32, 0.15);
 }
 
 .menu-item i {
   font-size: 1.3rem;
   transition: all var(--transition-speed);
+  color: var(--primary);
 }
 
 .menu-text {
-  margin-left: 12px;
+  margin-left: 14px;
   white-space: nowrap;
   opacity: 1;
   transform: translateX(0);
   transition: opacity var(--transition-speed), transform var(--transition-speed);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: var(--primary);
 }
 
 .sidebar.collapsed .menu-text {
   opacity: 0;
   transform: translateX(20px);
+  pointer-events: none;
 }
 
 .menu-item::before {
@@ -151,8 +197,8 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
-  transition: transform 0.6s;
+  background: linear-gradient(90deg, transparent, rgba(84, 72, 32, 0.1), transparent);
+  transition: transform 0.8s ease;
 }
 
 .menu-item:hover::after {
@@ -166,37 +212,43 @@
 
 .menu-item:hover,
 .menu-item.active {
-  background: var(--primary-light);
-  color: var(--text-lighter);
-  transform: translateX(2px);
+  background: rgba(84, 72, 32, 0.2);
+  color: var(--primary-dark);
+  transform: translateX(4px);
+  opacity: 1;
+  box-shadow: 0 4px 8px rgba(84, 72, 32, 0.2);
 }
 
 .menu-item:hover .icon-container,
 .menu-item.active .icon-container {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(84, 72, 32, 0.25);
+  box-shadow: 0 4px 8px rgba(84, 72, 32, 0.15);
 }
 
 .menu-item:hover i,
 .menu-item.active i {
-  color: var(--text-lighter);
+  color: var(--primary-dark);
   transform: scale(1.1);
 }
 
 .tooltip {
   position: absolute;
-  left: 100%;
+  left: calc(100% + 12px);
   top: 50%;
   transform: translateY(-50%);
-  background: var(--primary-dark);
+  background: var(--primary);
   color: var(--text-lighter);
   padding: 8px 12px;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 12px;
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transition: opacity var(--transition-speed);
+  transition: opacity var(--transition-speed), transform var(--transition-speed);
   z-index: 101;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-50%) translateX(-10px);
+  font-weight: 600;
 }
 
 .tooltip::before {
@@ -207,11 +259,12 @@
   transform: translateY(-50%);
   border-width: 6px;
   border-style: solid;
-  border-color: transparent var(--primary-dark) transparent transparent;
+  border-color: transparent var(--primary) transparent transparent;
 }
 
 .sidebar.collapsed .menu-item:hover .tooltip {
   opacity: 1;
+  transform: translateY(-50%) translateX(0);
 }
 
 /* Media Queries for Responsiveness */
@@ -223,6 +276,7 @@
   .menu-text {
     opacity: 0;
     transform: translateX(20px);
+    pointer-events: none;
   }
 
   .full-logo {
@@ -248,6 +302,7 @@
   .sidebar:not(.collapsed) .menu-text {
     opacity: 1;
     transform: translateX(0);
+    pointer-events: auto;
   }
 
   .sidebar:not(.collapsed) .mini-logo {
@@ -261,33 +316,35 @@
   .sidebar:not(.collapsed) .toggle-btn {
     transform: rotate(0);
   }
+  
+  .sidebar:not(.collapsed) .toggle-btn:hover {
+    transform: scale(1.1);
+  }
 }
 
-.sidebar::-webkit-scrollbar {
-  width: 5px;
+/* Bottom menu item styling for logout */
+.menu li:last-child {
+  border-top: 1px solid rgba(84, 72, 32, 0.2);
+  padding-top: 1.5rem;
+  margin-top: 1rem;
 }
 
-.sidebar::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 10px;
-  margin: 10px 0;
+.menu li:last-child .icon-container {
+  background-color: rgba(84, 72, 32, 0.2);
+  border: 1px solid rgba(84, 72, 32, 0.1);
 }
 
-.sidebar::-webkit-scrollbar-thumb {
-  background: transparent;
-  border-radius: 10px;
-  transition: background 0.3s ease;
+.menu li:last-child:hover .icon-container {
+  background-color: rgba(84, 72, 32, 0.3);
+  border-color: var(--primary);
 }
 
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background: transparent;
+.menu li:last-child:hover {
+  background: rgba(84, 72, 32, 0.25);
 }
 
-/* Hide scrollbar when not in use, but maintain functionality */
-.sidebar:not(:hover)::-webkit-scrollbar-thumb {
-  background: transparent;
-}
-
-.sidebar:not(:hover)::-webkit-scrollbar-track {
-  background: transparent;
+/* Active state enhancement */
+.menu-item.active {
+  background: rgba(84, 72, 32, 0.25);
+  border-right: 3px solid var(--primary);
 }
