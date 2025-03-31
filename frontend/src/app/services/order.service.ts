@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Order } from '../interfaces/interfaces';
+import { Order, orderDetails } from '../interfaces/interfaces';
 import { getAuthHeaders } from './notifications.service';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class OrderService {
 
   constructor(private http: HttpClient) { }
 
-  createOrder(order: Order): Observable<{ success: boolean, error?: string, message?: string }> {
+  createOrder(order: orderDetails): Observable<{ success: boolean, error?: string, message?: string }> {
     return this.http.post<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}create-order`, order, { headers: getAuthHeaders() });
   }
 

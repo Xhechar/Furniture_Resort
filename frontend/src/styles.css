@@ -23,9 +23,7 @@ button {
 :root {
   --primary: #544820;
   --primary-light: rgba(84, 72, 32, 0.1);
-  --primary-dark: hsl(46, 45%, 20%);
-  --accent: hsl(47, 71%, 52%);
-  --accent-hover: hsl(47, 71%, 45%);
+  --primary-dark: hsl(46, 45%, 20%)
   --white: #ffffff;
   --text-dark: #333333;
   --text-light: #666666;

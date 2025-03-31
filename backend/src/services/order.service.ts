@@ -59,10 +59,10 @@ export class OrderService implements OrderInterface {
           ProductId: cartExist.ProductId,
           Quantity: cartExist.Quantity,
           Price: cartExist.Price,
-          AmountPaid: order.AmountPaid,
-          OrderType: order.OrderType,
+          AmountPaid: cartExist.Price - cartExist.Discount,
+          OrderType: cartExist.OrderType,
           Discount: cartExist.Discount,
-          MpesaCode: order.MpesaCode
+          MpesaCode: order.MpesaCode || ''
         }
       });
 

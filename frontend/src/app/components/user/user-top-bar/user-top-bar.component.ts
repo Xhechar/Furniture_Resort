@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-user-top-bar',
   standalone: true,
-  imports: [NotificationsComponent, CommonModule],
+  imports: [CommonModule],
   templateUrl: './user-top-bar.component.html',
   styleUrl: './user-top-bar.component.css'
 })
@@ -32,11 +32,11 @@ export class UserTopBarComponent implements OnInit {
         if(value.success) {
           this.user = value.user as User;
         } else {
-          ns.showMessage(value.error as string, false);
+          // ns.showMessage(value.error as string, false);
         }
       },
       error: (error) => {
-        ns.showMessage(error.error.error as string, false);
+        // ns.showMessage(error.error.error as string, false);
       }
     });
   }

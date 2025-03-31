@@ -8,11 +8,12 @@ import { NotificationsService } from '../../../services/notifications.service';
 import { CategoryService } from '../../../services/category.service';
 import { WishlistsService } from '../../../services/wishlists.service';
 import { CartService } from '../../../services/cart.service';
+import { NotificationsComponent } from "../../notifications/notifications.component";
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, FormsModule, NotificationsComponent],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css'
 })
@@ -299,7 +300,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
         if(response.success) {
           this.ns.showMessage(response.message as string, response.success);
         } else {
-          this.ns.showMessage(response.error as string, response.success);
+          this.ns.showMessage(response.error as string, false);
         }
       },
       error: (error) => {
