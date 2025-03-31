@@ -1,1 +1,103 @@
-<p>user-messages works!</p>
+<div class="chat-container">
+    <div class="chat-header">
+        <div class="chat-header-left">
+            <button class="back-button" (click)="goBack()">
+                <i class="bx bx-arrow-back"></i>
+            </button>
+            <div class="product-info" *ngIf="selectedProduct">
+                <div class="product-image">
+                    <img [src]="selectedProduct.ProductImages.split(',')[0]" alt="Product">
+                </div>
+                <div class="product-details">
+                    <h3>{{selectedProduct.ProductName}}</h3>
+                    <p class="price">Ksh {{selectedProduct.Prize | number}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="chat-header-right">
+            <h2><i class="bx bxs-message-rounded-dots"></i> Ndagani SF Support</h2>
+        </div>
+    </div>
+
+    <div class="chat-body" #chatBody>
+        <div class="welcome-message" *ngIf="messages.length === 0">
+            <div class="welcome-icon">
+                <i class="bx bxs-message-alt-detail"></i>
+            </div>
+            <h3>Welcome to Ndagani SF Support</h3>
+            <p>Ask any questions about your product or order</p>
+        </div>
+
+        <div class="messages" *ngIf="messages.length > 0">
+            <div *ngFor="let message of messages"
+                [ngClass]="{'message-item': true, 'user-message': message.SenderId === currentUser.UserId, 'admin-message': message.SenderId !== currentUser.UserId}">
+                <div class="message-avatar" *ngIf="message.SenderId !== currentUser.UserId">
+                    <img src="assets/admin-avatar.png" alt="Admin">
+                </div>
+                <div class="message-content">
+                    <div class="message-text" [innerHTML]="formatMessage(message.Message)"></div>
+                    <div class="message-image" *ngIf="hasImage(message.Message)">
+                        <img [src]="extractImageUrl(message.Message)" alt="Message image"
+                            (click)="viewImage(extractImageUrl(message.Message))">
+                    </div>
+                    <div class="message-time">
+                        {{formatDate(message.DateCreated)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" *ngIf="isAdminTyping">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="chat-footer">
+        <div class="attachment-preview" *ngIf="selectedImage">
+            <div class="preview-image">
+                <img [src]="selectedImagePreview" alt="Selected image">
+                <button class="remove-image" (click)="removeSelectedImage()">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <button class="attachment-btn" (click)="openFileSelector()">
+                <i class="bx bx-image-add"></i>
+                <input type="file" #fileInput (change)="handleFileInput($event)" accept="image/*" hidden>
+            </button>
+
+            <div class="emoji-picker-container">
+                <button class="emoji-btn" (click)="toggleEmojiPicker()">
+                    <i class="bx bx-smile"></i>
+                </button>
+                <div class="emoji-picker" *ngIf="showEmojiPicker">
+                    <div class="emoji-categories">
+                        <button *ngFor="let category of emojiCategories" (click)="selectEmojiCategory(category.name)">
+                            <i [class]="category.icon"></i>
+                        </button>
+                    </div>
+                    <div class="emoji-list">
+                        <button *ngFor="let emoji of filteredEmojis" (click)="addEmoji(emoji)">
+                            {{emoji}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-input-wrapper">
+                <textarea class="message-input" placeholder="Type your message..." [(ngModel)]="messageText"
+                    (keydown)="sendMessage($event)" #messageInput rows="1"
+                    (input)="autoGrow(messageInput)"></textarea>
+            </div>
+
+            <button class="send-btn" [ngClass]="{'active': messageText.trim().length > 0 || selectedImage}"
+                (click)="sendMessage()">
+                <i class="bx bxs-send"></i>
+            </button>
+        </div>
+    </div>
+</div>

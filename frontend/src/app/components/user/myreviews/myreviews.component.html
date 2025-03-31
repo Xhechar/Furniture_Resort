@@ -1,1 +1,111 @@
-<p>myreviews works!</p>
+<div class="reviews-container">
+    <div class="reviews-header">
+        <div class="header-content">
+            <h1>Your Product Reviews</h1>
+            <p>Track and manage your feedback across products</p>
+        </div>
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="bx bxs-star stat-icon"></i>
+                <div class="stat-info">
+                    <h3>{{avgRating | number:'1.1-1'}}</h3>
+                    <p>Average Rating</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="bx bxs-comment-detail stat-icon"></i>
+                <div class="stat-info">
+                    <h3>{{userReviews.length}}</h3>
+                    <p>Total Reviews</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="bx bxs-time-five stat-icon"></i>
+                <div class="stat-info">
+                    <h3>{{getLatestReviewDate()}}</h3>
+                    <p>Latest Review</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="reviews-content" *ngIf="userReviews.length > 0">
+        <div class="review-card" *ngFor="let review of userReviews"
+            [class.highlight]="review.ReviewId === selectedReviewId">
+            <div class="review-header">
+                <div class="product-info">
+                    <img [src]="review.Product ? review.Product.ProductImages.split(',')[0]: ''" alt="Product Image" class="product-image">
+                    <div class="product-details">
+                        <h3>{{review.Product?.ProductName}}</h3>
+                        <p class="category">{{review.Product?.Category}}</p>
+                    </div>
+                </div>
+                <div class="review-actions">
+                    <div class="rating-display">
+                        <span *ngFor="let star of [1,2,3,4,5]">
+                            <i class="fa fa-star" [class.filled]="star <= review.Rating"></i>
+                        </span>
+                    </div>
+                    <span class="review-date">{{formatDate(review.DateCreated)}}</span>
+                    <button *ngIf="canUpdateReview(review)" (click)="toggleEditReview(review)" class="edit-btn">
+                        <i class="bx bxs-edit"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="review-body">
+                <p class="review-text">{{review.ReviewText}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="empty-state" *ngIf="userReviews.length === 0">
+        <i class="bx bx-comment-x empty-icon"></i>
+        <h2>No Reviews Yet</h2>
+        <p>You haven't reviewed any products yet. Your feedback helps other shoppers make better decisions.</p>
+        <button class="browse-btn" (click)="browseProducts()">Browse Products</button>
+    </div>
+
+    <!-- Edit Review Modal -->
+    <div class="modal-overlay" *ngIf="isEditModalOpen" (click)="closeEditModal($event)">
+        <div class="edit-modal">
+            <div class="modal-header">
+                <h2>Update Your Review</h2>
+                <button class="close-btn" (click)="closeEditModal()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <div class="modal-content" *ngIf="selectedReview">
+                <div class="product-preview">
+                    <img [src]="selectedReview.Product ? selectedReview.Product.ProductImages.split(',')[0] : ''" alt="Product Image"
+                        class="preview-image">
+                    <div>
+                        <h3>{{selectedReview.Product?.ProductName}}</h3>
+                        <p>{{selectedReview.Product?.Category}}</p>
+                    </div>
+                </div>
+
+                <div class="rating-selector">
+                    <p>Your Rating</p>
+                    <div class="stars">
+                        <span *ngFor="let star of [1,2,3,4,5]">
+                            <i class="fa fa-star" [class.filled]="star <= editRating" (click)="editRating = star"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="review-textarea">
+                    <label for="reviewText">Your Review</label>
+                    <textarea id="reviewText" rows="5" [(ngModel)]="editReviewText"
+                        placeholder="Share your experience with this product..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="cancel-btn" (click)="closeEditModal()">Cancel</button>
+                    <button class="update-btn" [disabled]="!editReviewText.trim()" (click)="updateReview()">
+                        Update Review
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

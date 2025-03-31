@@ -204,6 +204,10 @@ export class OrdersComponent implements OnInit {
     this.filteredCustomOrders = this.customOrders;
   }
 
+  fetchCustomOrders() {
+
+  }
+
   calculateStats(): void {
     this.totalOrders = this.orders.length + this.customOrders.length;
     this.completedOrders = [

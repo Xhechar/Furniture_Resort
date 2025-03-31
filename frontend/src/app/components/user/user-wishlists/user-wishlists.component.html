@@ -1,1 +1,116 @@
-<p>user-wishlists works!</p>
+<div class="wishlist-container">
+    <!-- Header Section -->
+    <div class="wishlist-header">
+        <h1 class="wishlist-title">My Wishlist</h1>
+        <div class="wishlist-stats">
+            <span><i class='bx bx-heart'></i> {{wishlistItems.length}} items</span>
+            <span><i class='bx bx-coin-stack'></i> Total value: {{calculateTotalValue() | currency}}</span>
+        </div>
+    </div>
+
+    <!-- Main Wishlist Content -->
+    <div class="wishlist-content" *ngIf="wishlistItems.length > 0">
+        <div class="product-grid">
+            <div class="product-card" *ngFor="let item of wishlistItems"
+                [ngClass]="{'on-offer': item.product.OnOffer, 'on-flush': item.product.OnFlushSale}">
+                <div class="product-badges">
+                    <span class="badge offer-badge" *ngIf="item.product.OnOffer">{{item.product.Discount}}% OFF</span>
+                    <span class="badge flush-badge" *ngIf="item.product.OnFlushSale">FLASH SALE</span>
+                </div>
+                <div class="image-container">
+                    <img [src]="item.product.ProductImages" [alt]="item.product.ProductName">
+                    <div class="overlay-actions">
+                        <button class="action-btn" (click)="viewProduct(item.product.ProductId)">
+                            <i class='bx bx-search'></i>
+                        </button>
+                        <button class="action-btn" (click)="addToCart(item.product)">
+                            <i class='bx bx-cart-add'></i>
+                        </button>
+                        <button class="action-btn remove-btn" (click)="removeFromWishlist(item.WishlistId)">
+                            <i class='bx bx-trash'></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">{{item.product.ProductName}}</h3>
+                    <div class="product-price-container">
+                        <span class="product-price" [class.discounted]="item.product.OnOffer">
+                            {{calculateFinalPrice(item.product) | currency}}
+                        </span>
+                        <span class="original-price" *ngIf="item.product.OnOffer">
+                            {{item.product.Prize | currency}}
+                        </span>
+                    </div>
+                    <div class="product-meta">
+                        <span class="stock-status" [ngClass]="{'low-stock': isLowStock(item.product)}">
+                            <i class='bx bx-store' *ngIf="!isLowStock(item.product)"></i>
+                            <i class='bx bx-alarm-exclamation' *ngIf="isLowStock(item.product)"></i>
+                            {{getStockMessage(item.product)}}
+                        </span>
+                        <span class="product-category">
+                            <i class='bx bx-purchase-tag'></i> {{item.product.Category}}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="primary-btn" (click)="addToCart(item.product)">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty Wishlist State -->
+    <div class="empty-wishlist" *ngIf="wishlistItems.length === 0">
+        <div class="empty-illustration">
+            <i class='bx bx-heart'></i>
+        </div>
+        <h2>Your wishlist is empty</h2>
+        <p>Add items to your wishlist to keep track of products you're interested in.</p>
+        <button class="primary-btn" routerLink="/products">
+            Explore Products
+        </button>
+    </div>
+
+    <!-- Recommended Products Section -->
+    <div class="recommended-section">
+        <div class="section-header">
+            <h2>You might also like</h2>
+            <button class="text-btn" routerLink="/products">View All <i class='bx bx-right-arrow-alt'></i></button>
+        </div>
+        <div class="recommended-grid">
+            <div class="product-card recommended-card" *ngFor="let product of recommendedProducts">
+                <div class="product-badges">
+                    <span class="badge offer-badge" *ngIf="product.OnOffer">{{product.Discount}}% OFF</span>
+                    <span class="badge flush-badge" *ngIf="product.OnFlushSale">FLASH SALE</span>
+                </div>
+                <div class="image-container">
+                    <img [src]="product.ProductImages" [alt]="product.ProductName">
+                    <div class="overlay-actions">
+                        <button class="action-btn" (click)="viewProduct(product.ProductId)">
+                            <i class='bx bx-search'></i>
+                        </button>
+                        <button class="action-btn" (click)="addToWishlist(product)">
+                            <i class='bx bx-heart'></i>
+                        </button>
+                        <button class="action-btn" (click)="addToCart(product)">
+                            <i class='bx bx-cart-add'></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">{{product.ProductName}}</h3>
+                    <div class="product-price-container">
+                        <span class="product-price" [class.discounted]="product.OnOffer">
+                            {{calculateFinalPrice(product) | currency}}
+                        </span>
+                        <span class="original-price" *ngIf="product.OnOffer">
+                            {{product.Prize | currency}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
