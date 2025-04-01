@@ -82,9 +82,7 @@ export interface Order {
 }
 
 export interface orderDetails {
-  AmountPaid: number,
-  MpesaCode?: string,
-  OrderType: string
+  MpesaCode?: string
 }
 
 export interface Recovery {
@@ -197,6 +195,11 @@ export interface RecoveryDetails {
   Email: string
   RecoveryCode: number,
   Password: string
+}
+
+export interface UpdateCartDto {
+  Quantity: number,
+  OrderType: string
 }
 
 export interface TopBar {

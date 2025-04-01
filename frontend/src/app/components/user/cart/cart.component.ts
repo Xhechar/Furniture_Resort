@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Cart, CustomOrder, Order } from '../../../interfaces/interfaces';
+import { Cart, CustomOrder, MpesaReferals, Order, orderDetails, UpdateCartDto } from '../../../interfaces/interfaces';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../../services/cart.service';
 import { OrderService } from '../../../services/order.service';
 import { NotificationsService } from '../../../services/notifications.service';
+import { CustomOrderService } from '../../../services/custom-order.service';
 
 @Component({
   selector: 'app-cart',
@@ -21,7 +22,8 @@ export class CartComponent implements OnInit {
     private cartService: CartService,
     private orderService: OrderService,
     private notificationService: NotificationsService,
-    private router: Router
+    private router: Router,
+    private cos: CustomOrderService
   ) {}
 
   ngOnInit(): void {
@@ -150,8 +152,21 @@ export class CartComponent implements OnInit {
     return this.cartItems.some(item => item.OrderType === 'custom');
   }
 
-  updateCartItem(item: Cart, cart: Cart): void {
-    
+  updateCartItem(CartId : string, cart: UpdateCartDto): void {
+    this.cartService.updateCart(CartId, cart).subscribe({
+      next: (response) => {
+        if(response.success) {
+          this.notificationService.showMessage(response.message as string, true);
+          this.cartItems = [];
+          this.loadCartItems();
+        } else {
+          this.notificationService.showMessage(response.error as string, false);
+        }
+      },
+      error: (error) => {
+        this.notificationService.showMessage(error.error.error as string, false);
+      }
+    })
   }
 
   removeFromCart(item: Cart): void {
@@ -159,9 +174,8 @@ export class CartComponent implements OnInit {
       next: (response) => {
         if(response.success) {
           this.notificationService.showMessage(response.message as string, true);
-          setTimeout(() => {
-            this.loadCartItems();
-          }, 7000);
+          this.cartItems = [];
+          this.loadCartItems();
         } else {
           this.notificationService.showMessage(response.error as string, false);
         }
@@ -177,9 +191,8 @@ export class CartComponent implements OnInit {
       next: (response) => {
         if(response.success) {
           this.notificationService.showMessage(response.message as string, true);
-          setTimeout(() => {
-            this.loadCartItems();
-          }, 7000);
+          this.cartItems = [];
+          this.loadCartItems();
         } else {
           this.notificationService.showMessage(response.error as string, false);
         }
@@ -191,41 +204,44 @@ export class CartComponent implements OnInit {
   }
 
   checkoutNormalOrders(): void {
-    // this.orderService.createOrder()
+    let order: orderDetails = {
+      MpesaCode: ''
+    }
+    
+    this.orderService.createOrder(order).subscribe({
+      next: (response) => {
+        if(response.success) {
+          this.notificationService.showMessage(response.message as string, true);
+          this.cartItems = [];
+          this.loadCartItems();
+        } else {
+          this.notificationService.showMessage(response.error as string, false);
+        }
+      },
+      error: (error) => {
+        this.notificationService.showMessage(error.error.error as string, false);
+      }
+    })
   }
 
   checkoutCustomOrders(): void {
-    const customOrders = this.cartItems.filter(item => item.OrderType === 'custom');
-    
-    if (customOrders.length === 0) {
-      this.notificationService.showMessage('No custom orders in cart', false);
-      return;
-    }
-    
-    // Convert cart items to custom order objects
-    const customOrderRequests: Partial<CustomOrder>[] = customOrders.map(item => ({
-      ProductId: item.ProductId,
-      UserId: item.UserId,
-      Price: this.calculateItemPriceAfterDiscount(item),
-      Discount: item.Discount,
-      Quantity: item.Quantity,
-      Deposit: this.calculateDeposit(item),
-      Balance: this.calculateBalance(item),
-      DateCreated: new Date().toISOString(),
-      DateModified: new Date(),
-      DeliveryStatus: 'penging'
-    }));
-    
-    // For real implementation
-    // this.orderService.createBulkCustomOrders(customOrderRequests).subscribe({...})
-    
-    // For dummy implementation
-    setTimeout(() => {
-      this.notificationService.showMessage('Custom orders placed successfully', true);
-      // Remove checked out items from cart
-      this.cartItems = this.cartItems.filter(item => item.OrderType !== 'custom');
-      // Navigate to custom order confirmation page in real implementation
-      // this.router.navigate(['/custom-order-confirmation']);
-    }, 1500);
+    let referal: MpesaReferals = ({
+      BalMpesaCode: '',
+      DepMpesaCode: ''
+    })
+    this.cos.createCustomOrder(referal).subscribe({
+      next: (response) => {
+        if(response.success) {
+          this.notificationService.showMessage(response.message as string, true);
+          this.cartItems = [];
+          this.loadCartItems();
+        } else {
+          this.notificationService.showMessage(response.error as string, false);
+        }
+      },
+      error: (error) => {
+        this.notificationService.showMessage(error.error.error as string, false);
+      }
+    })
   }
 }

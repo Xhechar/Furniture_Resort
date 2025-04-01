@@ -128,7 +128,7 @@
         <img [src]="product.ProductImages.split(', ')[0]" [alt]="product.ProductName">
         <div class="quick-actions">
           <button class="action-btn wishlist-btn" title="Add to Wishlist" (click)="toggleWishlist(product.ProductId)">
-            <i class="fas" [ngClass]="isInWishlist(product.ProductId) ? 'fa-heart' : 'fa-heart-o'"></i>
+            <i class="fas" [ngClass]="isInWishlist(product.ProductId) ? 'bx bxs-heart' : 'bx bx-heart'"></i>
           </button>
           <button class="action-btn view-btn" title="Quick View" (click)="quickView(product.ProductId)">
             <i class="fas fa-eye"></i>
@@ -170,7 +170,7 @@
           </div>
           <div class="button-container">
             <button class="add-cart"
-              (click)="addToCart(product.ProductId, {Discount: product.Discount, Price: product.Prize})">
+              (click)="addToCart(product.ProductId, {Discount: product.Discount, Price: product.Prize, OrderType: 'normal'})">
               <span>Add To Cart</span>
               <i class="fas fa-shopping-cart"></i>
             </button>

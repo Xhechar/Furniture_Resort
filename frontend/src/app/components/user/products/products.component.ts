@@ -21,7 +21,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   productRatings: number[] = [];
   filteredProducts: Product[] = [];
-  wishlist: string[] = [];
+  wishlists: Wishlist[] = [];
   compareList: number[] = [];
   categories: Category[] = [];
   priceRange: PriceRange = { min: 0, max: 10000 };
@@ -60,9 +60,12 @@ export class ProductsComponent implements OnInit, OnDestroy {
   constructor(private ps: ProductsService, private ns: NotificationsService, private cs: CategoryService, private router: Router, private ws: WishlistsService, private cts: CartService) {}
   
   ngOnInit(): void {
+    this.fetchWishlists();
+    
     this.fetchProducts();
     
     this.fetchCategories();
+
     
     this.startSlideShow();
   }
@@ -269,13 +272,12 @@ export class ProductsComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
-  isInWishlist(productId: string): boolean {
-    let usersWishlist: Wishlist[] = [];
+
+  fetchWishlists() {
     this.ws.getWishlistByUserId().subscribe({
       next: (response) => {
         if(response.success) {
-          usersWishlist = response.wishlists as Wishlist[];
+          this.wishlists = response.wishlists as Wishlist[];
         } else {
           // this.ns.showMessage(response.error as string, false);
         }
@@ -283,11 +285,11 @@ export class ProductsComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.ns.showMessage(err.error.error as string, false);
       }
-    });
-
-    usersWishlist.filter(wl => wl.ProductId === productId);
-
-    return usersWishlist.length === 1 ? true : false;
+    })
+  }
+  
+  isInWishlist(productId: string): boolean {
+    return this.wishlists.some(wl => wl.ProductId === productId)
   }
   
   addToCompare(productId: string): void {
@@ -295,10 +297,13 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
   
   addToCart(productId: string, cart: Partial<Cart>): void {
+    console.log(`Creadentials, i've got are Id: ${productId}, and cart: ${cart}`);
+    
     this.cts.createCart(productId, cart).subscribe({
       next: (response) => {
         if(response.success) {
           this.ns.showMessage(response.message as string, response.success);
+          console.log("This is definately after success!!");
         } else {
           this.ns.showMessage(response.error as string, false);
         }

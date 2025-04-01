@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Cart } from '../interfaces/interfaces';
+import { Cart, UpdateCartDto } from '../interfaces/interfaces';
 import { Observable } from 'rxjs';
 import { getAuthHeaders } from './notifications.service';
 
@@ -16,7 +16,7 @@ export class CartService {
     return this.http.post<{success: boolean, error?: string, message?: string}>(`${this.API_URL}create-cart/${ProductId}`, cart, {headers: getAuthHeaders()})
   }
 
-  updateCart(CartId: string, cart: Partial<Cart>): Observable<{ success: boolean, error?: string, message?: string }> {
+  updateCart(CartId: string, cart: UpdateCartDto): Observable<{ success: boolean, error?: string, message?: string }> {
     return this.http.put<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}update-cart/${CartId}`, cart, { headers: getAuthHeaders() })
   }
 
