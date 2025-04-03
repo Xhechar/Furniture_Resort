@@ -212,7 +212,7 @@ export class ReviewService implements ReviewInterface {
     if (userExists == null) {
       return {
         'success': false,
-        'error': 'Login inorder to create a review.'
+        'error': 'No reviews found at the mmoment.'
       }
     }
 

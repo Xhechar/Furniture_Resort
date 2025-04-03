@@ -11,4 +11,4 @@ orderRouter.put("/update-order-status/:OrderId", verifyToken, verifyAdmin, order
 orderRouter.delete("/delete-order/:OrderId", verifyToken, verifyAdmin, orderController.deleteOrder);
 orderRouter.get("/get-all-orders", verifyToken, verifyAdmin, orderController.getAllOrders);
 orderRouter.get("/get-all-orders-delivered", verifyToken, verifyAdmin, orderController.getAllOrdersDelivered);
-orderRouter.get("/get-all-user-orders", verifyToken, verifyAdmin, orderController.getAllOrdersDelivered);
+orderRouter.get("/get-all-user-orders", verifyToken, verifyUser, orderController.getOrdersByUserId);

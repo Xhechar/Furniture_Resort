@@ -10,4 +10,4 @@ reviewRouter.post("/create-review/:ProductId", verifyToken, verifyUser, reviewCo
 reviewRouter.put("/update-review/:ReviewId", verifyToken, verifyUser, reviewController.updateReview);
 reviewRouter.delete("/delete-review/:ReviewId", verifyToken, verifyUser, reviewController.deleteReview);
 reviewRouter.get("/get-all-reviews", verifyToken, verifyAdmin, reviewController.getAllReviews);
-reviewRouter.get("/get-reviews-by-user/", verifyToken, verifyUser, reviewController.getReviewsByUserId);
+reviewRouter.get("/get-reviews-by-user", verifyToken, verifyUser, reviewController.getReviewsByUserId);

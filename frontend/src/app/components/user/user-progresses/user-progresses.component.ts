@@ -24,7 +24,9 @@ export class UserProgressesComponent implements OnInit {
 
   constructor(private cos: CustomOrderService, private ns: NotificationsService, private ps:ProgressService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.getCustomOrders();
+  }
 
   calculateProgressPercentage(progress: Progress): number {
     if (!progress) return 0;

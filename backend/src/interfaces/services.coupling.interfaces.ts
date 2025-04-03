@@ -1,5 +1,5 @@
 import { Cart, PrismaClient, Wishlist } from "@prisma/client";
-import { Category, CustomOrder, LoginDetails, Messages, MpesaReferals, MpesaReferalsBalance, Order, orderDetails, Product, ProductQuantityTime, Progress, Recovery, RecoveryDetails, Review, TokenDetails, User } from "./backend.interfaces";
+import { Category, CustomOrder, LoginDetails, Messages, MpesaReferals, MpesaReferalsBalance, Order, orderDetails, Product, ProductQuantityTime, Progress, Recovery, RecoveryDetails, Review, TokenDetails, UpdateCartDto, User } from "./backend.interfaces";
 
 export interface UserInterface {
   prisma: PrismaClient,
@@ -29,7 +29,7 @@ export interface AuthInterface {
 export interface CartInterface {
   prisma: PrismaClient;
   createCart(UserId: string, ProductId: string , cart: Cart): Promise<{success: boolean, error?: string, message?:string}>,
-  updateCart(UserId: string, CartId: string, cart: Cart): Promise<{ success: boolean, error?: string, message?: string }>,
+  updateCart(UserId: string, CartId: string, cart: UpdateCartDto): Promise<{ success: boolean, error?: string, message?: string }>,
   deleteCart(UserId: string, CartId: string): Promise<{success: boolean, error?: string, message?:string}>,
   getCartByUserId(UserId: string): Promise<{success: boolean, error?: string, message?:string, carts?: Cart[] | unknown[]}>,
 }

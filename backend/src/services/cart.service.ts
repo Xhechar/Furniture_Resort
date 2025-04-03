@@ -2,6 +2,7 @@ import { Cart, PrismaClient } from "@prisma/client";
 import { CartInterface } from "../interfaces/services.coupling.interfaces";
 import { v4 } from "uuid";
 import lodach from 'lodash';
+import { UpdateCartDto } from "../interfaces/backend.interfaces";
 
 export class CartService implements CartInterface {
   prisma = new PrismaClient({
@@ -67,7 +68,7 @@ export class CartService implements CartInterface {
       }
     }
   }
-  public async updateCart(userId: string, cartId: string, cart: Cart): Promise<{ success: boolean; error?: string; message?: string; }> {
+  public async updateCart(userId: string, cartId: string, cart: UpdateCartDto): Promise<{ success: boolean; error?: string; message?: string; }> {
 
     let cartExists = await this.prisma.cart.findUnique({
       where: {
@@ -103,12 +104,9 @@ export class CartService implements CartInterface {
       }
     }
 
-
-    let { UserId, CartId, ProductId, Quantity, Discount, DateCreated, ...r_cart } = cart;
-
     let updateCart = await this.prisma.cart.update({
       data: {
-        ...r_cart
+        ...cart
       },
       where: {
         CartId: cartId,

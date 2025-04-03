@@ -39,7 +39,7 @@ export class OrderService {
     );
   }
 
-  getAllUserOrders(): Observable<{ success: boolean; orders?: Order[]; error?: string; message?: string }> {
+  getOrdersByUserId(): Observable<{ success: boolean; orders?: Order[]; error?: string; message?: string }> {
     return this.http.get<{ success: boolean; orders?: Order[]; error?: string; message?: string }>(
       `${this.API_URL}get-all-user-orders`,
       { headers: getAuthHeaders() }

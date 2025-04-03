@@ -81,9 +81,7 @@ export interface Order {
 }
 
 export interface orderDetails {
-  AmountPaid: number,
-  MpesaCode?: string,
-  OrderType: string
+  MpesaCode?: string
 }
 
 export interface Recovery {
@@ -144,6 +142,11 @@ export interface Cart {
   DateCreated: string,
   User?: User,
   Product?: Product
+}
+
+export interface UpdateCartDto {
+  Quantity: number,
+  OrderType: string
 }
 
 export interface MpesaReferals {

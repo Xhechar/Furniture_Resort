@@ -62,8 +62,8 @@ export class CustomOrderService implements CustomOrderInterface {
           Price: cartExist.Price,
           Discount: cartExist.Product.Discount,
           Quantity: cartExist.Quantity,
-          Deposit: cartExist.Product.Deposit,
-          Balance: 0,
+          Deposit: cartExist.Product.Deposit * cartExist.Quantity,
+          Balance: (cartExist.Product.CustomPrize * cartExist.Quantity) - (cartExist.Product.Deposit * cartExist.Quantity),
           DepMpesaCode: referal.DepMpesaCode,
           BalMpesaCode: referal.BalMpesaCode
         }
@@ -75,7 +75,7 @@ export class CustomOrderService implements CustomOrderInterface {
       } else {
         createdOrders.push(cartExist.Product.ProductName);
 
-        let isCreated: boolean = (await this.orderProgress.createProgress(userId, createProduct.ProductId)).success;
+        let isCreated: boolean = (await this.orderProgress.createProgress(userId, createProduct.CustomOrderId)).success;
 
         if (isCreated) {
           await this.prisma.user.update({
@@ -106,7 +106,7 @@ export class CustomOrderService implements CustomOrderInterface {
     } else {
       return {
         'success': false,
-        'error': `Unable to create orders for ${odersCount - uncreatedOrders.length} products. Which are: ${uncreatedOrders.filter(order => order)}.`
+        'error': `Unable to create orders for ${odersCount - uncreatedOrders.length} products. Which are: ${uncreatedOrders.map(order => order)}.`
       }
     }
 

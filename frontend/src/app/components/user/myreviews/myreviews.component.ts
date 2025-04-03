@@ -39,7 +39,7 @@ export class MyreviewsComponent implements OnInit {
           this.userReviews = response.reviews;
           this.calculateAverageRating();
         } else {
-          this.ns.showMessage(response.error as string, false);
+          // this.ns.showMessage(response.error as string, false);
         }
       },
       error: (error) => {

@@ -16,10 +16,6 @@ import { ReviewsService } from '../../../services/reviews.service';
   styleUrl: './orders.component.css'
 })
 export class OrdersComponent implements OnInit {
-
-  orders: Order[] = [];
-
-  customOrders: CustomOrder[] = [];
   
   filteredNormalOrders: Order[] = [];
   filteredCustomOrders: CustomOrder[] = [];
@@ -46,24 +42,18 @@ export class OrdersComponent implements OnInit {
   constructor(private ns: NotificationsService, private os: OrderService, private cos: CustomOrderService, private rs: ReviewsService) {}
 
   ngOnInit(): void {
-    this.fetchOrders();
+    this.fetchNormalOrders();
+    this.fetchCustomOrders();
     this.calculateStats();
   }
 
-  fetchOrders(): void {
-    this.fetchNormalOrders();
-    this.fetchCustomOrders();
-    this.filteredNormalOrders = this.orders;
-    this.filteredCustomOrders = this.customOrders;
-  }
-
   fetchNormalOrders() {
-    this.os.getAllUserOrders().subscribe({
+    this.os.getOrdersByUserId().subscribe({
       next: (response) => {
         if (response.success) {
-          this.orders = response.orders as Order[];
+          this.filteredNormalOrders = response.orders as Order[];
         } else {
-          this.ns.showMessage(response.error as string, false);
+          // this.ns.showMessage(response.error as string, false);
         }
       },
       error: (error) => {
@@ -76,9 +66,9 @@ export class OrdersComponent implements OnInit {
     this.cos.getCustomOrdersByUserId().subscribe({
       next: (response) => {
         if (response.success) {
-          this.customOrders = response.customOrders as CustomOrder[];
+          this.filteredCustomOrders = response.customOrders as CustomOrder[];
         } else {
-          this.ns.showMessage(response.error as string, false);
+          // this.ns.showMessage(response.error as string, false);
         }
       },
       error: (error) => {
@@ -88,10 +78,10 @@ export class OrdersComponent implements OnInit {
   }
 
   calculateStats(): void {
-    this.totalOrders = this.orders.length + this.customOrders.length;
+    this.totalOrders = this.filteredNormalOrders.length + this.filteredCustomOrders.length;
     this.completedOrders = [
-      ...this.orders.filter(o => o.DeliveryStatus === 'Delivered'),
-      ...this.customOrders.filter(o => o.DeliveryStatus)
+      ...this.filteredNormalOrders.filter(o => o.DeliveryStatus === 'Delivered'),
+      ...this.filteredCustomOrders.filter(o => o.DeliveryStatus)
     ].length;
     
     this.inCompleteOrders = this.totalOrders - this.completedOrders;
@@ -99,11 +89,11 @@ export class OrdersComponent implements OnInit {
 
   filterOrders(): void {
     if (this.activeOrderType === 'normal') {
-      this.filteredNormalOrders = this.orders.filter(order => 
+      this.filteredNormalOrders = this.filteredNormalOrders.filter(order => 
         this.searchTermMatch(order.Product?.ProductName)
       );
     } else {
-      this.filteredCustomOrders = this.customOrders.filter(order => 
+      this.filteredCustomOrders = this.filteredCustomOrders.filter(order => 
         this.searchTermMatch(order.Product?.ProductName)
       );
     }

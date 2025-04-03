@@ -42,7 +42,7 @@ export class OrderService implements OrderInterface {
     if (cartExists.length == 0) {
       return {
         'success': false,
-        'error': 'You have no orders at the moment.'
+        'error': 'You have no orders at the moment. Ensure to click update cart item to save cart.'
       }
     }
 
@@ -52,14 +52,14 @@ export class OrderService implements OrderInterface {
     let odersCount: number = 0;
 
     for (let cartExist of cartExists) {
-      let createOrder = this.prisma.order.create({
+      let createOrder = await this.prisma.order.create({
         data: {
           OrderId: v4(),
           UserId: cartExist.UserId,
           ProductId: cartExist.ProductId,
           Quantity: cartExist.Quantity,
           Price: cartExist.Price,
-          AmountPaid: cartExist.Price - cartExist.Discount,
+          AmountPaid: (cartExist.Price - cartExist.Discount) * cartExist.Quantity,
           OrderType: cartExist.OrderType,
           Discount: cartExist.Discount,
           MpesaCode: order.MpesaCode || ''
@@ -274,6 +274,26 @@ export class OrderService implements OrderInterface {
     }
   }
   public async getOrdersByUserId(UserId: string): Promise<{ success: boolean; error?: string; message?: string; orders?: Order[] | unknown[]; }> {
+    let userExists = await this.prisma.user.findUnique({
+      where: {
+        UserId
+      }
+    });
+
+    if (userExists == null) {
+      return {
+        'success': false,
+        'error': 'Your account is not registered.'
+      }
+    }
+
+    if (userExists.IsDeleted) {
+      return {
+        'success': false,
+        'error': `${userExists.Fullname}, your account is inactive.`
+      }
+    }
+
     let allOrders = await this.prisma.order.findMany({
       where: {
         UserId
