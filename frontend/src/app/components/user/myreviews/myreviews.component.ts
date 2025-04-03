@@ -30,13 +30,16 @@ export class MyreviewsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserReviews();
+    this.calculateAverageRating();
   }
 
   getUserReviews(): void {
     this.rs.getReviewsByUserId().subscribe({
       next: (response) => {
         if (response.success) {
-          this.userReviews = response.reviews;
+          this.userReviews = response.reviews as Review[];
+          console.log(this.userReviews);
+          
           this.calculateAverageRating();
         } else {
           // this.ns.showMessage(response.error as string, false);
@@ -134,12 +137,11 @@ export class MyreviewsComponent implements OnInit {
     if (!this.selectedReview || !this.editReviewText.trim()) return;
     
     const updatedReview = {
-      ...this.selectedReview,
       ReviewText: this.editReviewText,
       Rating: this.editRating
     };
     
-    this.rs.updateReview(updatedReview.ReviewId, updatedReview).subscribe({
+    this.rs.updateReview(this.selectedReview.ReviewId, updatedReview).subscribe({
       next: (response) => {
         if (response.success) {
           this.ns.showMessage(response.message as string, response.success);

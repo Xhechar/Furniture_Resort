@@ -241,7 +241,8 @@ export class ReviewService implements ReviewInterface {
     } else {
       return {
         'success': true,
-        'message': 'Reviews retrieved successfully.'
+        'message': 'Reviews retrieved successfully.',
+        'reviews': getAllReviews
       }
     }
   }

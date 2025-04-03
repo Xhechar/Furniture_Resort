@@ -12,7 +12,7 @@ export class ReviewsService {
 
   constructor(private http: HttpClient) { }
 
-  createReview(ProductId: string, review: Review): Observable<{ success: boolean; error?: string; message?: string }> {
+  createReview(ProductId: string, review: Partial<Review>): Observable<{ success: boolean; error?: string; message?: string }> {
     return this.http.post<{ success: boolean; error?: string; message?: string }>(
       `${this.API_URL}create-review/${ProductId}`,
       review,
@@ -35,15 +35,15 @@ export class ReviewsService {
     );
   }
 
-  getAllReviews(): Observable<{ success: boolean; error?: string; message?: string; reviews: Review[] }> {
-    return this.http.get<{ success: boolean; error?: string; message?: string; reviews: Review[] }>(
+  getAllReviews(): Observable<{ success: boolean; error?: string; message?: string; reviews?: Review[] }> {
+    return this.http.get<{ success: boolean; error?: string; message?: string; reviews?: Review[] }>(
       `${this.API_URL}get-all-reviews`,
       { headers: getAuthHeaders() }
     );
   }
 
-  getReviewsByUserId(): Observable<{ success: boolean; error?: string; message?: string; reviews: Review[] }> {
-    return this.http.get<{ success: boolean; error?: string; message?: string; reviews: Review[] }>(
+  getReviewsByUserId(): Observable<{ success: boolean; error?: string; message?: string; reviews?: Review[] }> {
+    return this.http.get<{ success: boolean; error?: string; message?: string; reviews?: Review[] }>(
       `${this.API_URL}get-reviews-by-user/`,
       { headers: getAuthHeaders() }
     );

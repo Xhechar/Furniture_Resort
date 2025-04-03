@@ -80,8 +80,8 @@ export class OrdersComponent implements OnInit {
   calculateStats(): void {
     this.totalOrders = this.filteredNormalOrders.length + this.filteredCustomOrders.length;
     this.completedOrders = [
-      ...this.filteredNormalOrders.filter(o => o.DeliveryStatus === 'Delivered'),
-      ...this.filteredCustomOrders.filter(o => o.DeliveryStatus)
+      ...this.filteredNormalOrders.filter(o => o.DeliveryStatus == 'delivered'),
+      ...this.filteredCustomOrders.filter(o => o.DeliveryStatus == 'delivered')
     ].length;
     
     this.inCompleteOrders = this.totalOrders - this.completedOrders;
@@ -125,8 +125,9 @@ export class OrdersComponent implements OnInit {
 
   submitReview(): void {
     if (this.newReview.ReviewText && this.newReview.Rating > 0) {
-      const newReviewEntry: Review = {
-        ...this.newReview,
+      const newReviewEntry: Partial<Review> = {
+        ReviewText: this.newReview.ReviewText,
+        Rating: this.newReview.Rating
       };
 
       this.rs.createReview(this.newReview.ProductId, newReviewEntry).subscribe({

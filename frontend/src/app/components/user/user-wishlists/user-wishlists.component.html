@@ -4,7 +4,7 @@
         <h1 class="wishlist-title">My Wishlist</h1>
         <div class="wishlist-stats">
             <span><i class='bx bx-heart'></i> {{wishlistItems.length}} items</span>
-            <span><i class='bx bx-coin-stack'></i> Total value: {{calculateTotalValue() | currency}}</span>
+            <span><i class='bx bx-coin-stack'></i> Total value: {{calculateTotalValue() | currency: 'Ksh '}}</span>
         </div>
     </div>
 
@@ -12,18 +12,18 @@
     <div class="wishlist-content" *ngIf="wishlistItems.length > 0">
         <div class="product-grid">
             <div class="product-card" *ngFor="let item of wishlistItems"
-                [ngClass]="{'on-offer': item.product.OnOffer, 'on-flush': item.product.OnFlushSale}">
+                [ngClass]="{'on-offer': item.Products?.OnOffer, 'on-flush': item.Products?.OnFlushSale}">
                 <div class="product-badges">
-                    <span class="badge offer-badge" *ngIf="item.product.OnOffer">{{item.product.Discount}}% OFF</span>
-                    <span class="badge flush-badge" *ngIf="item.product.OnFlushSale">FLASH SALE</span>
+                    <span class="badge offer-badge" *ngIf="item.Products?.OnOffer">{{item.Products?.Discount}}% OFF</span>
+                    <span class="badge flush-badge" *ngIf="item.Products?.OnFlushSale">FLASH SALE</span>
                 </div>
                 <div class="image-container">
-                    <img [src]="item.product.ProductImages" [alt]="item.product.ProductName">
+                    <img [src]="item.Products?.ProductImages" [alt]="item.Products?.ProductName">
                     <div class="overlay-actions">
-                        <button class="action-btn" (click)="viewProduct(item.product.ProductId)">
+                        <button class="action-btn" (click)="viewProduct(item.Products ? item.Products.ProductId : '')">
                             <i class='bx bx-search'></i>
                         </button>
-                        <button class="action-btn" (click)="addToCart(item.product)">
+                        <button class="action-btn" (click)="addToCart(item.Products ? item.Products : dum)">
                             <i class='bx bx-cart-add'></i>
                         </button>
                         <button class="action-btn remove-btn" (click)="removeFromWishlist(item.WishlistId)">
@@ -31,32 +31,32 @@
                         </button>
                     </div>
                 </div>
-                <div class="product-info">
-                    <h3 class="product-name">{{item.product.ProductName}}</h3>
+                <!-- <div class="product-info">
+                    <h3 class="product-name">{{item.Products?.ProductName}}</h3>
                     <div class="product-price-container">
-                        <span class="product-price" [class.discounted]="item.product.OnOffer">
-                            {{calculateFinalPrice(item.product) | currency}}
+                        <span class="product-price" [class.discounted]="item.Products?.OnOffer">
+                            {{calculateFinalPrice( item.Products ? item.Products.Prize : 0) | currency: 'Ksh ' | currency: 'Ksh '}}
                         </span>
-                        <span class="original-price" *ngIf="item.product.OnOffer">
-                            {{item.product.Prize | currency}}
+                        <span class="original-price" *ngIf="item.Products?.OnOffer">
+                            {{item.Products?.Prize | currency: 'Ksh '}}
                         </span>
                     </div>
                     <div class="product-meta">
-                        <span class="stock-status" [ngClass]="{'low-stock': isLowStock(item.product)}">
-                            <i class='bx bx-store' *ngIf="!isLowStock(item.product)"></i>
-                            <i class='bx bx-alarm-exclamation' *ngIf="isLowStock(item.product)"></i>
-                            {{getStockMessage(item.product)}}
+                        <span class="stock-status" [ngClass]="{'low-stock': isLowStock(item.Products)}">
+                            <i class='bx bx-store' *ngIf="!isLowStock(item.Products)"></i>
+                            <i class='bx bx-alarm-exclamation' *ngIf="isLowStock(item.Products)"></i>
+                            {{getStockMessage(item.Products)}}
                         </span>
                         <span class="product-category">
-                            <i class='bx bx-purchase-tag'></i> {{item.product.Category}}
+                            <i class='bx bx-purchase-tag'></i> {{item.Products?.Category}}
                         </span>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="primary-btn" (click)="addToCart(item.product)">
+                    <button class="primary-btn" (click)="addToCart(item.Products)">
                         Add to Cart
                     </button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -103,10 +103,10 @@
                     <h3 class="product-name">{{product.ProductName}}</h3>
                     <div class="product-price-container">
                         <span class="product-price" [class.discounted]="product.OnOffer">
-                            {{calculateFinalPrice(product) | currency}}
+                            {{calculateFinalPrice(product) | currency: 'Ksh '}}
                         </span>
                         <span class="original-price" *ngIf="product.OnOffer">
-                            {{product.Prize | currency}}
+                            {{product.Prize | currency: 'Ksh '}}
                         </span>
                     </div>
                 </div>

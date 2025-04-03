@@ -109,16 +109,17 @@
                             Deposit: {{ order.Deposit | currency }}
                         </span>
                         <span class="info-item delivery-status" [ngClass]="{
-                            'status-delivered': order.DeliveryStatus,
-                            'status-pending': !order.DeliveryStatus
+                            'status-delivered': order.DeliveryStatus === 'Delivered',
+                            'status-pending': order.DeliveryStatus !== 'Delivered'
                         }">
                             <i class="fa-solid fa-truck"></i>
-                            {{ order.DeliveryStatus ? 'Delivered' : 'In Progress' }}
+                            {{ order.DeliveryStatus }}
                         </span>
+
                     </div>
                 </div>
                 <div class="order-actions">
-                    <button *ngIf="order.DeliveryStatus" (click)="openReviewModal(order)" class="review-btn">
+                    <button *ngIf="order.DeliveryStatus.startsWith('d')" (click)="openReviewModal(order)" class="review-btn">
                         <i class="bx bx-star"></i> Leave Review
                     </button>
                 </div>
