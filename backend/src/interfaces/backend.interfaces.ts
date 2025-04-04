@@ -159,7 +159,7 @@ export interface Wishlist {
   ProductId: string,
   UserId: string,
   DateCreated: string,
-  Products?: Product,
+  Product?: Product,
   User?: User
 }
 

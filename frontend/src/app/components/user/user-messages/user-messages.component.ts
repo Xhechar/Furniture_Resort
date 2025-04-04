@@ -147,7 +147,7 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked {
   }
   
   goBack(): void {
-    this.router.navigate(['/products']);
+    this.router.navigate(['/user']);
   }
   
   openFileSelector(): void {

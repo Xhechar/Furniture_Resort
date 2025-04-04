@@ -1,29 +1,29 @@
+<app-notifications></app-notifications>
 <div class="wishlist-container">
     <!-- Header Section -->
     <div class="wishlist-header">
         <h1 class="wishlist-title">My Wishlist</h1>
-        <div class="wishlist-stats">
+        <div class="wishlist-stats" *ngIf="wishlistItems && wishlistItems.length > 0">
             <span><i class='bx bx-heart'></i> {{wishlistItems.length}} items</span>
             <span><i class='bx bx-coin-stack'></i> Total value: {{calculateTotalValue() | currency: 'Ksh '}}</span>
         </div>
     </div>
 
-    <!-- Main Wishlist Content -->
-    <div class="wishlist-content" *ngIf="wishlistItems.length > 0">
+    <div class="wishlist-content" *ngIf="wishlistItems && wishlistItems.length > 0">
         <div class="product-grid">
             <div class="product-card" *ngFor="let item of wishlistItems"
-                [ngClass]="{'on-offer': item.Products?.OnOffer, 'on-flush': item.Products?.OnFlushSale}">
+                [ngClass]="{'on-offer': item.Product?.OnOffer, 'on-flush': item.Product?.OnFlushSale}">
                 <div class="product-badges">
-                    <span class="badge offer-badge" *ngIf="item.Products?.OnOffer">{{item.Products?.Discount}}% OFF</span>
-                    <span class="badge flush-badge" *ngIf="item.Products?.OnFlushSale">FLASH SALE</span>
+                    <span class="badge offer-badge" *ngIf="item.Product?.OnOffer">{{item.Product?.Discount}}% OFF</span>
+                    <span class="badge flush-badge" *ngIf="item.Product?.OnFlushSale">FLASH SALE</span>
                 </div>
                 <div class="image-container">
-                    <img [src]="item.Products?.ProductImages" [alt]="item.Products?.ProductName">
+                    <img [src]="item.Product ? item.Product.ProductImages.split(', ')[0] : ''" [alt]="item.Product?.ProductName">
                     <div class="overlay-actions">
-                        <button class="action-btn" (click)="viewProduct(item.Products ? item.Products.ProductId : '')">
+                        <button class="action-btn" (click)="viewProduct(item.Product ? item.Product.ProductId : '')">
                             <i class='bx bx-search'></i>
                         </button>
-                        <button class="action-btn" (click)="addToCart(item.Products ? item.Products : dum)">
+                        <button class="action-btn" (click)="addToCart(item.ProductId, {Discount: item.Product?.Discount, Price: item.Product?.Prize})">
                             <i class='bx bx-cart-add'></i>
                         </button>
                         <button class="action-btn remove-btn" (click)="removeFromWishlist(item.WishlistId)">
@@ -31,44 +31,43 @@
                         </button>
                     </div>
                 </div>
-                <!-- <div class="product-info">
-                    <h3 class="product-name">{{item.Products?.ProductName}}</h3>
+                <div class="product-info">
+                    <h3 class="product-name">{{item.Product?.ProductName}}</h3>
                     <div class="product-price-container">
-                        <span class="product-price" [class.discounted]="item.Products?.OnOffer">
-                            {{calculateFinalPrice( item.Products ? item.Products.Prize : 0) | currency: 'Ksh ' | currency: 'Ksh '}}
+                        <span class="product-price" [class.discounted]="item.Product?.OnOffer">
+                            {{calculateFinalPrice(item.Product) | currency: 'Ksh '}}
                         </span>
-                        <span class="original-price" *ngIf="item.Products?.OnOffer">
-                            {{item.Products?.Prize | currency: 'Ksh '}}
+                        <span class="original-price" *ngIf="item.Product?.OnOffer">
+                            {{item.Product?.Prize | currency: 'Ksh '}}
                         </span>
                     </div>
                     <div class="product-meta">
-                        <span class="stock-status" [ngClass]="{'low-stock': isLowStock(item.Products)}">
-                            <i class='bx bx-store' *ngIf="!isLowStock(item.Products)"></i>
-                            <i class='bx bx-alarm-exclamation' *ngIf="isLowStock(item.Products)"></i>
-                            {{getStockMessage(item.Products)}}
+                        <span class="stock-status" [ngClass]="{'low-stock': isLowStock(item.Product)}">
+                            <i class='bx bx-store' *ngIf="!isLowStock(item.Product)"></i>
+                            <i class='bx bx-alarm-exclamation' *ngIf="isLowStock(item.Product)"></i>
+                            {{getStockMessage(item.Product)}}
                         </span>
                         <span class="product-category">
-                            <i class='bx bx-purchase-tag'></i> {{item.Products?.Category}}
+                            <i class='bx bx-purchase-tag'></i> {{item.Product?.Category}}
                         </span>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="primary-btn" (click)="addToCart(item.Products)">
+                    <button class="primary-btn" (click)="addToCart(item.ProductId, {Discount: item.Product?.Discount, Price: item.Product?.Prize})">
                         Add to Cart
                     </button>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Empty Wishlist State -->
-    <div class="empty-wishlist" *ngIf="wishlistItems.length === 0">
+    <div class="empty-wishlist" *ngIf=" !wishlistItems || wishlistItems.length === 0">
         <div class="empty-illustration">
             <i class='bx bx-heart'></i>
         </div>
         <h2>Your wishlist is empty</h2>
         <p>Add items to your wishlist to keep track of products you're interested in.</p>
-        <button class="primary-btn" routerLink="/products">
+        <button class="primary-btn" routerLink="/user">
             Explore Products
         </button>
     </div>
@@ -86,15 +85,15 @@
                     <span class="badge flush-badge" *ngIf="product.OnFlushSale">FLASH SALE</span>
                 </div>
                 <div class="image-container">
-                    <img [src]="product.ProductImages" [alt]="product.ProductName">
+                    <img [src]="product.ProductImages.split(', ')[0]" [alt]="product.ProductName">
                     <div class="overlay-actions">
                         <button class="action-btn" (click)="viewProduct(product.ProductId)">
                             <i class='bx bx-search'></i>
                         </button>
-                        <button class="action-btn" (click)="addToWishlist(product)">
+                        <button class="action-btn" (click)="addToWishlist(product.ProductId)">
                             <i class='bx bx-heart'></i>
                         </button>
-                        <button class="action-btn" (click)="addToCart(product)">
+                        <button class="action-btn" (click)="addToCart(product.ProductId, {Discount: product.Discount, Price: product.Prize})">
                             <i class='bx bx-cart-add'></i>
                         </button>
                     </div>
