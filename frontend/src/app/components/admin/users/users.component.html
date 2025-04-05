@@ -1,32 +1,236 @@
-<div class="stats-container">
-  <div class="stat-card blue" routerLink="all-users">
-    <i class='bx bxs-group'></i>
-    <div class="stat-info">
-      <p class="title">Total Users</p>
-      <p class="value">50</p>
+<div class="admin-users-container">
+  <!-- Stats Section -->
+  <div class="stats-container">
+    <div class="stat-card" [ngClass]="{'active': activeSection === 'all'}">
+      <div class="stat-icon">
+        <i class='bx bxs-user-account'></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{users.length}}</h3>
+        <p>Total Users</p>
+      </div>
+    </div>
+    <div class="stat-card" [ngClass]="{'active': activeSection === 'active'}">
+      <div class="stat-icon">
+        <i class='bx bxs-user-check'></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{activeUsers.length}}</h3>
+        <p>Active Users</p>
+      </div>
+    </div>
+    <div class="stat-card" [ngClass]="{'active': activeSection === 'deleted'}">
+      <div class="stat-icon">
+        <i class='bx bxs-user-x'></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{deletedUsers.length}}</h3>
+        <p>Deleted Users</p>
+      </div>
+    </div>
+    <div class="stat-card" [ngClass]="{'active': activeSection === 'admin'}">
+      <div class="stat-icon">
+        <i class='bx bxs-user-badge'></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{adminUsers.length}}</h3>
+        <p>Admins</p>
+      </div>
     </div>
   </div>
-  <div class="stat-card purple" routerLink="deleted-users">
-    <i class='bx bxs-user-x'></i>
-    <div class="stat-info">
-      <p class="title">In-Active Users</p>
-      <p class="value">22</p>
-    </div>
-  </div>
-  <div class="stat-card violet">
-    <i class='bx bxs-objects-vertical-bottom bx-rotate-180' ></i>
-    <div class="stat-info">
-      <p class="title">Pending Progress</p>
-      <p class="value">16</p>
-    </div>
-  </div>
-  <!-- <div class="stat-card green" routerLink="on-flush-products">
-    <i class='bx bxs-flag' ></i>
-    <div class="stat-info">
-      <p class="title">Products On Flush Sale</p>
-      <p class="value">2</p>
-    </div>
-  </div> -->
-</div>
 
-<router-outlet></router-outlet>
+  <!-- Navigation Buttons -->
+  <div class="navigation-container">
+    <div class="nav-buttons">
+      <button class="nav-btn" [ngClass]="{'active': activeSection === 'all'}" (click)="setActiveSection('all')">
+        <i class='bx bxs-user-detail'></i> All Users
+      </button>
+      <button class="nav-btn" [ngClass]="{'active': activeSection === 'active'}" (click)="setActiveSection('active')">
+        <i class='bx bxs-user-check'></i> Active Users
+      </button>
+      <button class="nav-btn" [ngClass]="{'active': activeSection === 'deleted'}" (click)="setActiveSection('deleted')">
+        <i class='bx bxs-user-x'></i> Deleted Users
+      </button>
+      <button class="nav-btn" [ngClass]="{'active': activeSection === 'admin'}" (click)="setActiveSection('admin')">
+        <i class='bx bxs-user-badge'></i> Admins
+      </button>
+    </div>
+    
+    <div class="bulk-actions" *ngIf="selectedUsers.length > 0">
+      <span class="selected-count">{{selectedUsers.length}} selected</span>
+      <button class="action-btn delete-btn" *ngIf="canSoftDelete()" (click)="softDeleteSelected()">
+        <i class='bx bx-trash'></i> Soft Delete
+      </button>
+      <button class="action-btn restore-btn" *ngIf="canRestore()" (click)="restoreSelected()">
+        <i class='bx bx-revision'></i> Restore
+      </button>
+      <button class="action-btn permanent-delete-btn" (click)="permanentDeleteSelected()">
+        <i class='bx bxs-trash'></i> Permanent Delete
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter and Search Section -->
+  <div class="filter-container">
+    <div class="search-wrapper">
+      <i class='bx bx-search'></i>
+      <input type="text" placeholder="Search by name, email or ID..." [(ngModel)]="searchTerm" (input)="applyFilters()">
+    </div>
+    
+    <div class="filters">
+      <div class="filter">
+        <label>Country:</label>
+        <select [(ngModel)]="filters.country" (change)="applyFilters()">
+          <option value="">All Countries</option>
+          <option *ngFor="let country of uniqueCountries" [value]="country">{{country}}</option>
+        </select>
+      </div>
+      
+      <div class="filter">
+        <label>Gender:</label>
+        <select [(ngModel)]="filters.gender" (change)="applyFilters()">
+          <option value="">All Genders</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      
+      <div class="filter date-filter">
+        <label>From Date:</label>
+        <input type="date" [(ngModel)]="filters.dateFrom" (change)="applyFilters()">
+      </div>
+      
+      <div class="filter date-filter">
+        <label>To Date:</label>
+        <input type="date" [(ngModel)]="filters.dateTo" (change)="applyFilters()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Table Header -->
+  <div class="users-table">
+    <div class="table-header">
+      <div class="header-cell checkbox-cell">
+        <input type="checkbox" [checked]="isAllSelected()" (change)="toggleSelectAll()">
+      </div>
+      <div class="header-cell image-cell">Profile</div>
+      <div class="header-cell name-cell">Full Name</div>
+      <div class="header-cell email-cell">Email</div>
+      <div class="header-cell mobile-cell">Mobile</div>
+      <div class="header-cell location-cell">Location</div>
+      <div class="header-cell stats-cell">User Stats</div>
+      <div class="header-cell date-cell">Joined</div>
+      <div class="header-cell actions-cell">Actions</div>
+    </div>
+
+    <!-- Table Body -->
+    <div class="table-body">
+      <div class="table-row" *ngFor="let user of filteredUsers; let i = index" [ngClass]="{'deleted': user.IsDeleted, 'admin': user.Role === 'Admin'}">
+        <div class="cell checkbox-cell">
+          <input type="checkbox" [checked]="isSelected(user.UserId)" (change)="toggleSelect(user.UserId)">
+        </div>
+        <div class="cell image-cell">
+          <div class="profile-image" [style.backgroundImage]="'url(' + (user.ProfileImage || 'assets/images/default-avatar.png') + ')'"></div>
+        </div>
+        <div class="cell name-cell">
+          <p class="user-name">{{user.Fullname}}</p>
+          <span class="user-id">ID: {{user.UserId.substring(0, 8)}}...</span>
+        </div>
+        <div class="cell email-cell">
+          <p class="user-email">{{user.Email}}</p>
+        </div>
+        <div class="cell mobile-cell">{{user.Mobile || 'Not provided'}}</div>
+        <div class="cell location-cell">
+          <p>{{user.Country}}</p>
+          <span *ngIf="user.City">{{user.City}}</span>
+        </div>
+        <div class="cell stats-cell">
+          <div class="user-stats">
+            <div class="stat-item" *ngIf="user.Orders && user.Orders.length">
+              <i class='bx bxs-shopping-bag'></i> {{user.Orders.length}} Orders
+            </div>
+            <div class="stat-item" *ngIf="user.CustomOrders && user.CustomOrders.length">
+              <i class='bx bxs-customize'></i> {{user.CustomOrders.length}} Custom
+            </div>
+            <div class="stat-item" *ngIf="user.WishListProducts && user.WishListProducts.length">
+              <i class='bx bxs-heart'></i> {{user.WishListProducts.length}} Wishlist
+            </div>
+            <div class="stat-item" *ngIf="user.Reviews && user.Reviews.length">
+              <i class='bx bxs-star'></i> {{user.Reviews.length}} Reviews
+            </div>
+          </div>
+        </div>
+        <div class="cell date-cell">
+          <p>{{formatDate(user.DateCreated)}}</p>
+        </div>
+        <div class="cell actions-cell">
+          <div class="action-buttons">
+            <button class="icon-btn" [ngClass]="{'admin-role': user.Role === 'Admin'}" (click)="toggleAdminRole(user)" title="{{user.Role === 'Admin' ? 'Remove Admin' : 'Make Admin'}}">
+              <i class="{{user.Role === 'Admin' ? 'bx bxs-crown' : 'bx bx-crown'}}"></i>
+            </button>
+            
+            <button class="icon-btn" *ngIf="!user.IsDeleted" (click)="softDeleteUser(user)" title="Soft Delete">
+              <i class='bx bx-trash'></i>
+            </button>
+            
+            <button class="icon-btn restore" *ngIf="user.IsDeleted" (click)="restoreUser(user)" title="Restore User">
+              <i class='bx bx-revision'></i>
+            </button>
+            
+            <button class="icon-btn delete" (click)="confirmDelete(user)" title="Permanent Delete">
+              <i class='bx bxs-trash'></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="filteredUsers.length === 0">
+        <i class='bx bx-search-alt'></i>
+        <h3>No users found</h3>
+        <p>Try changing your search criteria or filters</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Pagination -->
+  <div class="pagination">
+    <button class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+      <i class='bx bx-chevron-left'></i>
+    </button>
+    
+    <span *ngFor="let page of getPageNumbers()">
+      <button class="page-btn" [ngClass]="{'active': currentPage === page}" (click)="goToPage(page)">
+        {{page}}
+      </button>
+    </span>
+    
+    <button class="page-btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+      <i class='bx bx-chevron-right'></i>
+    </button>
+  </div>
+  
+  <!-- Delete Confirmation Modal -->
+  <div class="modal" *ngIf="showDeleteModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Confirm Permanent Delete</h2>
+        <button class="close-btn" (click)="cancelDelete()">
+          <i class='bx bx-x'></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="warning-icon">
+          <i class='bx bxs-error-circle'></i>
+        </div>
+        <p>Are you sure you want to permanently delete <span class="highlight">{{userToDelete?.Fullname}}</span>?</p>
+        <p class="warning-text">This action cannot be undone and will remove all user data from the system.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="cancel-btn" (click)="cancelDelete()">Cancel</button>
+        <button class="confirm-btn" (click)="permanentlyDeleteUser()">Delete Permanently</button>
+      </div>
+    </div>
+  </div>
+</div>

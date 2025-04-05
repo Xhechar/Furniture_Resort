@@ -1,32 +1,202 @@
-<div class="stats-container">
-  <div class="stat-card blue" routerLink="normal-orders">
-    <i class="fa-solid fa-chair"></i>
-    <div class="stat-info">
-      <p class="title">Normal Orders</p>
-      <p class="value">3</p>
+<div class="admin-orders-container">
+  <!-- Stats Cards Section -->
+  <div class="stats-container">
+    <div class="stat-card normal-orders">
+      <i class='bx bx-package'></i>
+      <div class="stat-info">
+        <h3>Normal Orders</h3>
+        <p class="stat-count">{{normalOrdersCount}}</p>
+      </div>
+    </div>
+    
+    <div class="stat-card custom-orders">
+      <i class='bx bx-palette'></i>
+      <div class="stat-info">
+        <h3>Custom Orders</h3>
+        <p class="stat-count">{{customOrdersCount}}</p>
+      </div>
+    </div>
+    
+    <div class="stat-card delivered">
+      <i class='bx bx-check-circle'></i>
+      <div class="stat-info">
+        <h3>Delivered</h3>
+        <p class="stat-count">{{deliveredCount}}</p>
+      </div>
+    </div>
+    
+    <div class="stat-card total-revenue">
+      <i class='bx bx-money'></i>
+      <div class="stat-info">
+        <h3>Total Revenue</h3>
+        <p class="stat-count">KSh {{totalRevenue | number:'1.0-0'}}</p>
+      </div>
     </div>
   </div>
-  <div class="stat-card purple" routerLink="delivered-orders">
-    <i class='bx bx-task'></i>
-    <div class="stat-info">
-      <p class="title">Delivered Normal Orders</p>
-      <p class="value">9</p>
+
+  <!-- Filters and Actions Section -->
+  <div class="controls-container">
+    <div class="order-type-tabs">
+      <button [class.active]="activeTab === 'all'" (click)="setActiveTab('all')">All Orders</button>
+      <button [class.active]="activeTab === 'normal'" (click)="setActiveTab('normal')">Normal Orders</button>
+      <button [class.active]="activeTab === 'custom'" (click)="setActiveTab('custom')">Custom Orders</button>
+      <button [class.active]="activeTab === 'delivered'" (click)="setActiveTab('delivered')">Delivered</button>
+    </div>
+    
+    <div class="filters">
+      <div class="search-container">
+        <i class='bx bx-search'></i>
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Search orders..." (input)="applyFilters()">
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropdown-btn">
+          <i class='bx bx-sort'></i> Sort By
+        </button>
+        <div class="dropdown-content">
+          <a (click)="sortOrders('date', 'desc')">Newest First</a>
+          <a (click)="sortOrders('date', 'asc')">Oldest First</a>
+          <a (click)="sortOrders('price', 'desc')">Price (High to Low)</a>
+          <a (click)="sortOrders('price', 'asc')">Price (Low to High)</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropdown-btn">
+          <i class='bx bx-filter'></i> Filter
+        </button>
+        <div class="dropdown-content">
+          <a (click)="filterByStatus('all')">All Statuses</a>
+          <a (click)="filterByStatus('pending')">Pending</a>
+          <a (click)="filterByStatus('processing')">Processing</a>
+          <a (click)="filterByStatus('delivered')">Delivered</a>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="stat-card violet" routerLink="user-custom-orders">
-    <i class='bx bxs-shopping-bags' ></i>
-    <div class="stat-info">
-      <p class="title">Custom Orders</p>
-      <p class="value">45</p>
+
+  <!-- Orders Table Section -->
+  <div class="orders-table-container">
+    <!-- Table Header -->
+    <div class="order-row header">
+      <div class="order-cell image-cell">Product</div>
+      <div class="order-cell name-cell">Name</div>
+      <div class="order-cell quantity-cell">Quantity</div>
+      <div class="order-cell price-cell">Price</div>
+      <div class="order-cell date-cell">Date</div>
+      <div class="order-cell status-cell">Status</div>
+      <div class="order-cell user-cell">Customer</div>
+      <div class="order-cell actions-cell">Actions</div>
+    </div>
+    
+    <!-- Empty state -->
+    <div *ngIf="filteredOrders.length === 0" class="empty-state">
+      <i class='bx bx-package'></i>
+      <p>No orders found</p>
+    </div>
+    
+    <!-- Normal Order Rows -->
+    <div *ngFor="let order of filteredOrders" class="order-row" 
+         [ngClass]="{'normal-order': isNormalOrder(order), 'custom-order': isCustomOrder(order)}"
+         [class.delivered]="isDelivered(order)">
+      
+      <div class="order-cell image-cell">
+        <img [src]="getProductImage(order)" alt="Product">
+      </div>
+      
+      <div class="order-cell name-cell">
+        <p class="product-name">{{getProductName(order)}}</p>
+        <p class="order-type-badge" [class]="isCustomOrder(order) ? 'custom-badge' : 'normal-badge'">
+          {{isCustomOrder(order) ? 'Custom' : 'Normal'}}
+        </p>
+      </div>
+      
+      <div class="order-cell quantity-cell">{{getOrderQuantity(order)}}</div>
+      
+      <div class="order-cell price-cell">
+        <p class="price">KSh {{getOrderPrice(order) | number:'1.0-0'}}</p>
+        <p *ngIf="getOrderDiscount(order) > 0" class="discount">
+          -{{getOrderDiscount(order)}}%
+        </p>
+      </div>
+      
+      <div class="order-cell date-cell">
+        <p>{{getOrderDate(order) | date:'MMM d, y'}}</p>
+        <p class="time">{{getOrderDate(order) | date:'h:mm a'}}</p>
+      </div>
+      
+      <div class="order-cell status-cell">
+        <span class="status-badge" [ngClass]="getStatusClass(order)">
+          {{getOrderStatus(order)}}
+        </span>
+      </div>
+      
+      <div class="order-cell user-cell">
+        <p class="user-name">{{getUserName(order)}}</p>
+        <p class="user-email">{{getUserEmail(order)}}</p>
+      </div>
+      
+      <div class="order-cell actions-cell">
+        <button class="action-btn view-btn" (click)="viewOrderDetails(order)">
+          <i class='bx bx-show'></i>
+        </button>
+        <button class="action-btn deliver-btn" *ngIf="!isDelivered(order)" (click)="updateDeliveryStatus(order)">
+          <i class='bx bx-package'></i>
+        </button>
+        <button class="action-btn delete-btn" (click)="confirmDelete(order)">
+          <i class='bx bx-trash'></i>
+        </button>
+      </div>
     </div>
   </div>
-  <div class="stat-card green" routerLink="user-delivered-orders">
-    <i class='bx bx-task' ></i>
-    <div class="stat-info">
-      <p class="title">Delivered Custom Orders<p>
-      <p class="value">25</p>
-    </div>
+  
+  <!-- Pagination Controls -->
+  <div class="pagination-controls">
+    <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+      <i class='bx bx-chevron-left'></i>
+    </button>
+    
+    <span *ngFor="let page of getPageNumbers()" 
+          [class.active]="page === currentPage"
+          (click)="changePage(page)">
+      {{page}}
+    </span>
+    
+    <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+      <i class='bx bx-chevron-right'></i>
+    </button>
   </div>
 </div>
 
-<router-outlet></router-outlet>
+<!-- Confirmation Modal -->
+<div class="modal-overlay" *ngIf="showModal" (click)="cancelAction()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{modalTitle}}</h3>
+      <button class="close-btn" (click)="cancelAction()">
+        <i class='bx bx-x'></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <p>{{modalMessage}}</p>
+      
+      <div *ngIf="modalType === 'delivery'" class="order-summary">
+        <div class="order-item">
+          <img [src]="getProductImage(selectedOrder)" alt="Product">
+          <div class="item-details">
+            <p class="item-name">{{getProductName(selectedOrder)}}</p>
+            <p class="item-price">KSh {{getOrderPrice(selectedOrder) | number:'1.0-0'}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="cancelAction()">Cancel</button>
+      <button class="confirm-btn" [ngClass]="{'delete': modalType === 'delete', 'deliver': modalType === 'delivery'}" (click)="confirmAction()">
+        {{modalConfirmText}}
+      </button>
+    </div>
+  </div>
+</div>
