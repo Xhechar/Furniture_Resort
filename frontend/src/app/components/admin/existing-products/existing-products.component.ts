@@ -16,7 +16,7 @@ import { PqtService } from '../../../services/pqt.service';
   templateUrl: './existing-products.component.html',
   styleUrl: './existing-products.component.css'
 })
-export class ExistingProductsComponent implements OnChanges, OnInit{
+export class ExistingProductsComponent implements OnChanges, OnInit {
   selectedProducts: string[] = [];
   deletedProductId!: string;
   expandedProductIndex: number = -1;
@@ -30,6 +30,9 @@ export class ExistingProductsComponent implements OnChanges, OnInit{
   private previousLength = 0;
 
   products: Product[] = [];
+  filteredProducts: Product[] = [];
+  searchTerm: string = '';
+  activeFilter: string = 'all';
 
   showModal = false;
   furnitureName = '';
@@ -155,6 +158,7 @@ export class ExistingProductsComponent implements OnChanges, OnInit{
       next: (response) => {
         if (response.success) {
           this.products = response.products as Product[];
+          this.applyFilters();
           console.log(this.products);
         } else {
           this.ns.showMessage(response.error as string, false);
@@ -163,7 +167,53 @@ export class ExistingProductsComponent implements OnChanges, OnInit{
       error: (error) => {
         this.ns.showMessage(error.error.error as string, false);
       }
-    })
+    });
+  }
+
+  // Filter products based on active filter and search term
+  applyFilters() {
+    let result = [...this.products];
+    
+    // Apply filter based on activeFilter
+    if (this.activeFilter !== 'all') {
+      switch (this.activeFilter) {
+        case 'activated':
+          result = result.filter(product => product.IsActivated);
+          break;
+        case 'offer':
+          result = result.filter(product => product.OnOffer);
+          break;
+        case 'flush':
+          result = result.filter(product => product.OnFlushSale);
+          break;
+        case 'custom':
+          result = result.filter(product => product.IsCustommable);
+          break;
+      }
+    }
+    
+    // Apply search filter if searchTerm exists
+    if (this.searchTerm.trim()) {
+      const search = this.searchTerm.toLowerCase().trim();
+      result = result.filter(product => 
+        product.ProductName.toLowerCase().includes(search) || 
+        product.Category?.toLowerCase().includes(search)
+      );
+    }
+    
+    this.filteredProducts = result;
+  }
+  
+  // Method to handle filter button clicks
+  setFilter(filter: string) {
+    this.activeFilter = filter;
+    this.applyFilters();
+  }
+  
+  // Method to handle search input changes
+  onSearchChange(event: any) {
+    this.searchTerm = event.target.value;
+    this.applyFilters();
   }
 
   activateProduct(ProductId: string) {
@@ -255,6 +305,7 @@ export class ExistingProductsComponent implements OnChanges, OnInit{
       this.previousLength = this.selectedProducts.length;
     }
   }
+  
   private addHidingClass() {
     const buttons = this.el.nativeElement.querySelectorAll('.button-u');
     buttons.forEach((button: HTMLElement, index: number) => {

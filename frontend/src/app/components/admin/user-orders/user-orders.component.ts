@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Order, CustomOrder } from '../../../interfaces/interfaces';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { OrderService } from '../../../services/order.service';
+import { CustomOrderService } from '../../../services/custom-order.service';
+import { NotificationsService } from '../../../services/notifications.service';
 
 @Component({
   selector: 'app-user-orders',
@@ -43,37 +46,52 @@ export class UserOrdersComponent implements OnInit {
   modalConfirmText = '';
   selectedOrder: Order | CustomOrder | null = null;
   
-  constructor(private http: HttpClient) { }
+  constructor(private os: OrderService, private cos: CustomOrderService, private ns: NotificationsService ) { }
   
   ngOnInit(): void {
     this.fetchOrders();
   }
   
   fetchOrders(): void {
-    // Fetch normal orders
-    this.http.get<Order[]>('/api/orders').subscribe(orders => {
-      this.normalOrders = orders;
-      this.normalOrdersCount = orders.length;
-      this.calculateStats();
-      this.applyFilters();
+
+    this.os.getAllOrders().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.normalOrders = response.orders as Order[];
+          this.normalOrdersCount = (response.orders as Order[]).length;
+          this.calculateStats();
+          this.applyFilters();
+        } else {
+          this.ns.showMessage(response.error as string, false);
+        }
+      },
+      error: (error) => {
+        this.ns.showMessage(error.error.error as string, false);
+      }
     });
-    
-    // Fetch custom orders
-    this.http.get<CustomOrder[]>('/api/custom-orders').subscribe(orders => {
-      this.customOrders = orders;
-      this.customOrdersCount = orders.length;
-      this.calculateStats();
-      this.applyFilters();
+
+    this.cos.getAllCustomOrders().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.customOrders = response.customOrders as CustomOrder[];
+          this.customOrdersCount = (response.customOrders as CustomOrder[]).length;
+          this.calculateStats();
+          this.applyFilters();
+        } else {
+          this.ns.showMessage(response.error as string, false);
+        }
+      },
+      error: (error) => {
+        this.ns.showMessage(error.error.error as string, false);
+      }
     });
   }
   
   calculateStats(): void {
-    // Calculate delivered count
     this.deliveredCount = this.normalOrders.filter(order => 
-      order.DeliveryStatus).length + 
-      this.customOrders.filter(order => order.DeliveryStatus).length;
+      order.DeliveryStatus == 'delivered').length + 
+      this.customOrders.filter(order => order.DeliveryStatus == 'delivered').length;
     
-    // Calculate total revenue
     this.totalRevenue = 
       this.normalOrders.reduce((sum, order) => sum + this.calculateOrderTotal(order), 0) +
       this.customOrders.reduce((sum, order) => sum + this.calculateCustomOrderTotal(order), 0);
@@ -96,7 +114,6 @@ export class UserOrdersComponent implements OnInit {
   applyFilters(): void {
     let allOrders: (Order | CustomOrder)[] = [];
     
-    // Filter by tab
     if (this.activeTab === 'all') {
       allOrders = [...this.normalOrders, ...this.customOrders];
     } else if (this.activeTab === 'normal') {
@@ -110,7 +127,6 @@ export class UserOrdersComponent implements OnInit {
       ];
     }
     
-    // Filter by search term
     if (this.searchTerm) {
       const searchLower = this.searchTerm.toLowerCase();
       allOrders = allOrders.filter(order => {
@@ -332,46 +348,74 @@ export class UserOrdersComponent implements OnInit {
   }
   
   markAsDelivered(order: Order | CustomOrder): void {
-    const endpoint = this.isCustomOrder(order) ? 
-      `/api/custom-orders/${(order as CustomOrder).CustomOrderId}/deliver` : 
-      `/api/orders/${(order as Order).OrderId}/deliver`;
-    
-    this.http.put(endpoint, {}).subscribe(() => {
-      if (this.isCustomOrder(order)) {
-        const index = this.customOrders.findIndex(o => 
-          (o as CustomOrder).CustomOrderId === (order as CustomOrder).CustomOrderId);
-        if (index !== -1) {
-          this.customOrders[index].DeliveryStatus = 'delivered';
+    if ('CustomOrderId' in order) {
+      this.cos.updateCustomOrderStatus(order.CustomOrderId).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.ns.showMessage(response.message as string, response.success);
+            this.fetchOrders();
+            this.calculateStats();
+            this.applyFilters();
+          } else {
+            this.ns.showMessage(response.error as string, false);
+          }
+        },
+        error: (error) => {
+          this.ns.showMessage(error.error.error as string, false);
         }
-      } else {
-        const index = this.normalOrders.findIndex(o => 
-          (o as Order).OrderId === (order as Order).OrderId);
-        if (index !== -1) {
-          this.normalOrders[index].DeliveryStatus = 'delivered';
+      });
+    } else {
+      this.os.updateOrderStatus(order.OrderId).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.ns.showMessage(response.message as string, response.success);
+            this.fetchOrders();
+            this.calculateStats();
+            this.applyFilters();
+          } else {
+            this.ns.showMessage(response.error as string, false);
+          }
+        },
+        error: (error) => {
+          this.ns.showMessage(error.error.error as string, false);
         }
-      }
-      
-      this.calculateStats();
-      this.applyFilters();
-    });
+      });
+    }
   }
   
   deleteOrder(order: Order | CustomOrder): void {
-    const endpoint = this.isCustomOrder(order) ? 
-      `/api/custom-orders/${(order as CustomOrder).CustomOrderId}` : 
-      `/api/orders/${(order as Order).OrderId}`;
-    
-    this.http.delete(endpoint).subscribe(() => {
-      if (this.isCustomOrder(order)) {
-        this.customOrders = this.customOrders.filter(o => 
-          (o as CustomOrder).CustomOrderId !== (order as CustomOrder).CustomOrderId);
-      } else {
-        this.normalOrders = this.normalOrders.filter(o => 
-          (o as Order).OrderId !== (order as Order).OrderId);
-      }
-      
-      this.calculateStats();
-      this.applyFilters();
-    });
+    if ('CustomOrderId' in order) {
+      this.cos.deleteCustomOrder(order.CustomOrderId).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.ns.showMessage(response.message as string, response.success);
+            this.fetchOrders();
+            this.calculateStats();
+            this.applyFilters();
+          } else {
+            this.ns.showMessage(response.error as string, false);
+          }
+        },
+        error: (error) => {
+          this.ns.showMessage(error.error.error as string, false);
+        }
+      });
+    } else {
+      this.os.deleteOrder(order.OrderId).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.ns.showMessage(response.message as string, response.success);
+            this.fetchOrders();
+            this.calculateStats();
+            this.applyFilters();
+          } else {
+            this.ns.showMessage(response.error as string, false);
+          }
+        },
+        error: (error) => {
+          this.ns.showMessage(error.error.error as string, false);
+        }
+      });
+    }
   }
 }
