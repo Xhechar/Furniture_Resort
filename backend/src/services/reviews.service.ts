@@ -180,6 +180,7 @@ export class ReviewService implements ReviewInterface {
     }
   }
   public async getAllReviews(): Promise<{ success: boolean; error?: string; message?: string; reviews?: Review[] | unknown[]; }> {
+
     let getAllReviews = await this.prisma.review.findMany({
       include: {
         User: true,
@@ -187,7 +188,7 @@ export class ReviewService implements ReviewInterface {
       }
     });
 
-    if (getAllReviews == null) {
+    if (getAllReviews == null || getAllReviews.length === 0) {
       return {
         'success': false,
         'error': 'No reviews found.'
@@ -195,7 +196,8 @@ export class ReviewService implements ReviewInterface {
     } else {
       return {
         'success': true,
-        'message': 'Reviews retrieved successfully.'
+        'message': 'Reviews retrieved successfully.',
+        'reviews': getAllReviews
       }
     }
   }

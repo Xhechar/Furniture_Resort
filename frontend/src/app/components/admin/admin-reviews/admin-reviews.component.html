@@ -1,3 +1,4 @@
+<app-notifications></app-notifications>
 <div class="reviews-dashboard">
   <!-- Header section with stats -->
   <div class="dashboard-header">
@@ -111,7 +112,7 @@
     
     <div *ngFor="let review of filteredReviews" 
         class="review-card" 
-        [ngClass]="{'highlighted': review.highlighted, 'new-review': isNewReview(review)}">
+        [ngClass]="{'highlighted': review.User?.IsDeleted, 'new-review': isNewReview(review)}">
       <div class="review-header">
         <div class="reviewer-info">
           <img class="review-avatar" [src]="review.User?.ProfileImage || 'assets/images/default-avatar.png'" 
@@ -157,10 +158,10 @@
             <i class="fa fa-trash"></i>
             <span class="action-label">Delete</span>
           </button>
-          <button class="action-button highlight-button" (click)="toggleHighlight(review)">
+          <!-- <button class="action-button highlight-button" (click)="toggleHighlight(review)">
             <i class="fa" [ngClass]="review.highlighted ? 'fa-star' : 'fa-star-o'"></i>
             <span class="action-label">{{ review.highlighted ? 'Featured' : 'Feature' }}</span>
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
