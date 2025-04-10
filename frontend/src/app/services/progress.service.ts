@@ -12,9 +12,9 @@ export class ProgressService {
 
   constructor(private http: HttpClient) { }
 
-  updateProgress(progress: Progress): Observable<{ success: boolean; message?: string; error?: string }> {
+  updateProgress(ProgressId: string, progress: Progress): Observable<{ success: boolean; message?: string; error?: string }> {
     return this.http.put<{ success: boolean; message?: string; error?: string }>(
-      `${this.API_URL}update-progress`,
+      `${this.API_URL}update-progress/${ProgressId}`,
       progress,
       { headers: getAuthHeaders() }
     );

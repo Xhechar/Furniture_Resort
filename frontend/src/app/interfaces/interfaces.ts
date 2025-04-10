@@ -213,17 +213,6 @@ export interface AdminStyles {
   profileTextColor: string
 }
 
-export interface ChatUser {
-  id: number;
-  name: string;
-  avatar?: string;
-  initials?: string;
-  lastMessage: string;
-  time: string;
-  isTyping?: boolean;
-  unreadCount?: number;
-}
-
 export interface ActionType {
   operation: boolean,
   submitAction: string,

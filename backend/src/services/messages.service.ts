@@ -130,7 +130,7 @@ export class MessagesService implements MessagesInterface {
     }
 
   }
-  public async updateMessage(SenderId: string, MessagesId: string, message: Messages): Promise<{ success: boolean; error?: string; message?: string; }> {
+  public async updateMessage(SenderId: string, MessagesId: string, message: string): Promise<{ success: boolean; error?: string; message?: string; }> {
     let userExists = await this.prisma.user.findUnique({
       where: {
         UserId: SenderId
@@ -180,7 +180,7 @@ export class MessagesService implements MessagesInterface {
 
     let updateMessage = await this.prisma.messages.update({
       data: {
-        Message: message.Message
+        Message: message
       },
       where: {
         SenderId: messageExists.SenderId,
@@ -204,8 +204,7 @@ export class MessagesService implements MessagesInterface {
     let userExists = await this.prisma.user.findUnique({
       where: {
         UserId,
-        Role: 'admin',
-        Selected: true
+        Role: 'admin'
       }
     });
 

@@ -6,7 +6,7 @@ export const progressRouter = Router();
 
 const progressController = new ProgressController();
 
-progressRouter.put("/update-progress", verifyToken, verifyAdmin, progressController.updateProgress);
+progressRouter.put("/update-progress/:ProgressId", verifyToken, verifyAdmin, progressController.updateProgress);
 progressRouter.put("/update-progress-status/:ProgressId", verifyToken, verifyUser, progressController.updateProgressStatus);
 progressRouter.put("/approve-progress/:ProgressId", verifyToken, verifyUser, progressController.approveProgress);
 progressRouter.delete("/delete-progress/:ProgressId", verifyToken, verifyAdmin, progressController.deleteProgress);

@@ -21,7 +21,7 @@ export class MessagesController {
   async updateMessage(req: ExtendedRequest, res: Response) {
     try {
 
-      let result = await messageService.updateMessage(getIdFromToken(req), req.params.MessagesId, req.body);
+      let result = await messageService.updateMessage(getIdFromToken(req), req.params.MessagesId, req.body.message);
 
       res.status(201).json(result);
       

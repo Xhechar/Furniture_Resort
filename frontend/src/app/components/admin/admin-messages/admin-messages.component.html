@@ -5,9 +5,10 @@
     </div>
     <div class="profile-section">
       <div class="profile-pic-wrapper">
-        <img src="https://i.pinimg.com/474x/6a/f9/ca/6af9ca755d4d1850c97e89a38a288f24.jpg" alt="Profile Picture" class="profile-pic" />
+        <img [src]="currentUser.ProfileImage" alt="Profile Picture" class="profile-pic" />
+        <div class="online-indicator"></div>
       </div>
-      <h3 class="profile-name">Jontray Arnold</h3>
+      <h3 class="profile-name">{{currentUser.Fullname}}</h3>
       <div class="status-dropdown">
         <select>
           <option value="available" selected>Available</option>
@@ -19,23 +20,29 @@
     <div class="search-section">
       <div class="search-wrapper">
         <i class="fas fa-search search-icon"></i>
-        <input type="text" placeholder="Search conversations..." class="search-bar" />
+        <input type="text" placeholder="Search conversations..." class="search-bar" [(ngModel)]="searchText" />
       </div>
     </div>
     <div class="chat-list">
-      <div *ngFor="let user of users" 
+      <div *ngFor="let user of getFilteredUsers()" 
            class="chat-item" 
-           [class.active]="activeChat.id === user.id"
-           (click)="selectChat(user)">
-        <img *ngIf="user.avatar" [src]="user.avatar" [alt]="user.name" class="chat-pic" />
-        <div *ngIf="user.initials" class="chat-pic initials">{{user.initials}}</div>
-        <div class="chat-info">
-          <h4>{{user.name}}</h4>
-          <p *ngIf="!user.isTyping">{{user.lastMessage}}</p>
-          <p *ngIf="user.isTyping"><span class="typing-indicator">typing...</span></p>
+           [class.active]="activeUser.UserId === user.UserId"
+           (click)="selectUser(user)">
+        <div *ngIf="user.ProfileImage" class="chat-pic-container">
+          <img [src]="user.ProfileImage" [alt]="user.Fullname" class="chat-pic" />
         </div>
-        <span class="chat-time">{{user.time}}</span>
-        <span *ngIf="user.unreadCount" class="unread-badge">{{user.unreadCount}}</span>
+        <div *ngIf="!user.ProfileImage" class="chat-pic initials">
+          {{getInitials(user.Fullname)}}
+        </div>
+        <div class="chat-info">
+          <h4>{{user.Fullname}}</h4>
+          <p *ngIf="!isUserTyping(user.UserId)">{{getLastMessage(user.UserId)}}</p>
+          <p *ngIf="isUserTyping(user.UserId)"><span class="typing-indicator">typing...</span></p>
+        </div>
+        <div class="chat-meta">
+          <span class="chat-time">{{getLastMessageTime(user.UserId)}}</span>
+          <span *ngIf="getUnreadCount(user.UserId) > 0" class="unread-badge">{{getUnreadCount(user.UserId)}}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -47,11 +54,19 @@
           <i class="fas fa-arrow-left"></i>
         </button>
         <div class="active-chat-info">
-          <img *ngIf="activeChat.avatar" [src]="activeChat.avatar" alt="Active Chat" class="active-chat-pic" />
-          <div *ngIf="activeChat.initials" class="chat-pic initials active-chat-pic">{{activeChat.initials}}</div>
-          <div>
-            <h2>{{activeChat.name}}</h2>
-            <span class="online-status">Online</span>
+          <div *ngIf="activeUser?.ProfileImage" class="active-chat-pic-container">
+            <img [src]="activeUser.ProfileImage" [alt]="activeUser.Fullname" class="active-chat-pic" />
+            <div class="online-indicator small"></div>
+          </div>
+          <div *ngIf="!activeUser?.ProfileImage" class="chat-pic initials active-chat-pic">
+            {{getInitials(activeUser.Fullname || '')}}
+          </div>
+          <div class="user-details">
+            <h2>{{activeUser.Fullname}}</h2>
+            <div class="user-meta">
+              <span class="online-status">Online</span>
+              <span class="location">{{activeUser.City}}, {{activeUser.Country}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -70,18 +85,36 @@
   
     <div class="chat-messages">
       <div class="message-group">
-        <span class="message-date">Message</span>
+        <span class="message-date">Today</span>
         <div *ngFor="let message of messages" 
              class="message" 
-             [class.sent]="message.sent" 
-             [class.received]="!message.sent">
-          <img *ngIf="!message.sent" class="avatar" [src]="message.avatar" alt="User" />
+             [class.sent]="message.SenderId === currentUser.UserId" 
+             [class.received]="message.SenderId !== currentUser.UserId">
+          <div *ngIf="message.SenderId !== currentUser?.UserId && getSender(message.SenderId)?.ProfileImage" class="chat-pic-container">
+            <img [src]="getSender(message.SenderId)?.ProfileImage" 
+                 alt="User" 
+                 class="avatar" />
+          </div>
+          <div *ngIf="message.SenderId !== currentUser?.UserId && !getSender(message.SenderId)?.ProfileImage" 
+               class="avatar initials">
+            {{getInitials(getSender(message.SenderId)?.Fullname || '')}}
+          </div>
           <div class="message-content">
-            <p class="message-text" [innerHTML]="message.text"></p>
-            <span class="message-time">{{message.time}}</span>
-            <span *ngIf="message.sent && message.seen" class="message-status">
-              <i class="fas fa-check-double"></i>
-            </span>
+            <p class="message-text">{{message.Message}}</p>
+            <div class="message-footer">
+              <span class="message-time">{{formatMessageDate(message.DateCreated)}}</span>
+              <div *ngIf="message.SenderId === currentUser?.UserId" class="message-actions">
+                <button *ngIf="isMessageEditable(message.DateCreated)" class="message-action-btn edit-btn" title="Edit message">
+                  <i class="fas fa-pencil-alt" (click)="setUpdateMessage(message.MessagesId, message.Message)"></i>
+                </button>
+                <button (click)="deleteMessage(message.MessagesId)" class="message-action-btn delete-btn" title="Delete message">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+                <span class="message-status">
+                  <i class="fas fa-check-double"></i>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -92,12 +125,12 @@
         <i class="fas fa-paperclip"></i>
       </button>
       <div class="input-wrapper">
-        <input type="text" placeholder="Write your message..." />
+        <input type="text" placeholder="Write your message..." [(ngModel)]="messageInput" (keyup.enter)="sendMessage()" />
         <button class="emoji-button" aria-label="Add emoji">
           <i class="fas fa-smile"></i>
         </button>
       </div>
-      <button class="send-button" aria-label="Send message">
+      <button class="send-button" aria-label="Send message" (click)="sendMessage()">
         <i class="fas fa-paper-plane"></i>
       </button>
     </div>

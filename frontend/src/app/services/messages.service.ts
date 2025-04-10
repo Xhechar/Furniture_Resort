@@ -12,7 +12,7 @@ export class MessagesService {
 
   constructor(private http: HttpClient) { }
 
-  sendMessage(message: Messages): Observable<{ success: boolean; message: string; error?: string }> {
+  sendMessage(message: Partial<Messages>): Observable<{ success: boolean; message: string; error?: string }> {
     return this.http.post<{ success: boolean; message: string; error?: string }>(
       `${this.API_URL}send-message`,
       message,
@@ -20,10 +20,10 @@ export class MessagesService {
     );
   }
 
-  updateMessage(MessagesId: string, message: Messages): Observable<{ success: boolean; message: string; error?: string }> {
+  updateMessage(MessagesId: string, message: string): Observable<{ success: boolean; message: string; error?: string }> {
     return this.http.put<{ success: boolean; message: string; error?: string }>(
       `${this.API_URL}update-message/${MessagesId}`,
-      message,
+      {message},
       { headers: getAuthHeaders() }
     );
   }

@@ -86,12 +86,11 @@ export class ProgressService implements ProgressInterface {
         'success': false,
         'error': `${userExists.Fullname}, your account is inactive.`
       }
-    }
+    }    
 
     let progressExists = await this.prisma.progress.findUnique({
       where: {
-        ProgressId: progressId,
-        UserId: userExists.UserId
+        ProgressId: progressId
       }
     });
 
@@ -297,7 +296,11 @@ export class ProgressService implements ProgressInterface {
   public async getAllProgresses(): Promise<{ success: boolean; error?: string; message?: string; progresses?: Progress[] | unknown[]; }> {
     let getAllProgresses = await this.prisma.progress.findMany({
       include: {
-        Product: true,
+        Product: {
+          include: {
+            ProductQuantityTimes: true
+          }
+        },
         User: true,
         CustomOrder: true
       }
