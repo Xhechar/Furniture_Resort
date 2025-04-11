@@ -188,7 +188,7 @@ export class NewproductComponent implements OnInit {
     fetch('https://api.remove.bg/v1.0/removebg', {
       method: 'POST',
       headers: {
-        'X-Api-Key': 'LJRyRowV6X9jxdkW62pN6jta'
+        'X-Api-Key': 'UfTDCKhr5WYZ4eHfQ1Pd8GQT'
       },
       body: formData
     })

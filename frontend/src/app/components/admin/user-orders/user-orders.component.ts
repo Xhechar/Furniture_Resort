@@ -277,7 +277,7 @@ export class UserOrdersComponent implements OnInit {
   }
   
   getOrderStatus(order: Order | CustomOrder): string {
-    if (order.DeliveryStatus) return 'Delivered';
+    if (order.DeliveryStatus === 'delivered') return 'Delivered';
     
     if (this.isCustomOrder(order)) {
       const customOrder = order as CustomOrder;

@@ -18,7 +18,7 @@ export class OrderService {
   }
 
   updateOrderStatus(OrderId: string): Observable<{ success: boolean, error?: string, message?: string }> {
-    return this.http.put<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}update-order-status/${OrderId}`, { headers: getAuthHeaders() });
+  return this.http.put<{ success: boolean, error?: string, message?: string }>(`${this.API_URL}update-order-status/${OrderId}`, {}, { headers: getAuthHeaders() });
   }
 
   deleteOrder(OrderId: string): Observable<{ success: boolean, error?: string, message?: string }> {

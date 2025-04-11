@@ -45,8 +45,7 @@ export class MessagesService implements MessagesInterface {
   
       let recieverExists = await this.prisma.user.findFirst({
         where: {
-          Role: 'admin',
-          Selected: true
+          Role: 'admin'
         }
       });
   
@@ -253,7 +252,7 @@ export class MessagesService implements MessagesInterface {
       }
     }
   }
-  public async getAllSendersMessages(SenderId: string, ReceiverId: string): Promise<{ success: boolean; error?: string; message?: string; messages?: Messages[] | unknown[]}> {
+  public async getAllSendersMessages(SenderId: string, ReceiverId: string | ''): Promise<{ success: boolean; error?: string; message?: string; messages?: Messages[] | unknown[]}> {
     let userExists = await this.prisma.user.findUnique({
       where: {
         UserId: SenderId
@@ -274,7 +273,57 @@ export class MessagesService implements MessagesInterface {
       }
     }
     
-    let myMessages = await this.prisma.messages.findMany({
+    if(userExists.Role === 'user' && ReceiverId === '') {
+
+      let receiverExists = await this.prisma.user.findFirst({
+      where: {
+        Role: 'admin'
+      }
+      });
+
+      if (receiverExists == null) {
+      return {
+        'success': false,
+        'error': 'Admin not available.'
+      }
+    }
+
+      let myMessages = await this.prisma.messages.findMany({
+      where: {
+        OR: [
+          {
+            SenderId,
+            ReceiverId:receiverExists.UserId
+          },
+          {
+            SenderId: receiverExists.UserId,
+            ReceiverId: SenderId
+          }
+        ]
+      },
+      include: {
+        Sender: true,
+        Receiver: true
+      },
+      orderBy: {
+        DateCreated: 'asc'
+      }
+    });
+
+    if (myMessages.length == 0) {
+      return {
+        'success': false,
+        'error': 'Unable to get messages.'
+      }
+    } else {
+      return {
+        'success': true,
+        'message': 'Messages retrieved successfully.',
+        'messages': myMessages
+      }
+    }
+    }else {
+      let myMessages = await this.prisma.messages.findMany({
       where: {
         OR: [
           {
@@ -307,6 +356,7 @@ export class MessagesService implements MessagesInterface {
         'message': 'Messages retrieved successfully.',
         'messages': myMessages
       }
+    }
     }
   }
   
