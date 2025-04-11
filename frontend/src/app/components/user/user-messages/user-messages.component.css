@@ -7,6 +7,7 @@
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     overflow: hidden;
+    position: relative;
 }
 
 /* Header */
@@ -17,7 +18,9 @@
     padding: 1rem;
     background-color: var(--white);
     color: var(--primary);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    z-index: 5;
 }
 
 .chat-header-left {
@@ -27,9 +30,9 @@
 }
 
 .back-button {
-    background: none;
+    background-color: var(--primary-light);
     border: none;
-    color: var(--white);
+    color: var(--primary);
     font-size: 1.25rem;
     cursor: pointer;
     width: 36px;
@@ -42,13 +45,16 @@
 }
 
 .back-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--primary);
+    color: var(--white);
+    transform: scale(1.05);
 }
 
 .product-info {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    animation: slideInLeft 0.4s ease;
 }
 
 .product-image {
@@ -57,12 +63,24 @@
     border-radius: var(--border-radius);
     overflow: hidden;
     border: 2px solid var(--accent);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+}
+
+.product-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
 }
 
 .product-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: var(--transition);
+}
+
+.product-image:hover img {
+    transform: scale(1.1);
 }
 
 .product-details h3 {
@@ -72,6 +90,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 150px;
+    color: var(--text-dark);
 }
 
 .price {
@@ -87,10 +106,12 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    animation: fadeIn 0.5s ease;
 }
 
 .chat-header-right i {
     color: var(--accent);
+    animation: pulse 2s infinite;
 }
 
 /* Chat Body */
@@ -107,16 +128,25 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 200px;
+    min-height: 250px;
     text-align: center;
     padding: 2rem;
-    animation: fadeIn 0.5s ease;
+    animation: fadeIn 0.6s ease, floatUp 0.8s ease;
 }
 
 .welcome-icon {
-    font-size: 3rem;
+    font-size: 3.5rem;
     color: var(--primary);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: var(--primary-light);
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    animation: pulse 3s infinite;
 }
 
 .welcome-message h3 {
@@ -132,7 +162,8 @@
 .messages {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
+    padding-bottom: 0.5rem;
 }
 
 .message-item {
@@ -140,24 +171,27 @@
     align-items: flex-start;
     gap: 0.75rem;
     max-width: 80%;
-    animation: slideIn 0.3s ease;
+    position: relative;
 }
 
 .user-message {
     align-self: flex-end;
     flex-direction: row-reverse;
+    animation: slideInRight 0.4s ease;
 }
 
 .admin-message {
     align-self: flex-start;
+    animation: slideInLeft 0.4s ease;
 }
 
 .message-avatar {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
+    border: 2px solid var(--accent);
 }
 
 .message-avatar img {
@@ -170,26 +204,35 @@
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    position: relative;
 }
 
 .message-text {
     padding: 0.75rem 1rem;
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     font-size: 0.95rem;
-    line-height: 1.4;
+    line-height: 1.5;
     word-break: break-word;
+    transition: var(--transition);
 }
 
 .admin-message .message-text {
     background-color: var(--primary-light);
     border-top-left-radius: 0.25rem;
     color: var(--text-dark);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .user-message .message-text {
     background-color: var(--primary);
     border-top-right-radius: 0.25rem;
     color: var(--white);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.admin-message:hover .message-text,
+.user-message:hover .message-text {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
 .message-image {
@@ -199,27 +242,70 @@
     overflow: hidden;
     cursor: pointer;
     transition: var(--transition);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .message-image:hover {
     transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 .message-image img {
     width: 100%;
     height: auto;
     display: block;
+    transition: var(--transition);
+}
+
+.message-image:hover img {
+    transform: scale(1.05);
+}
+
+.message-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+    opacity: 0.7;
+    transition: var(--transition);
+}
+
+.message-item:hover .message-footer {
+    opacity: 1;
 }
 
 .message-time {
     font-size: 0.7rem;
     color: var(--text-light);
-    margin-top: 0.25rem;
-    align-self: flex-end;
 }
 
-.user-message .message-time {
-    align-self: flex-start;
+.user-message .message-footer {
+    flex-direction: row-reverse;
+}
+
+.update-btn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 0.9rem;
+    padding: 0.15rem 0.3rem;
+    margin: 0;
+    cursor: pointer;
+    border-radius: 3px;
+    opacity: 0;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+}
+
+.user-message:hover .update-btn {
+    opacity: 1;
+}
+
+.update-btn:hover {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    transform: scale(1.1);
 }
 
 .typing-indicator {
@@ -230,8 +316,8 @@
     background-color: var(--primary-light);
     border-radius: 1rem;
     width: fit-content;
-    margin-top: 0.5rem;
-    animation: slideIn 0.3s ease;
+    margin-top: 0.75rem;
+    animation: slideInLeft 0.3s ease;
 }
 
 .typing-indicator .dot {
@@ -255,10 +341,13 @@
     background-color: var(--white);
     border-top: 1px solid rgba(0, 0, 0, 0.05);
     padding: 1rem;
+    position: relative;
+    z-index: 5;
 }
 
 .attachment-preview {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    animation: slideInUp 0.4s ease;
 }
 
 .preview-image {
@@ -268,6 +357,7 @@
     border-radius: var(--border-radius);
     overflow: hidden;
     border: 2px solid var(--accent);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
 .preview-image img {
@@ -283,7 +373,7 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     color: white;
     border: none;
     display: flex;
@@ -294,7 +384,8 @@
 }
 
 .remove-image:hover {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
 }
 
 .chat-input-container {
@@ -304,6 +395,13 @@
     background-color: rgba(84, 72, 32, 0.05);
     border-radius: 1.5rem;
     padding: 0.75rem;
+    transition: var(--transition);
+    position: relative;
+}
+
+.chat-input-container.editing {
+    background-color: rgba(215, 180, 71, 0.2);
+    box-shadow: 0 0 0 2px rgba(215, 180, 71, 0.3);
 }
 
 .attachment-btn,
@@ -327,6 +425,7 @@
 .attachment-btn:hover,
 .emoji-btn:hover {
     background-color: var(--primary-light);
+    transform: scale(1.1);
 }
 
 .send-btn {
@@ -346,6 +445,7 @@
 
 .send-btn:hover {
     transform: scale(1.05);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
 .message-input-wrapper {
@@ -364,10 +464,48 @@
     color: var(--text-dark);
     outline: none;
     font-family: inherit;
+    transition: var(--transition);
 }
 
 .message-input::placeholder {
     color: var(--text-light);
+}
+
+.edit-indicator {
+    position: absolute;
+    top: -25px;
+    left: 0;
+    background-color: rgba(215, 180, 71, 0.9);
+    color: var(--white);
+    font-size: 0.8rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: fadeIn 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-edit-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    margin-left: 5px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.cancel-edit-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 /* Emoji Picker */
@@ -411,9 +549,15 @@
     transition: var(--transition);
 }
 
+.emoji-categories button.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
 .emoji-categories button:hover {
     background-color: var(--primary-light);
     color: var(--primary);
+    transform: scale(1.1);
 }
 
 .emoji-list {
@@ -435,9 +579,11 @@
     justify-content: center;
     align-items: center;
     transition: var(--transition);
+    border-radius: 4px;
 }
 
 .emoji-list button:hover {
+    background-color: var(--primary-light);
     transform: scale(1.2);
 }
 
@@ -446,34 +592,71 @@
     from {
         opacity: 0;
     }
-
     to {
         opacity: 1;
     }
 }
 
-@keyframes slideIn {
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInUp {
     from {
         transform: translateY(10px);
         opacity: 0;
     }
-
     to {
         transform: translateY(0);
         opacity: 1;
     }
 }
 
-@keyframes bounce {
-
-    0%,
-    80%,
+@keyframes floatUp {
+    0% {
+        transform: translateY(20px);
+    }
     100% {
         transform: translateY(0);
     }
+}
 
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: translateY(0);
+    }
     40% {
         transform: translateY(-5px);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
     }
 }
 
@@ -484,7 +667,8 @@
     }
 
     .product-details h3 {
-        max-width: 100px;
+        max-width: 120px;
+        font-size: 0.85rem;
     }
 
     .message-item {
@@ -500,6 +684,16 @@
     .emoji-list {
         grid-template-columns: repeat(6, 1fr);
     }
+    
+    .welcome-icon {
+        font-size: 2.8rem;
+        width: 75px;
+        height: 75px;
+    }
+    
+    .welcome-message h3 {
+        font-size: 1.3rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -513,6 +707,7 @@
 
     .product-details h3 {
         max-width: 80px;
+        font-size: 0.8rem;
     }
 
     .message-item {
@@ -529,5 +724,27 @@
         width: 36px;
         height: 36px;
         font-size: 1.25rem;
+    }
+    
+    .emoji-picker {
+        width: 220px;
+    }
+    
+    .emoji-list {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .welcome-icon {
+        font-size: 2.5rem;
+        width: 65px;
+        height: 65px;
+    }
+    
+    .welcome-message h3 {
+        font-size: 1.2rem;
+    }
+    
+    .welcome-message p {
+        font-size: 0.9rem;
     }
 }

@@ -1,26 +1,35 @@
-import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Messages, Product, User } from '../../../interfaces/interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../../services/user.service';
+import { Subscription } from 'rxjs';
+import { ProductsService } from '../../../services/products.service';
+import { MessagesService } from '../../../services/messages.service';
+import { NotificationsService } from '../../../services/notifications.service';
+import { NotificationsComponent } from "../../notifications/notifications.component";
 
 @Component({
   selector: 'app-user-messages',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NotificationsComponent],
   templateUrl: './user-messages.component.html',
   styleUrl: './user-messages.component.css'
 })
-export class UserMessagesComponent implements OnInit, AfterViewChecked {
+export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('chatBody') chatBodyRef!: ElementRef;
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('messageInput') messageInput!: ElementRef;
-
-  currentUser: User;
+  currentUser!: User;
   selectedProduct: Product | null = null;
   messages: Messages[] = [];
   messageText: string = '';
   isAdminTyping: boolean = false;
+  
+  // For editing messages
+  isEditing: boolean = false;
+  editingMessageId: string = '';
   
   // Image upload
   selectedImage: File | null = null;
@@ -38,7 +47,7 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked {
   ];
   currentEmojiCategory: string = 'smileys';
   
-  // Sample emoji data - in a real app, you'd use a more comprehensive library
+  // Sample emoji data
   emojis = {
     smileys: ['😀', '😁', '😂', '🙂', '😊', '😇', '🥰', '😍', '😘', '😋', '😎', '🤩', '😏', '😣', '😮', '🤔'],
     objects: ['💼', '📱', '💻', '⌚', '📷', '🎮', '🎧', '💎', '🔑', '🛒', '🎁', '📚', '✏️', '📌', '🔍', '💡'],
@@ -48,393 +57,387 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked {
     symbols: ['❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝', '🔴']
   };
   filteredEmojis: string[] = [];
+  
+  // Subscriptions
+  private subscriptions: Subscription[] = [];
+  private productId: string = '';
+  private receiverId: string = '';
+  private messagePollingInterval: any;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private messageService: MessagesService,
+    private productService: ProductsService,
+    private userService: UserService,
+    private ns: NotificationsService
   ) {
-    // Initialize with dummy user data - in a real app, you'd get this from a service
-    this.currentUser = {
-      UserId: 'user123',
-      Fullname: 'John Doe',
-      Email: 'john@example.com',
-      Mobile: '123456789',
-      Country: 'Kenya',
-      City: 'Nairobi',
-      Gender: 'Male',
-      IdentificationNumber: 12345,
-      ProfileImage: 'assets/user-avatar.png',
-      BackgroundWallpaper: '',
-      Password: '',
-      IsWelcomed: true,
-      IsDeleted: false,
-      DateCreated: new Date(),
-      HasOrder: false,
-      HasWishList: false,
-      Role: 'user',
-      Selected: false
-    };
-    
     this.filteredEmojis = this.emojis.smileys;
   }
 
   ngOnInit(): void {
-    // Get product ID from route params
+    this.subscriptions.push(
+      this.userService.getSingleUser().subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.currentUser = response.user as User;
+            this.receiverId = this.currentUser.UserId;
+            this.initializeChat();
+          } else {
+            this.ns.showMessage(response.error as string, false);
+          }
+        },
+        error: (err) => {
+          console.error('Error fetching current user:', err);
+        }
+      })
+    );
+
     this.route.params.subscribe(params => {
-      const productId = params['productId'];
-      if (productId) {
-        this.loadProductDetails(productId);
+      if (params['productId']) {
+        this.productId = params['productId'];
+        this.loadProductDetails();
+      }
+      
+      if (params['receiverId']) {
+        this.receiverId = params['receiverId'];
       }
     });
-    
-    // Load chat history
-    this.loadChatHistory();
-    
-    // Simulate admin typing after 2 seconds
-    setTimeout(() => {
-      this.simulateAdminTyping();
-    }, 2000);
   }
-  
+
   ngAfterViewChecked(): void {
     this.scrollToBottom();
   }
-  
-  loadProductDetails(productId: string): void {
-    // In a real app, you'd get this from a service
-    this.selectedProduct = {
-      ProductId: productId,
-      ProductName: 'Handcrafted Leather Bag',
-      ProductImages: 'assets/product-1.jpg,assets/product-1-alt.jpg',
-      ShortDesc: 'Genuine leather handcrafted bag',
-      LongDesc: 'This beautiful handcrafted leather bag is made from the finest materials. Perfect for everyday use.',
-      Sizes: 'S,M,L',
-      Category: 'Bags',
-      Colour: 'Brown',
-      Prize: 5999,
-      StockQuantity: 10,
-      StockLimit: 5,
-      CustomPrize: 6999,
-      OnOffer: true,
-      OnFlushSale: false,
-      Discount: 10,
-      MakePeriods: 14,
-      Deposit: 2000,
-      DateCreated: new Date(),
-      IsActivated: true,
-      IsCustommable: true
-    };
-  }
-  
-  loadChatHistory(): void {
-    // In a real app, you'd get this from a service
-    // Leaving empty for now
-  }
-  
-  formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+
+  ngOnDestroy(): void {
+    // Clear all subscriptions to prevent memory leaks
+    this.subscriptions.forEach(sub => sub.unsubscribe());
     
-    if (diffInDays === 0) {
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    } else if (diffInDays === 1) {
-      return 'Yesterday, ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    } else {
-      return date.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ', ' + 
-             date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // Clear polling interval
+    if (this.messagePollingInterval) {
+      clearInterval(this.messagePollingInterval);
     }
   }
-  
-  goBack(): void {
-    this.router.navigate(['/user']);
+
+  private initializeChat(): void {
+    // Load chat messages
+    this.loadMessages();
+    
+    // Set up message polling (every 5 seconds)
+    this.messagePollingInterval = setInterval(() => {
+      this.loadMessages(false);
+    }, 5000);
   }
-  
-  openFileSelector(): void {
-    this.fileInput.nativeElement.click();
+
+  private loadProductDetails(): void {
+    if (!this.productId) return;
+
+    this.productService.getSingleActivatedProduct(this.productId).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.selectedProduct = response.product as Product;
+        } else {
+          this.ns.showMessage(response.error as string, false);
+        }
+      },
+      error: (err) => {
+        this.ns.showMessage(err.error.error as string, false);
+      }
+    })
   }
-  
-  handleFileInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedImage = input.files[0];
+
+  loadMessages(showLoading: boolean = true): void {
+    if (showLoading) {
+      // Show loading indicator if needed
+    }
+
+    const params = {
+      senderId: this.currentUser.UserId,
+      receiverId: this.receiverId,
+      productId: this.productId
+    };
+
+    this.subscriptions.push(
+      this.messageService.getAllSendersMessages().subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.messages = response.messages as Messages[];
+            this.simulateAdminTyping();
+          } else {
+            this.ns.showMessage(response.error as string, false);
+          }
+        },
+        error: (err) => {
+          this.ns.showMessage(err.error.error as string, false);
+        }
+      })
+    );
+  }
+
+  simulateAdminTyping(): void {
+    // This is just for demo, in production you would use real-time notifications
+    // Only simulate typing if the last message was from the user
+    if (this.messages.length > 0 && 
+        this.messages[this.messages.length - 1].SenderId === this.currentUser.UserId) {
       
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.selectedImagePreview = reader.result as string;
-      };
-      reader.readAsDataURL(this.selectedImage);
+      const randomDelay = Math.floor(Math.random() * 3) + 1;
+      
+      // Show typing indicator after random delay
+      setTimeout(() => {
+        this.isAdminTyping = true;
+        
+        // Hide typing indicator after 2-4 seconds
+        setTimeout(() => {
+          this.isAdminTyping = false;
+        }, 2000 + Math.random() * 2000);
+      }, randomDelay * 1000);
     }
   }
-  
-  removeSelectedImage(): void {
-    this.selectedImage = null;
-    this.selectedImagePreview = '';
-  }
-  
-  toggleEmojiPicker(): void {
-    this.showEmojiPicker = !this.showEmojiPicker;
-  }
-  
-  selectEmojiCategory(category: string): void {
-    this.currentEmojiCategory = category;
-    this.filteredEmojis = this.emojis[category as keyof typeof this.emojis];
-  }
-  
-  addEmoji(emoji: string): void {
-    this.messageText += emoji;
-    this.showEmojiPicker = false;
-    this.messageInput.nativeElement.focus();
-  }
-  
+
   sendMessage(event?: KeyboardEvent): void {
     if (event) {
       event.preventDefault();
     }
     
-    if (this.messageText.trim() === '' && !this.selectedImage) {
+    if ((!this.messageText.trim() && !this.selectedImage) || !this.currentUser) {
       return;
     }
-    
-    // Prepare message text
-    let messageContent = this.messageText.trim();
-    
-    // If there's an image, add it to the message
+
+    if (this.isEditing && this.editingMessageId) {
+      this.updateMessage();
+      return;
+    }
+
+    const newMessage: Partial<Messages> = {
+      SenderId: this.currentUser.UserId,
+      ReceiverId: this.receiverId,
+      Message: this.messageText.trim(),
+      DateCreated: new Date().toISOString()
+    };
+
+    // If there's an image, handle it
     if (this.selectedImage) {
-      // In a real app, you'd upload the image to your server and get a URL
-      // For this demo, we'll use the preview as if it were the uploaded URL
-      messageContent += `<img src="${this.selectedImagePreview}" alt="Uploaded image">`;
+      this.uploadImage().then(imageUrl => {
+        newMessage.Message += imageUrl ? `\n<img src="${imageUrl}" alt="uploaded image">` : '';
+        this.sendMessageToServer(newMessage);
+      });
+    } else {
+      this.sendMessageToServer(newMessage);
+    }
+  }
+
+  private sendMessageToServer(message: Partial<Messages>): void {
+    this.subscriptions.push(
+      this.messageService.sendMessage(message).subscribe({
+        next: (sentMessage) => {
+          this.loadMessages(true);
+          this.resetMessageInput();
+          // Scroll to bottom
+          this.scrollToBottom();
+        },
+        error: (err) => {
+          console.error('Error sending message:', err);
+        }
+      })
+    );
+  }
+
+  updateMessage(): void {
+    if (!this.messageText.trim() || !this.editingMessageId) {
+      return;
+    }
+
+    const updatedMessage = {
+      MessagesId: this.editingMessageId,
+      Message: this.messageText.trim()
+    };
+
+    this.subscriptions.push(
+      this.messageService.updateMessage(updatedMessage).subscribe({
+        next: (result) => {
+          // Update message in local array
+          const index = this.messages.findIndex(m => m.MessagesId === this.editingMessageId);
+          if (index !== -1) {
+            this.messages[index].Message = this.messageText.trim();
+          }
+          
+          // Reset editing state
+          this.resetMessageInput();
+        },
+        error: (err) => {
+          console.error('Error updating message:', err);
+        }
+      })
+    );
+  }
+
+  resetMessageInput(): void {
+    this.messageText = '';
+    this.isEditing = false;
+    this.editingMessageId = '';
+    this.selectedImage = null;
+    this.selectedImagePreview = '';
+    this.showEmojiPicker = false;
+    
+    // Reset textarea height
+    if (this.messageInput) {
+      this.messageInput.nativeElement.style.height = 'auto';
+    }
+  }
+
+  editMessage(message: Messages): void {
+    this.isEditing = true;
+    this.editingMessageId = message.MessagesId;
+    this.messageText = this.stripImageTags(message.Message);
+    
+    // Focus on input
+    setTimeout(() => {
+      this.messageInput.nativeElement.focus();
+    }, 100);
+  }
+
+  cancelEdit(): void {
+    this.resetMessageInput();
+  }
+
+  // Check if message can be updated (within 1 hour and is from current user)
+  canUpdateMessage(message: Messages): boolean {
+    if (message.SenderId !== this.currentUser.UserId) {
+      return false;
     }
     
-    // Create a new message object
-    const newMessage: Messages = {
-      MessagesId: 'msg_' + Date.now(),
-      SenderId: this.currentUser.UserId,
-      ReceiverId: 'admin', // Assuming admin has a fixed ID
-      Message: messageContent,
-      DateCreated: new Date().toISOString(),
-      Sender: this.currentUser,
-      Receiver: {
-        UserId: 'admin',
-        Fullname: 'Admin',
-        Email: 'admin@ndaganisf.com',
-        Mobile: '',
-        Country: '',
-        City: '',
-        Gender: '',
-        IdentificationNumber: 0,
-        ProfileImage: 'assets/admin-avatar.png',
-        BackgroundWallpaper: '',
-        Password: '',
-        IsWelcomed: true,
-        IsDeleted: false,
-        DateCreated: new Date(),
-        HasOrder: false,
-        HasWishList: false,
-        Role: 'admin',
-        Selected: false
-      }
-    };
+    const messageDate = new Date(message.DateCreated);
+    const now = new Date();
+    const hourInMs = 60 * 60 * 1000;
     
-    // Add message to chat
-    this.messages.push(newMessage);
-    
-    // Clear input fields
-    this.messageText = '';
-    this.removeSelectedImage();
-    
-    // Simulate admin typing after a short delay
-    setTimeout(() => {
-      this.simulateAdminTyping();
-    }, 1500);
+    return (now.getTime() - messageDate.getTime()) < hourInMs;
   }
-  
-  simulateAdminTyping(): void {
-    this.isAdminTyping = true;
+
+  // File handling methods
+  openFileSelector(): void {
+    this.fileInput.nativeElement.click();
+  }
+
+  handleFileInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const files = target.files;
     
-    // Simulate admin response after 2 seconds
-    setTimeout(() => {
-      this.isAdminTyping = false;
+    if (files && files.length > 0) {
+      this.selectedImage = files[0];
       
-      // Add admin response
-      const adminResponse: Messages = {
-        MessagesId: 'msg_' + Date.now(),
-        SenderId: 'admin',
-        ReceiverId: this.currentUser.UserId,
-        Message: this.getRandomAdminResponse(),
-        DateCreated: new Date().toISOString(),
-        Sender: {
-          UserId: 'admin',
-          Fullname: 'Admin',
-          Email: 'admin@ndaganisf.com',
-          Mobile: '',
-          Country: '',
-          City: '',
-          Gender: '',
-          IdentificationNumber: 0,
-          ProfileImage: 'assets/admin-avatar.png',
-          BackgroundWallpaper: '',
-          Password: '',
-          IsWelcomed: true,
-          IsDeleted: false,
-          DateCreated: new Date(),
-          HasOrder: false,
-          HasWishList: false,
-          Role: 'admin',
-          Selected: false
-        },
-        Receiver: this.currentUser
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.selectedImagePreview = e.target?.result as string;
       };
-      
-      this.messages.push(adminResponse);
-    }, 2000);
+      reader.readAsDataURL(this.selectedImage);
+    }
   }
-  
-  getRandomAdminResponse(): string {
-    const responses = [
-      "Thank you for your message. How can I help you with this product?",
-      "Hello! I'm happy to assist you with any questions about this item.",
-      "Thanks for reaching out! Is there anything specific you'd like to know about the customization options?",
-      "I appreciate your interest in our products. Let me know if you need any details about shipping or delivery.",
-      "Hello there! Would you like to know more about the materials used in this product?",
-      "Thank you for contacting Ndagani SF support. I'm here to help with any questions you might have."
-    ];
+
+  removeSelectedImage(): void {
+    this.selectedImage = null;
+    this.selectedImagePreview = '';
+    this.fileInput.nativeElement.value = '';
+  }
+
+  // Upload image to server and return URL
+  private async uploadImage(): Promise<string> {
+    if (!this.selectedImage) {
+      return '';
+    }
+
+    try {
+      const imageUrl = await this.messageService.uploadImage(this.selectedImage).toPromise();
+      return imageUrl || '';
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      return '';
+    } finally {
+      this.removeSelectedImage();
+    }
+  }
+
+  // Emoji picker methods
+  toggleEmojiPicker(): void {
+    this.showEmojiPicker = !this.showEmojiPicker;
+  }
+
+  selectEmojiCategory(category: string): void {
+    this.currentEmojiCategory = category;
+    this.filteredEmojis = this.emojis[category as keyof typeof this.emojis];
+  }
+
+  addEmoji(emoji: string): void {
+    this.messageText += emoji;
+    // Don't close emoji picker after selection to allow multiple selections
+  }
+
+  // Helper methods
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const today = new Date();
     
-    const randomIndex = Math.floor(Math.random() * responses.length);
-    return responses[randomIndex];
+    // If today, just show time
+    if (date.toDateString() === today.toDateString()) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    // If within the last 7 days, show day and time
+    const diffTime = Math.abs(today.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays <= 7) {
+      return `${date.toLocaleDateString([], { weekday: 'short' })} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    }
+    
+    // Otherwise show full date
+    return date.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' + 
+           date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
   formatMessage(message: string): string {
-    // Replace URLs with clickable links
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    return message.replace(urlRegex, (url) => {
-      // Don't process image tags
-      if (message.includes('<img') && url.includes('src=')) {
-        return url;
-      }
-      return `<a href="${url}" target="_blank" class="message-link">${url}</a>`;
-    });
+    // Handle line breaks
+    let formattedMessage = message.replace(/\n/g, '<br>');
+    
+    // Remove image tags for display in message text
+    formattedMessage = this.stripImageTags(formattedMessage);
+    
+    // Add emoji parsing if needed
+    
+    return formattedMessage;
   }
-  
+
+  stripImageTags(message: string): string {
+    return message.replace(/<img[^>]*>/g, '');
+  }
+
   hasImage(message: string): boolean {
-    return message.includes('<img');
+    return /<img[^>]*>/g.test(message);
   }
-  
+
   extractImageUrl(message: string): string {
-    // Extract the image URL from the message
-    const imgMatch = message.match(/src="([^"]+)"/);
+    const imgMatch = message.match(/<img src="([^"]+)"/);
     return imgMatch ? imgMatch[1] : '';
   }
-  
+
   viewImage(imageUrl: string): void {
-    // Open image in a modal or lightbox
-    // In a real app, you'd implement a proper image viewer
+    // Implement image viewer functionality
+    // Could open in modal or lightbox
     window.open(imageUrl, '_blank');
   }
-  
+
   scrollToBottom(): void {
-    try {
+    if (this.chatBodyRef) {
       this.chatBodyRef.nativeElement.scrollTop = this.chatBodyRef.nativeElement.scrollHeight;
-    } catch (err) { }
+    }
   }
-  
+
   autoGrow(element: HTMLTextAreaElement): void {
     element.style.height = 'auto';
     element.style.height = (element.scrollHeight) + 'px';
   }
-  
-  // Additional methods for a complete implementation
-  
-  searchMessages(query: string): void {
-    // Implement search functionality
-    if (!query.trim()) {
-      this.loadChatHistory();
-      return;
-    }
-    
-    // Filter messages based on query
-    // In a real app, you might do this on the server
-    const filteredMessages = this.messages.filter(msg => 
-      msg.Message.toLowerCase().includes(query.toLowerCase())
-    );
-    
-    this.messages = filteredMessages;
-  }
-  
-  downloadChat(): void {
-    // Generate a text file with the chat history
-    let chatText = 'Ndagani SF Support Chat\n';
-    chatText += `Product: ${this.selectedProduct?.ProductName}\n`;
-    chatText += `Date: ${new Date().toLocaleDateString()}\n\n`;
-    
-    this.messages.forEach(msg => {
-      const sender = msg.SenderId === this.currentUser.UserId ? 'You' : 'Admin';
-      const time = this.formatDate(msg.DateCreated);
-      // Strip HTML tags for plain text
-      const plainMessage = msg.Message.replace(/<[^>]*>?/gm, '');
-      
-      chatText += `[${time}] ${sender}: ${plainMessage}\n`;
-    });
-    
-    // Create download link
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(chatText));
-    element.setAttribute('download', `ndagani-chat-${new Date().getTime()}.txt`);
-    
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    
-    element.click();
-    
-    document.body.removeChild(element);
-  }
-  
-  markAsUrgent(): void {
-    // Implementation for marking a conversation as urgent
-    // In a real app, you'd call a service to update the conversation status
-    alert('This conversation has been marked as urgent. Our team will respond promptly.');
-  }
-  
-  reportIssue(): void {
-    // Implementation for reporting an issue with the conversation
-    // In a real app, you'd show a modal with options
-    alert('Thank you for reporting this issue. Our team will review this conversation.');
-  }
-  
-  isTyping(): void {
-    // Send typing indicator to server
-    // In a real app, you'd use a service to notify that the user is typing
-    console.log('User is typing...');
-  }
-  
-  // Utility methods for emoji handling
-  
-  searchEmojis(query: string): void {
-    if (!query.trim()) {
-      this.filteredEmojis = this.emojis[this.currentEmojiCategory as keyof typeof this.emojis];
-      return;
-    }
-    
-    // Search across all emoji categories
-    const results: string[] = [];
-    
-    Object.values(this.emojis).forEach(categoryEmojis => {
-      categoryEmojis.forEach(emoji => {
-        // Simple search - in a real app, you'd use emoji descriptions
-        if (emoji.includes(query)) {
-          results.push(emoji);
-        }
-      });
-    });
-    
-    this.filteredEmojis = results;
-  }
-  
-  // Lifecycle hooks
-  
-  ngOnDestroy(): void {
-    // Clean up any subscriptions or timers
-    // In a real app, you'd unsubscribe from observables
+
+  goBack(): void {
+    this.router.navigate(['/products']);
   }
 }
