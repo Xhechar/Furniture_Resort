@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
-import { Subscription } from 'rxjs';
 import { ProductsService } from '../../../services/products.service';
 import { MessagesService } from '../../../services/messages.service';
 import { NotificationsService } from '../../../services/notifications.service';
@@ -58,8 +57,6 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
   };
   filteredEmojis: string[] = [];
   
-  // Subscriptions
-  private subscriptions: Subscription[] = [];
   private productId: string = '';
   private receiverId: string = '';
   private messagePollingInterval: any;
@@ -76,7 +73,6 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
   }
 
   ngOnInit(): void {
-    this.subscriptions.push(
       this.userService.getSingleUser().subscribe({
         next: (response) => {
           if (response.success) {
@@ -88,21 +84,9 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
           }
         },
         error: (err) => {
-          console.error('Error fetching current user:', err);
+            this.ns.showMessage(err.error.error as string, false);
         }
       })
-    );
-
-    this.route.params.subscribe(params => {
-      if (params['productId']) {
-        this.productId = params['productId'];
-        this.loadProductDetails();
-      }
-      
-      if (params['receiverId']) {
-        this.receiverId = params['receiverId'];
-      }
-    });
   }
 
   ngAfterViewChecked(): void {
@@ -110,8 +94,6 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
   }
 
   ngOnDestroy(): void {
-    // Clear all subscriptions to prevent memory leaks
-    this.subscriptions.forEach(sub => sub.unsubscribe());
     
     // Clear polling interval
     if (this.messagePollingInterval) {
@@ -157,36 +139,32 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
       productId: this.productId
     };
 
-    this.subscriptions.push(
-      this.messageService.getAllSendersMessages('').subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.messages = response.messages as Messages[];
-            this.simulateAdminTyping();
-          } else {
-            this.ns.showMessage(response.error as string, false);
-          }
-        },
-        error: (err) => {
-          this.ns.showMessage(err.error.error as string, false);
+    
+    this.messageService.getAllSendersMessages('').subscribe({
+      next: (response) => {
+        console.log(response);
+        if (response.success) {
+          this.messages = response.messages as Messages[];
+          this.simulateAdminTyping();
+        } else {
+          this.ns.showMessage(response.error as string, false);
         }
-      })
-    );
-  }
+      },
+      error: (err) => {
+        this.ns.showMessage(err.error.error as string, false);
+      }
+    });
+}
 
   simulateAdminTyping(): void {
-    // This is just for demo, in production you would use real-time notifications
-    // Only simulate typing if the last message was from the user
     if (this.messages.length > 0 && 
         this.messages[this.messages.length - 1].SenderId === this.currentUser.UserId) {
       
       const randomDelay = Math.floor(Math.random() * 3) + 1;
       
-      // Show typing indicator after random delay
       setTimeout(() => {
         this.isAdminTyping = true;
         
-        // Hide typing indicator after 2-4 seconds
         setTimeout(() => {
           this.isAdminTyping = false;
         }, 2000 + Math.random() * 2000);
@@ -215,31 +193,18 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
       DateCreated: new Date().toISOString()
     };
 
-    // If there's an image, handle it
-    if (this.selectedImage) {
-      this.uploadImage().then(imageUrl => {
-        newMessage.Message += imageUrl ? `\n<img src="${imageUrl}" alt="uploaded image">` : '';
-        this.sendMessageToServer(newMessage);
-      });
-    } else {
-      this.sendMessageToServer(newMessage);
-    }
+    this.sendMessageToServer(newMessage);
   }
 
   private sendMessageToServer(message: Partial<Messages>): void {
-    this.subscriptions.push(
-      this.messageService.sendMessage(message).subscribe({
-        next: (sentMessage) => {
-          this.loadMessages(true);
-          this.resetMessageInput();
-          // Scroll to bottom
-          this.scrollToBottom();
-        },
-        error: (err) => {
-          console.error('Error sending message:', err);
+    this.messageService.sendMessage(message).subscribe({
+      next: (response) => {
+        if(response.success) {
+          this.loadMessages();
+
         }
-      })
-    );
+      }
+    })
   }
 
   updateMessage(): void {
@@ -252,23 +217,22 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
       Message: this.messageText.trim()
     };
 
-    this.subscriptions.push(
-      this.messageService.updateMessage(updatedMessage.MessagesId, updatedMessage.Message).subscribe({
-        next: (result) => {
-          // Update message in local array
-          const index = this.messages.findIndex(m => m.MessagesId === this.editingMessageId);
-          if (index !== -1) {
-            this.messages[index].Message = this.messageText.trim();
-          }
-          
-          // Reset editing state
-          this.resetMessageInput();
-        },
-        error: (err) => {
-          console.error('Error updating message:', err);
+    
+    this.messageService.updateMessage(updatedMessage.MessagesId, updatedMessage.Message).subscribe({
+      next: (result) => {
+        // Update message in local array
+        const index = this.messages.findIndex(m => m.MessagesId === this.editingMessageId);
+        if (index !== -1) {
+          this.messages[index].Message = this.messageText.trim();
         }
-      })
-    );
+        
+        // Reset editing state
+        this.resetMessageInput();
+      },
+      error: (err) => {
+        console.error('Error updating message:', err);
+      }
+    });
   }
 
   resetMessageInput(): void {
@@ -341,22 +305,21 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
   }
 
   // Upload image to server and return URL
-  private async uploadImage(): Promise<string> {
-    // if (!this.selectedImage) {
-    //   return '';
-    // }
+  // private async uploadImage(): Promise<string> {
+  //   if (!this.selectedImage) {
+  //     return '';
+  //   }
 
-    // try {
-    //   const imageUrl = await this.messageService.uploadImage(this.selectedImage).toPromise();
-    //   return imageUrl || '';
-    // } catch (error) {
-    //   console.error('Error uploading image:', error);
-    //   return '';
-    // } finally {
-    //   this.removeSelectedImage();
-    // }
-    return ''
-  }
+  //   try {
+  //     const imageUrl = await this.messageService.uploadImage(this.selectedImage).toPromise();
+  //     return imageUrl || '';
+  //   } catch (error) {
+  //     console.error('Error uploading image:', error);
+  //     return '';
+  //   } finally {
+  //     this.removeSelectedImage();
+  //   }
+  // }
 
   // Emoji picker methods
   toggleEmojiPicker(): void {

@@ -98,7 +98,7 @@
     <!-- Normal Order Rows -->
     <div *ngFor="let order of filteredOrders" class="order-row" 
          [ngClass]="{'normal-order': isNormalOrder(order), 'custom-order': isCustomOrder(order)}"
-         [class.delivered]="isDelivered(order)">
+         [class.delivered]="isDelivered(order) === 'delivered'">
       
       <div class="order-cell image-cell">
         <img [src]="getProductImage(order)" alt="Product">
@@ -140,7 +140,7 @@
         <button class="action-btn view-btn" (click)="viewOrderDetails(order)">
           <i class='bx bx-show'></i>
         </button>
-        <button class="action-btn deliver-btn" *ngIf="!isDelivered(order)" (click)="updateDeliveryStatus(order)">
+        <button class="action-btn deliver-btn" *ngIf="isDelivered(order) === 'pending'" (click)="updateDeliveryStatus(order)">
           <i class='bx bx-package'></i>
         </button>
         <button class="action-btn delete-btn" (click)="confirmDelete(order)">
