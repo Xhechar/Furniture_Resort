@@ -5,6 +5,7 @@ import { HandlerService } from '../../../services/handler.service';
 import { TopBar } from '../../../interfaces/interfaces';
 import { ModalService } from '../../../services/modal.service';
 import { LogoutComponent } from '../../logout/logout.component';
+import { SidebarService } from '../../../services/modifiers/sidebar.service';
 
 @Component({
   selector: 'app-user-side-bar',
@@ -32,8 +33,14 @@ export class UserSideBarComponent {
   selectedIndex = 0;
   isSidebarCollapsed = false;
   screenWidth: number;
+  sidebarState: boolean = false;
 
-  constructor(private router: Router, private hs: HandlerService, private ms: ModalService) {
+  constructor(private router: Router, private hs: HandlerService, private ms: ModalService, private ss: SidebarService) {
+
+    ss.sidebarState$.subscribe(value => {
+      this.sidebarState = value;
+    });
+    
     this.screenWidth = window.innerWidth;
     this.checkScreenSize();
     
@@ -56,6 +63,11 @@ export class UserSideBarComponent {
     }
   }
 
+  switchSidebar() {
+    this.ss.toggleIncreaseWidth();
+    this.ss.toggleSidebar();
+  }
+
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
@@ -66,6 +78,8 @@ export class UserSideBarComponent {
     // If on mobile, collapse sidebar after selection
     if (this.screenWidth <= 768) {
       this.isSidebarCollapsed = true;
+
+      this.switchSidebar();
     }
     
     const routeParts = this.router.url.split('/');

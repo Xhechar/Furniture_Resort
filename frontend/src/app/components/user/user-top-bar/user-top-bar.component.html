@@ -1,20 +1,20 @@
 <div class="top-bar">
-  <h2>{{parent}}&nbsp;<span class="separator">></span><span class="child"> {{child}}</span></h2>
+  <h2 title="{{parent}}">{{parent}}&nbsp;<span class="separator">></span><span class="child" title="{{child}}"> {{child}}</span></h2>
   <div class="profile-area">
     <nav class="nav-icons">
       <ul>
         <li><i class='bx bx-home-smile icon-animation'></i></li>
-        <li><i class='bx bx-notification icon-animation'></i></li>
+        <li (click)="switchSidebar()"><i class='bx bx-menu icon-animation'></i></li>
         <li><i class='bx bx-cart-alt icon-animation'></i></li>
       </ul>
     </nav>
     <div class="profile">
       <div class="name-and-date">
-        <h3>{{user ? user.Fullname : 'Collins Ongolo'}}</h3>
+        <h3 title="{{user ? user.Fullname : 'Guest'}}">{{user ? user.Fullname : 'Guest'}}</h3>
         <p>{{now | date : 'fullDate'}}</p>
       </div>
       <div class="img-container">
-        <img [src]="user.ProfileImage" alt="profile">
+        <img [src]="user && user.ProfileImage ? user.ProfileImage : 'assets/images/default-avatar.png'" alt="profile">
       </div>
     </div>
   </div>

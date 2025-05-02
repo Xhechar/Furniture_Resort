@@ -1,7 +1,124 @@
+.admin-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+.main-admin-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.body {
+  margin-top: 4.8rem;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  min-height: calc(100vh - var(--top-bar-height));
+}
+
 .admin-contents {
-  width: 77.5%;
-  height: 400px;
+  width: calc(100% - var(--sidebar-width) - 2%);
+  min-height: calc(100vh - var(--top-bar-height) - 2rem);
   margin-right: 1%;
   margin-left: auto;
-  margin-top: 5rem;
+  margin-top: var(--top-bar-height);
+  padding: var(--admin-padding);
+  transition: width 0.3s ease, margin-top 0.3s ease;
+}
+
+/* Sidebar collapsed state */
+.sidebar-collapsed .admin-contents {
+  width: calc(100% - var(--sidebar-collapsed-width) - 2%);
+}
+
+/* Responsive styles */
+@media screen and (max-width: 1400px) {
+  .admin-contents {
+    width: calc(100% - var(--sidebar-width) - 1%);
+    margin-right: 0.5%;
+  }
+  
+  .sidebar-collapsed .admin-contents {
+    width: calc(100% - var(--sidebar-collapsed-width) - 1%);
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  :root {
+    --top-bar-height: 4.2rem;
+    --admin-padding: 1.25rem;
+  }
+  
+  .admin-contents {
+    width: calc(100% - var(--sidebar-width));
+    margin-right: 0;
+  }
+  
+  .sidebar-collapsed .admin-contents {
+    width: calc(100% - var(--sidebar-collapsed-width));
+  }
+}
+
+@media screen and (max-width: 992px) {
+  :root {
+    --top-bar-height: 4rem;
+    --admin-padding: 1rem;
+  }
+  
+  .admin-contents {
+    width: calc(100% - var(--sidebar-width) + 1rem);
+  }
+  
+  .sidebar-collapsed .admin-contents {
+    width: calc(100% - var(--sidebar-collapsed-width) + 0.5rem);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  :root {
+    --sidebar-width: 4.5rem;
+    --sidebar-collapsed-width: 0;
+    --top-bar-height: 3.8rem;
+  }
+  
+  .admin-contents {
+    width: calc(100% - var(--sidebar-width));
+    padding: 0.8rem;
+  }
+  
+  .sidebar-collapsed .admin-contents {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  :root {
+    --top-bar-height: 3.5rem;
+    --admin-padding: 0.8rem;
+  }
+  
+  .admin-container {
+    flex-direction: column;
+  }
+  
+  .admin-contents {
+    width: 100%;
+    padding: var(--admin-padding);
+    margin-top: calc(var(--top-bar-height) + 0.5rem);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  :root {
+    --top-bar-height: 3.2rem;
+    --admin-padding: 0.6rem;
+  }
+  
+  .admin-contents {
+    padding: 0.5rem;
+  }
 }

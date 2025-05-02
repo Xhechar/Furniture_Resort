@@ -1,17 +1,12 @@
 import { Response } from "express";
 import { ExtendedRequest, getIdFromToken } from "../middlewares/verification.tokens";
 import { UserService } from "../services/user.service";
-import { RegistrationSchema, UpdateUserSchema } from "../validators/backend.input.validators";
 
-const userService = new UserService();
+export const userService = new UserService();
 
 export class UserController {
   async createUser(req: ExtendedRequest, res: Response) {
     try {
-
-      let { error } = RegistrationSchema.validate(req.body);
-
-      if (error) res.status(401).json({ 'error': error.message });
 
       let result = await userService.createUser(req.body);
 
@@ -25,10 +20,6 @@ export class UserController {
   }
   async updateUser(req: ExtendedRequest, res: Response) {
     try {
-
-      let { error } = UpdateUserSchema.validate(req.body);
-
-      if (error) res.status(401).json({ error: error.message });
 
       let result = await userService.updateUser(getIdFromToken(req), req.body);
 

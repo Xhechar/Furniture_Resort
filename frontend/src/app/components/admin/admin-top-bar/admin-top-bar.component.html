@@ -1,22 +1,25 @@
-<app-notifications></app-notifications>
 <div class="top-bar">
-  <h2>{{parent}}&nbsp;><span> {{child}}</span></h2>
-<div class="profile-area">
-  <nav>
-    <ul>
-      <li><i class='bx bx-home-smile' ></i></li>
-      <li><i class='bx bx-notification' ></i></li>
-      <li><i class='bx bx-cart-alt' ></i></li>
-    </ul>
-  </nav>
-  <div class="profile">
-    <div class="name-and-date">
-      <h3>{{user ? user.Fullname.toLocaleUpperCase() : 'Collins Ongolo'.toLocaleUpperCase() }}</h3>
-      <p>{{user ? user.Role.toLocaleUpperCase() : 'admin'.toLocaleUpperCase() }}</p>
-    </div>
-    <div class="img-container">
-      <img [src]="user ? user.ProfileImage : '' " [alt]="user ? user.Fullname.split(' ')[0] : 'profile image'">
+  <div class="breadcrumb">
+    <h2>{{parent}}&nbsp;<span class="separator">></span><span class="child"> {{child}}</span></h2>
+  </div>
+  <div class="profile-area">
+    <nav class="top-nav">
+      <ul>
+        <li class="nav-icon"><i class='bx bx-home-smile'></i></li>
+        <li class="nav-icon"><i class='bx bx-notification'></i></li>
+        <li (click)="switchSideBar()" class="nav-icon mobile-menu"><i class='bx bx-menu'></i></li>
+      </ul>
+    </nav>
+    <div class="profile">
+      <div class="name-and-role">
+        <h3>{{user ? user.Fullname.toLocaleUpperCase() : 'Guest'.toLocaleUpperCase() }}</h3>
+        <p>{{user ? user.Role.toLocaleUpperCase() : 'admin'.toLocaleUpperCase() }}</p>
+      </div>
+      <div class="img-container">
+        <img [src]="user ? user.ProfileImage : '' " [alt]="user ? user.Fullname.split(' ')[0] : 'profile image'">
+      </div>
     </div>
   </div>
 </div>
-</div>
+
+<app-notifications></app-notifications>

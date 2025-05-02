@@ -3,6 +3,9 @@ import { User } from "../interfaces/backend.interfaces";
 import { UserInterface } from "../interfaces/services.coupling.interfaces";
 import { v4 } from "uuid";
 import bcryptjs from 'bcryptjs'
+import { RegistrationSchema, UpdateUserSchema } from "../validators/backend.input.validators";
+import { userService } from "../controllers/user.controller";
+import { getIdFromToken } from "../middlewares/verification.tokens";
 
 export class UserService implements UserInterface {
   
@@ -11,6 +14,15 @@ export class UserService implements UserInterface {
   });
 
   public async createUser(user: User) : Promise<{success: boolean, message?: string, error?: string}> {
+
+    let { error } = RegistrationSchema.validate(user);
+
+    if (error) {
+      return {
+        'success': false,
+        'error':  error.details[0].message
+      }
+    }
 
     let emailExists = await this.prisma.user.findUnique({
       where: {
@@ -96,6 +108,15 @@ export class UserService implements UserInterface {
   }
 
   public async updateUser(UserId: string, user: User): Promise<{ success: boolean; error?: string; message?: string; }> {
+
+    let { error } = UpdateUserSchema.validate(user);
+
+    if (error) {
+      return {
+        'success': false,
+        'error':  error.details[0].message
+      }
+    }
     
     let userExists = await this.prisma.user.findUnique({
       where: {

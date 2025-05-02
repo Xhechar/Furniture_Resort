@@ -1,17 +1,12 @@
 import { Response } from "express";
 import { ExtendedRequest, getIdFromToken } from "../middlewares/verification.tokens";
 import { ProductService } from "../services/products.service";
-import { ProductSchema } from "../validators/backend.input.validators";
 
-const productService = new ProductService();
+export const productService = new ProductService();
 
 export class ProductsController {
   async createProduct(req: ExtendedRequest, res: Response) {
     try {
-
-      let { error } = ProductSchema.validate(req.body);
-
-      if (error) res.status(401).json({ error: error.message });
 
       let result = await productService.createProduct(getIdFromToken(req), req.body);
 
@@ -25,9 +20,6 @@ export class ProductsController {
   }
   async updateProduct(req: ExtendedRequest, res: Response) {
     try {
-      let { error } = ProductSchema.validate(req.body);
-
-      if (error) res.status(401).json({ error: error.message });
 
       let result = await productService.updateProduct(getIdFromToken(req), req.params.ProductId, req.body);
 

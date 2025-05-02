@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 81%;
+  width: calc( 100% - var(--sidebar-width));
   height: 4.5rem;
   border: none;
   display: flex;
@@ -25,6 +25,10 @@
   letter-spacing: 1px;
   display: flex;
   align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 50%;
 }
 
 .separator {
@@ -38,6 +42,9 @@
   font-weight: 500;
   color: var(--text-light);
   transition: var(--transition);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .child:hover {
@@ -47,9 +54,10 @@
 .profile-area {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   height: 100%;
   gap: 1.5rem;
+  flex-shrink: 0;
 }
 
 .nav-icons {
@@ -123,6 +131,10 @@
   line-height: 1.2;
   margin: 0 0 0.2rem 0;
   transition: var(--transition);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
 }
 
 .name-and-date p {
@@ -141,6 +153,7 @@
   border: 2px solid var(--accent);
   transition: var(--transition);
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  flex-shrink: 0;
 }
 
 .img-container:hover {
@@ -156,9 +169,23 @@
 }
 
 /* Responsive styles */
+@media screen and (max-width: 1400px) {
+  .top-bar {
+    width: calc( 100% - var(--sidebar-width));
+  }
+}
+
 @media screen and (max-width: 1200px) {
   .top-bar {
-    width: 75%;
+    width: calc( 100% - var(--sidebar-width));
+  }
+  
+  .top-bar h2 {
+    max-width: 45%;
+  }
+  
+  .name-and-date h3 {
+    max-width: 120px;
   }
 }
 
@@ -171,11 +198,25 @@
   .profile::before {
     display: none;
   }
+  
+  .top-bar h2 {
+    font-size: 1.1rem;
+    max-width: 40%;
+  }
+  
+  .child {
+    font-size: 1rem;
+  }
+  
+  .profile-area {
+    gap: 1rem;
+  }
 }
 
 @media screen and (max-width: 768px) {
   .top-bar {
-    width: 65%;
+    width: calc(100% - 80px);
+    height: 4rem;
   }
   
   .name-and-date p {
@@ -185,40 +226,101 @@
   .profile {
     gap: 0.5rem;
   }
+  
+  .icon-animation {
+    width: 34px;
+    height: 34px;
+    font-size: 1.2rem;
+  }
+  
+  .nav-icons ul {
+    gap: 0.5rem;
+  }
+  
+  .name-and-date h3 {
+    max-width: 100px;
+  }
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 640px) {
   .top-bar {
-    width: 85%;
-    right: 0;
+    width: 100%;
     left: 0;
-    margin: 0 auto;
-    padding: 0 0.8rem;
+    right: 0;
+    padding: 0 1rem;
+    height: 3.8rem;
   }
   
   .top-bar h2 {
     font-size: 1rem;
+    max-width: 40%;
   }
   
   .child {
     font-size: 0.9rem;
   }
   
-  .name-and-date h3 {
-    font-size: 0.9rem;
-  }
-  
   .icon-animation {
     width: 32px;
     height: 32px;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+  }
+  
+  .name-and-date h3 {
+    font-size: 0.9rem;
+    max-width: 80px;
   }
   
   .img-container {
     width: 36px;
   }
+}
+
+@media screen and (max-width: 480px) {
+  .top-bar {
+    padding: 0 0.8rem;
+  }
+  
+  .top-bar h2 {
+    font-size: 0.9rem;
+    max-width: 35%;
+  }
+  
+  .child {
+    font-size: 0.8rem;
+  }
+  
+  .name-and-date h3 {
+    font-size: 0.8rem;
+    max-width: 70px;
+  }
+  
+  .img-container {
+    width: 32px;
+  }
+  
+  .icon-animation {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
   
   .nav-icons ul {
     gap: 0.3rem;
+  }
+  
+  .separator {
+    margin: 0 0.3rem;
+  }
+}
+
+/* For extremely small screens */
+@media screen and (max-width: 375px) {
+  .nav-icons ul li:nth-child(3) {
+    display: none;
+  }
+  
+  .name-and-date h3 {
+    max-width: 60px;
   }
 }

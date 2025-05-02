@@ -158,7 +158,7 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
     };
 
     this.subscriptions.push(
-      this.messageService.getAllSendersMessages().subscribe({
+      this.messageService.getAllSendersMessages('').subscribe({
         next: (response) => {
           if (response.success) {
             this.messages = response.messages as Messages[];
@@ -194,7 +194,7 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
     }
   }
 
-  sendMessage(event?: KeyboardEvent): void {
+  sendMessage(event?: any): void {
     if (event) {
       event.preventDefault();
     }
@@ -253,7 +253,7 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
     };
 
     this.subscriptions.push(
-      this.messageService.updateMessage(updatedMessage).subscribe({
+      this.messageService.updateMessage(updatedMessage.MessagesId, updatedMessage.Message).subscribe({
         next: (result) => {
           // Update message in local array
           const index = this.messages.findIndex(m => m.MessagesId === this.editingMessageId);
@@ -342,19 +342,20 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
 
   // Upload image to server and return URL
   private async uploadImage(): Promise<string> {
-    if (!this.selectedImage) {
-      return '';
-    }
+    // if (!this.selectedImage) {
+    //   return '';
+    // }
 
-    try {
-      const imageUrl = await this.messageService.uploadImage(this.selectedImage).toPromise();
-      return imageUrl || '';
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      return '';
-    } finally {
-      this.removeSelectedImage();
-    }
+    // try {
+    //   const imageUrl = await this.messageService.uploadImage(this.selectedImage).toPromise();
+    //   return imageUrl || '';
+    // } catch (error) {
+    //   console.error('Error uploading image:', error);
+    //   return '';
+    // } finally {
+    //   this.removeSelectedImage();
+    // }
+    return ''
   }
 
   // Emoji picker methods

@@ -3,6 +3,9 @@ import { Product } from "../interfaces/backend.interfaces";
 import { ProductInterface } from "../interfaces/services.coupling.interfaces";
 import { date, string } from "joi";
 import { NIL, v4 } from "uuid";
+import { productService } from "../controllers/products.controller";
+import { getIdFromToken } from "../middlewares/verification.tokens";
+import { ProductSchema } from "../validators/backend.input.validators";
 
 export class ProductService implements ProductInterface {
   prisma = new PrismaClient({
@@ -12,6 +15,16 @@ export class ProductService implements ProductInterface {
   now = new Date();
   
   public async createProduct(UserId: string, product: Product): Promise<{ success: boolean; error?: string; message?: string; }> {
+
+    let { error } = ProductSchema.validate(product);
+
+    if (error) {
+      return {
+        'success': false,
+        'error':  error.details[0].message
+      }
+    }
+    
     let adminExists = await this.prisma.user.findUnique({
       where: {
         Role: 'admin',
@@ -55,6 +68,16 @@ export class ProductService implements ProductInterface {
     }
   }
   public async updateProduct(UserId: string, productId: string, product: Product): Promise<{ success: boolean; error?: string; message?: string; }> {
+
+    let { error } = ProductSchema.validate(product);
+
+    if (error) {
+      return {
+        'success': false,
+        'error':  error.details[0].message
+      }
+    }
+
     let adminExists = await this.prisma.user.findUnique({
       where: {
         Role: 'admin',

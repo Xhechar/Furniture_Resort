@@ -5,14 +5,13 @@ import { Router, RouterLink } from '@angular/router';
 import { LoginDetails } from '../../interfaces/interfaces';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { NotificationsComponent } from '../notifications/notifications.component';
-import { UserService } from '../../services/user.service';
 import { NotificationsService } from '../../services/notifications.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, ReactiveFormsModule, TopbarComponent, NotificationsComponent],
+  imports: [RouterLink, CommonModule, FormsModule, ReactiveFormsModule, NotificationsComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

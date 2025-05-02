@@ -1,6 +1,8 @@
-<app-logout></app-logout>
-<div class="sidebar">
+<div class="sidebar" *ngIf="!show">
   <div class="sidebar-header">
+    <div class="home-button">
+      <i class="bx bxs-home"></i>
+    </div>
     <div class="logo-text">
       <h1>Ndagani SF</h1>
       <p>Smart Furniture</p>
@@ -16,11 +18,13 @@
         <span class="menu-text">{{menu.value}}</span>
       </li>
     </ul>
-    <li class="menu-item" (click)="displayLogoutModal()">
+    <div class="menu-item logout-item" (click)="displayLogoutModal()">
       <div class="icon-box">
         <i class="bx bxs-log-out"></i>
       </div>
       <span class="menu-text">Logout</span>
-    </li>
+    </div>
   </div>
 </div>
+
+<app-logout></app-logout>

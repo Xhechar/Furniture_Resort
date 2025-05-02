@@ -1,5 +1,61 @@
 .everything-holder {
-  width: 81%;
+  width: calc( 100% - var(--sidebar-width));
   margin-top: 5rem;
   margin-left: auto;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  min-height: calc(100vh - 5rem);
+}
+
+/* Responsive styles to match the top-bar breakpoints */
+@media screen and (max-width: 1400px) {
+  .everything-holder {
+    width: calc( 100% - var(--sidebar-width));
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .everything-holder {
+    width: calc( 100% - var(--sidebar-width));
+    padding: 1.25rem;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .everything-holder {
+    width: 70%;
+    padding: 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .everything-holder {
+    width: calc(100% - 80px);
+    margin-top: 4rem;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .everything-holder {
+    width: 100%;
+    margin-top: 3.8rem;
+    padding: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .everything-holder {
+    padding: 0.8rem;
+  }
+}
+
+/* Optional: Add styles for side-bar collapse functionality */
+.app-container.sidebar-collapsed .everything-holder {
+  width: 95%;
+}
+
+@media screen and (max-width: 768px) {
+  .app-container.sidebar-collapsed .everything-holder {
+    width: 100%;
+  }
 }

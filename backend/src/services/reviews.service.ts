@@ -2,6 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import { Review } from "../interfaces/backend.interfaces";
 import { ReviewInterface } from "../interfaces/services.coupling.interfaces";
 import { v4 } from "uuid";
+import { reviewsService } from "../controllers/reviews.controller";
+import { getIdFromToken } from "../middlewares/verification.tokens";
+import { ReviewSchema } from "../validators/backend.input.validators";
 
 export class ReviewService implements ReviewInterface {
   prisma = new PrismaClient({
@@ -9,6 +12,16 @@ export class ReviewService implements ReviewInterface {
   });
   
   public async createReview(UserId: string, ProductId: string, review: Review): Promise<{ success: boolean; error?: string; message?: string; }> {
+
+    let { error } = ReviewSchema.validate(review);
+
+    if (error) {
+      return {
+        'success': false,
+        'error':  error.details[0].message
+      }
+    }
+    
     let userExists = await this.prisma.user.findUnique({
       where: {
         UserId
@@ -90,6 +103,16 @@ export class ReviewService implements ReviewInterface {
 
   }
   public async updateReview(UserId: string, ReviewId: string, review: Review): Promise<{ success: boolean; error?: string; message?: string; }> {
+
+    let { error } = ReviewSchema.validate(review);
+
+    if (error) {
+      return {
+        'success': false,
+        'error':  error.details[0].message
+      }
+    }
+
     let userExists = await this.prisma.user.findUnique({
       where: {
         UserId

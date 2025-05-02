@@ -10,7 +10,7 @@ import { NotificationsComponent } from '../notifications/notifications.component
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule, TopbarComponent, NotificationsComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule, NotificationsComponent],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })

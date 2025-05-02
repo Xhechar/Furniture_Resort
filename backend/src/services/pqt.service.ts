@@ -2,12 +2,22 @@ import { PrismaClient } from "@prisma/client";
 import { ProductQuantityTime, Review } from "../interfaces/backend.interfaces";
 import { PtQTInteface } from "../interfaces/services.coupling.interfaces";
 import { v4 } from "uuid";
+import { ProductQuantityTimeSchema } from "../validators/backend.input.validators";
 
 export class PQTSerice implements PtQTInteface {
   prisma = new PrismaClient({
     log: ["error"]
   });
   public async createPQT(ProductId: string, pqt: ProductQuantityTime): Promise<{ success: boolean; error?: string; message?: string; }> {
+    let { error } = ProductQuantityTimeSchema.validate(pqt);
+
+    if (error) {
+      return {
+        'success': false,
+        'error':  error.details[0].message
+      }
+    }
+
     let productExists = await this.prisma.product.findUnique({
       where: {
         ProductId
@@ -44,6 +54,16 @@ export class PQTSerice implements PtQTInteface {
     }
   }
   public async updatePQT(ProductQuantityTimeId: string, pqt: Partial<ProductQuantityTime>): Promise<{ success: boolean; error?: string; message?: string; }> {
+
+    let { error } = ProductQuantityTimeSchema.validate(pqt);
+
+    if (error) {
+      return {
+        'success': false,
+        'error':  error.details[0].message
+      }
+    }
+    
     let pqtExists = await this.prisma.productQuantityTime.findUnique({
       where: {
         ProductQuantityTimeId

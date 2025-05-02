@@ -1,216 +1,259 @@
-<app-topbar></app-topbar>
 <app-notifications></app-notifications>
-<div class="body">
-    <div class="coloured-body">
-      <div class="entire-grid">
-        <div class="business-services"></div>
-        <div class="entire-content">
-            <div class="logo-title-area">
-              <div class="title-area">
-                <h3>REGISTER DETAILS.</h3>
-                <p>Sign Up</p>
-              </div>
-              <div class="logo-container">
-                <div class="image-holder">
-                  <div class="image" *ngIf="imageUrl">
-                    <img [src]="imageUrl" alt="">
-                  </div>
-                  <i class='bx bx-loader bx-spin loader' *ngIf="load"></i>
-                  <i class='bx bx-camera' ></i>
-                  <input type="file" name="profile" id="profile" (change)="getImageUrl($event)">
-                </div>
-                <p>Upload Profile</p>
-              </div>
-            </div>
-      
-            <div class="form-container">
-              <form [formGroup]="registerUserForm" (ngSubmit)="registerUser()">
-                <div class="input-group">
-                  <div class="input">
-                    <div class="image-label">
-                      <img src="../../../icons/badge_53dp_544820.png" alt="" />
-                      <label for="fullname">fullname</label>
-                    </div>
-                    <div class="input-cont">
-                      <input type="text" name="fullname" formControlName="Fullname" required placeholder="John Doe" />
-                    </div>
-                    <div class="err" *ngIf="registerUserForm.get('Fullname')?.invalid && registerUserForm.get('Fullname')?.touched || registerUserForm.get('Fullname')?.dirty">
-                      <div class="err" *ngIf="registerUserForm.get('Fullname')?.errors?.['required']">
-                        <p>Fullname field cannot be empty!</p>
-                      </div>
-                      <div class="err" *ngIf="registerUserForm.get('Fullname')?.errors?.['invalidFullname']">
-                        <p>Fullname must be more than 5 characters.</p>
-                      </div>
-                    </div>
-                  </div>
-      
-                  <div class="input">
-                    <div class="image-label">
-                      <img src="../../../icons/email_53dp_544820.png" alt="" />
-                      <label for="email">email</label>
-                    </div>
-                    <div class="input-cont">
-                      <input type="email" name="email" formControlName="Email" required placeholder="johndoe@gmail.com" />
-                    </div>
-                    <div class="err" *ngIf="registerUserForm.get('Email')?.invalid && registerUserForm.get('Email')?.touched || registerUserForm.get('Email')?.dirty">
-                      <div class="err" *ngIf="registerUserForm.get('Email')?.errors?.['required']">
-                        <p>Email field cannot be empty!</p>
-                      </div>
-                      <div class="err" *ngIf="registerUserForm.get('Email')?.errors?.['invalidEmail']">
-                        <p>Invalid email format!</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="input">
-                    <div class="image-label">
-                      <img src="../../../icons/phone.png" alt="" />
-                      <label for="phone_number">phone number</label>
-                    </div>
-                    <div class="input-cont">
-                      <input type="text" name="phone_number" required placeholder="07-00-000-000" formControlName="Mobile"/>
-                    </div>
-                    <div class="err" *ngIf="registerUserForm.get('Mobile')?.invalid && registerUserForm.get('Mobile')?.touched || registerUserForm.get('Mobile')?.dirty">
-                      <div class="err" *ngIf="registerUserForm.get('Mobile')?.errors?.['required']">
-                        <p>Mobile number field cannot be empty!</p>
-                      </div>
-                      <div class="err" *ngIf="registerUserForm.get('Mobile')?.errors?.['invalidMobile']">
-                        <p>Invalid mobile number format!</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="input">
-                    <div class="image-label">
-                      <img src="../../../icons/id.png" alt="" />
-                      <label for="id number">identification number</label>
-                    </div>
-                    <div class="input-cont">
-                      <input type="number" name="id number" required placeholder="07-00-000-000" formControlName="IdentificationNumber"/>
-                    </div>
-                    <div class="err" *ngIf="registerUserForm.get('IdentificationNumber')?.invalid && registerUserForm.get('IdentificationNumber')?.touched || registerUserForm.get('IdentificationNumber')?.dirty">
-                      <div class="err" *ngIf="registerUserForm.get('IdentificationNumber')?.errors?.['required']">
-                        <p>Identification number field cannot be empty!</p>
-                      </div>
-                      <div class="err" *ngIf="registerUserForm.get('IdentificationNumber')?.errors?.['invalidIdentificationNumber']">
-                        <p>Invalid identification number size!</p>
-                      </div>
-                    </div>
-                  </div>
-      
-                  <div class="input">
-                    <div class="image-label">
-                      <img src="../../../icons/country.png" alt="" />
-                      <label for="country">country</label>
-                    </div>
-                    <div class="input-cont">
-                      <input type="text" name="country" formControlName="Country" required placeholder="kenya" />
-                    </div>
-                    <div class="err" *ngIf="registerUserForm.get('Country')?.invalid && registerUserForm.get('Country')?.touched || registerUserForm.get('Country')?.dirty">
-                      <div class="err" *ngIf="registerUserForm.get('Country')?.errors?.['required']">
-                        <p>Country field cannot be empty!</p>
-                      </div>
-                      <div class="err" *ngIf="registerUserForm.get('Country')?.errors?.['invalidCountry']">
-                        <p>Invalid country name size!</p>
-                      </div>
-                    </div>
-                  </div>
 
-                  <div class="input">
-                    <div class="image-label">
-                      <img src="../../../icons/city.png" alt="" />
-                      <label for="city">city</label>
-                    </div>
-                    <div class="input-cont">
-                      <input type="text" name="city" formControlName="City" required placeholder="nairobi" />
-                    </div>
-                    <div class="err" *ngIf="registerUserForm.get('City')?.invalid && registerUserForm.get('City')?.touched || registerUserForm.get('City')?.dirty">
-                      <div class="err" *ngIf="registerUserForm.get('City')?.errors?.['required']">
-                        <p>City field cannot be empty!</p>
-                      </div>
-                      <div class="err" *ngIf="registerUserForm.get('City')?.errors?.['invalidCity']">
-                        <p>Invalid city name size!</p>
-                      </div>
-                    </div>
-                  </div>
+<div class="signup-container">
+  <div class="signup-wrapper">
+    <!-- Back to home button -->
+    <a routerLink="/" class="home-button">
+      <i class="bx bx-home-alt"></i>
+    </a>
 
-                  <div class="input">
-                    <div class="image-label">
-                      <img src="../../../icons/gender.png" alt="" />
-                      <label for="gender">gender</label>
-                    </div>
-                    <div class="input-cont">
-                      <select name="gender" id="gender" formControlName="Gender">
-                        <option value="" selected disabled>Choose Type</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
-                    <div class="err" *ngIf="registerUserForm.get('Gender')?.invalid && registerUserForm.get('Gender')?.touched || registerUserForm.get('Gender')?.dirty">
-                      <div class="err" *ngIf="registerUserForm.get('Gender')?.errors?.['required']">
-                        <p>Gender field cannot be empty!</p>
-                      </div>
-                    </div>
-                  </div>
-      
-                  <div class="input">
-                    <div class="image-label">
-                      <img src="../../../icons/password_53dp_544820.png" alt="" />
-                      <label for="password">password</label>
-                    </div>
-                    <div class="input-cont">
-                      <input type="password" name="password" minlength="8" maxlength="30" required placeholder="abcABC@123" formControlName="Password" />
-                    </div>
-                    <div class="err" *ngIf="registerUserForm.get('Password')?.invalid && registerUserForm.get('Password')?.touched || registerUserForm.get('Password')?.dirty">
-                      <div class="err" *ngIf="registerUserForm.get('Password')?.errors?.['required']">
-                        <p>Password field cannot be empty!</p>
-                      </div>
-                      <div class="err" *ngIf="registerUserForm.get('Password')?.errors?.['passwordLength']">
-                        <p>Password must be at least 8 characters long!</p>
-                      </div>
-                      <div class="err" *ngIf="registerUserForm.get('Password')?.errors?.['maxlength']">
-                        <p>Password must be at most 30 characters long!</p>
-                      </div>
-                      <div class="err" *ngIf="registerUserForm.get('Password')?.errors?.['passwordPattern']">
-                        <p>Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character </p>
-                      </div>
-                    </div>
-                  </div>
-      
-                  <div class="input">
-                    <div class="image-label">
-                      <img src="../../../icons/confirm_password.png" alt="" />
-                      <label for="confirm_password">confirm password</label>
-                    </div>
-                    <div class="input-cont">
-                      <input type="password" name="confirm_password" minlength="8" maxlength="30" required placeholder="abcABC@123" formControlName="ConfirmPassword"/>
-                    </div>
-                    <div class="err" *ngIf="registerUserForm.get('ConfirmPassword')?.invalid && registerUserForm.get('ConfirmPassword')?.touched || registerUserForm.get('ConfirmPassword')?.dirty">
-                      <div class="err" *ngIf="registerUserForm.get('ConfirmPassword')?.errors?.['required']">
-                        <p>Confirm password field cannot be empty!</p>
-                      </div>
-                      <div class="err" *ngIf="registerUserForm.get('ConfirmPassword')?.errors?.['passwordMismatch']">
-                        <p>Passwords do not match!</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-      
-                <div class="button-input">
-                  <button type="submit" [disabled]="registerUserForm.pristine">
-                    Sign Up
-                  </button>
-                </div>
-                <div class="alternative-option">
-                  <p class="login-link">
-                    Already have an account? <a routerLink="/login">Login</a>
-                  </p>
-                </div>
-              </form>
+    <!-- Left side with furniture image -->
+    <div class="signup-image">
+      <div class="company-info">
+        <h1>Ndagani <span>SF</span></h1>
+        <p>Smart Furniture for Modern Living</p>
+      </div>
+    </div>
+
+    <!-- Right side with signup form -->
+    <div class="signup-form-container">
+      <div class="signup-form-wrapper">
+        <div class="signup-header">
+          <h2>Create Account</h2>
+          <p>Join Ndagani Smart Furniture</p>
+        </div>
+
+        <!-- Profile Upload -->
+        <div class="profile-upload">
+          <div class="profile-image-container">
+            <div class="image-holder">
+              <div class="image" *ngIf="imageUrl">
+                <img [src]="imageUrl" alt="Profile picture">
+              </div>
+              <i class="bx bx-loader bx-spin loader" *ngIf="load"></i>
+              <i class="bx bx-camera"></i>
+              <input type="file" name="profile" id="profile" (change)="getImageUrl($event)">
             </div>
           </div>
+          <p>Upload Profile Photo</p>
+        </div>
+
+        <form [formGroup]="registerUserForm" (ngSubmit)="registerUser()" class="signup-form">
+          <div class="form-grid">
+            <!-- Full Name -->
+            <div class="form-group">
+              <div class="input-icon">
+                <i class="bx bx-user"></i>
+              </div>
+              <div class="input-field">
+                <input 
+                  type="text" 
+                  name="fullname" 
+                  id="fullname" 
+                  formControlName="Fullname" 
+                  required
+                >
+                <label for="fullname">Full name</label>
+              </div>
+              <div class="error-message" *ngIf="registerUserForm.get('Fullname')?.invalid && registerUserForm.get('Fullname')?.touched || registerUserForm.get('Fullname')?.dirty">
+                <p *ngIf="registerUserForm.get('Fullname')?.errors?.['required']">Fullname field cannot be empty!</p>
+                <p *ngIf="registerUserForm.get('Fullname')?.errors?.['invalidFullname']">Fullname must be more than 5 characters.</p>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <div class="input-icon">
+                <i class="bx bx-envelope"></i>
+              </div>
+              <div class="input-field">
+                <input 
+                  type="email" 
+                  name="email" 
+                  id="email" 
+                  formControlName="Email" 
+                  required
+                >
+                <label for="email">Email address</label>
+              </div>
+              <div class="error-message" *ngIf="registerUserForm.get('Email')?.invalid && registerUserForm.get('Email')?.touched || registerUserForm.get('Email')?.dirty">
+                <p *ngIf="registerUserForm.get('Email')?.errors?.['required']">Email field cannot be empty!</p>
+                <p *ngIf="registerUserForm.get('Email')?.errors?.['invalidEmail']">Invalid email format!</p>
+              </div>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group">
+              <div class="input-icon">
+                <i class="bx bx-phone"></i>
+              </div>
+              <div class="input-field">
+                <input 
+                  type="text" 
+                  name="phone_number" 
+                  id="phone_number" 
+                  formControlName="Mobile" 
+                  required
+                >
+                <label for="phone_number">Phone number</label>
+              </div>
+              <div class="error-message" *ngIf="registerUserForm.get('Mobile')?.invalid && registerUserForm.get('Mobile')?.touched || registerUserForm.get('Mobile')?.dirty">
+                <p *ngIf="registerUserForm.get('Mobile')?.errors?.['required']">Mobile number field cannot be empty!</p>
+                <p *ngIf="registerUserForm.get('Mobile')?.errors?.['invalidMobile']">Invalid mobile number format!</p>
+              </div>
+            </div>
+
+            <!-- ID Number -->
+            <div class="form-group">
+              <div class="input-icon">
+                <i class="bx bx-id-card"></i>
+              </div>
+              <div class="input-field">
+                <input 
+                  type="number" 
+                  name="id_number" 
+                  id="id_number" 
+                  formControlName="IdentificationNumber" 
+                  required
+                >
+                <label for="id_number">ID number</label>
+              </div>
+              <div class="error-message" *ngIf="registerUserForm.get('IdentificationNumber')?.invalid && registerUserForm.get('IdentificationNumber')?.touched || registerUserForm.get('IdentificationNumber')?.dirty">
+                <p *ngIf="registerUserForm.get('IdentificationNumber')?.errors?.['required']">Identification number field cannot be empty!</p>
+                <p *ngIf="registerUserForm.get('IdentificationNumber')?.errors?.['invalidIdentificationNumber']">Invalid identification number size!</p>
+              </div>
+            </div>
+
+            <!-- Country -->
+            <div class="form-group">
+              <div class="input-icon">
+                <i class="bx bx-globe"></i>
+              </div>
+              <div class="input-field">
+                <input 
+                  type="text" 
+                  name="country" 
+                  id="country" 
+                  formControlName="Country" 
+                  required
+                >
+                <label for="country">Country</label>
+              </div>
+              <div class="error-message" *ngIf="registerUserForm.get('Country')?.invalid && registerUserForm.get('Country')?.touched || registerUserForm.get('Country')?.dirty">
+                <p *ngIf="registerUserForm.get('Country')?.errors?.['required']">Country field cannot be empty!</p>
+                <p *ngIf="registerUserForm.get('Country')?.errors?.['invalidCountry']">Invalid country name size!</p>
+              </div>
+            </div>
+
+            <!-- City -->
+            <div class="form-group">
+              <div class="input-icon">
+                <i class="bx bx-buildings"></i>
+              </div>
+              <div class="input-field">
+                <input 
+                  type="text" 
+                  name="city" 
+                  id="city" 
+                  formControlName="City" 
+                  required
+                >
+                <label for="city">City</label>
+              </div>
+              <div class="error-message" *ngIf="registerUserForm.get('City')?.invalid && registerUserForm.get('City')?.touched || registerUserForm.get('City')?.dirty">
+                <p *ngIf="registerUserForm.get('City')?.errors?.['required']">City field cannot be empty!</p>
+                <p *ngIf="registerUserForm.get('City')?.errors?.['invalidCity']">Invalid city name size!</p>
+              </div>
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+              <div class="input-icon">
+                <i class="bx bx-male-female"></i>
+              </div>
+              <div class="input-field select-field">
+                <select name="gender" id="gender" formControlName="Gender">
+                  <option value="" selected disabled>Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+                <label for="gender" class="select-label">Gender</label>
+              </div>
+              <div class="error-message" *ngIf="registerUserForm.get('Gender')?.invalid && registerUserForm.get('Gender')?.touched || registerUserForm.get('Gender')?.dirty">
+                <p *ngIf="registerUserForm.get('Gender')?.errors?.['required']">Gender field cannot be empty!</p>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+              <div class="input-icon">
+                <i class="bx bx-lock-alt"></i>
+              </div>
+              <div class="input-field">
+                <input 
+                  type="password" 
+                  name="password" 
+                  id="password" 
+                  formControlName="Password" 
+                  minlength="8" 
+                  maxlength="30" 
+                  required
+                >
+                <label for="password">Password</label>
+              </div>
+              <div class="error-message" *ngIf="registerUserForm.get('Password')?.invalid && registerUserForm.get('Password')?.touched || registerUserForm.get('Password')?.dirty">
+                <p *ngIf="registerUserForm.get('Password')?.errors?.['required']">Password field cannot be empty!</p>
+                <p *ngIf="registerUserForm.get('Password')?.errors?.['passwordLength']">Password must be at least 8 characters long!</p>
+                <p *ngIf="registerUserForm.get('Password')?.errors?.['maxlength']">Password must be at most 30 characters long!</p>
+                <p *ngIf="registerUserForm.get('Password')?.errors?.['passwordPattern']">Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.</p>
+              </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+              <div class="input-icon">
+                <i class="bx bx-check-shield"></i>
+              </div>
+              <div class="input-field">
+                <input 
+                  type="password" 
+                  name="confirm_password" 
+                  id="confirm_password" 
+                  formControlName="ConfirmPassword" 
+                  minlength="8" 
+                  maxlength="30" 
+                  required
+                >
+                <label for="confirm_password">Confirm password</label>
+              </div>
+              <div class="error-message" *ngIf="registerUserForm.get('ConfirmPassword')?.invalid && registerUserForm.get('ConfirmPassword')?.touched || registerUserForm.get('ConfirmPassword')?.dirty">
+                <p *ngIf="registerUserForm.get('ConfirmPassword')?.errors?.['required']">Confirm password field cannot be empty!</p>
+                <p *ngIf="registerUserForm.get('ConfirmPassword')?.errors?.['passwordMismatch']">Passwords do not match!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Terms and Conditions -->
+          <div class="terms-container">
+            <div class="terms-checkbox">
+              <input type="checkbox" id="terms" name="terms">
+              <label for="terms">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+            </div>
+          </div>
+
+          <div class="form-action">
+            <button type="submit" [disabled]="registerUserForm.pristine" class="signup-button">
+              <span>Create Account</span>
+              <i class="bx bx-right-arrow-alt"></i>
+            </button>
+          </div>
+
+          <div class="alternative-option">
+            <p>Already have an account? <a routerLink="/login" class="login-link">Login</a></p>
+          </div>
+        </form>
       </div>
     </div>
   </div>
-  
+</div>

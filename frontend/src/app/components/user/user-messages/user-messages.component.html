@@ -98,7 +98,7 @@
 
             <div class="message-input-wrapper">
                 <textarea class="message-input" placeholder="Type your message..." [(ngModel)]="messageText"
-                    (keydown.enter)="sendMessage($event)" #messageInput rows="1"
+                    (click)="sendMessage($event)" #messageInput rows="1"
                     (input)="autoGrow(messageInput)"></textarea>
                 <div class="edit-indicator" *ngIf="isEditing">
                     <i class="bx bx-edit"></i> Editing message

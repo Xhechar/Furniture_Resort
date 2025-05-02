@@ -1,7 +1,6 @@
 import { Response } from "express";
 import { ExtendedRequest, getIdFromToken } from "../middlewares/verification.tokens";
 import { ProgressService } from "../services/progress.service";
-import { ProductSchema } from "../validators/backend.input.validators";
 
 const progressService = new ProgressService();
 

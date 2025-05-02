@@ -1,67 +1,111 @@
-<app-topbar></app-topbar>
 <app-notifications></app-notifications>
-<div class="body">
-  <div class="coloured-body">
-    <div class="entire-content">
-      <div class="logo-container">
-          <div class="image-holder"></div>
+
+<div class="login-container">
+  <div class="login-wrapper">
+    <!-- Back to home button -->
+    <a routerLink="/" class="home-button">
+      <i class="bx bx-home-alt"></i>
+    </a>
+
+    <!-- Left side with furniture image -->
+    <div class="login-image">
+      <div class="company-info">
+        <h1>Ndagani <span>SF</span></h1>
+        <p style="color: white;">Smart Furniture for Modern Living</p>
       </div>
-      <div class="form-container">
-        <div class="centered-items">
-          <div class="title-area">
-            <h3>CONNECT WITH US.</h3>
-            <p>login</p>
+    </div>
+
+    <!-- Right side with login form -->
+    <div class="login-form-container">
+      <div class="login-form-wrapper">
+        <div class="login-header">
+          <h2>Welcome Back</h2>
+          <p>Login to your account</p>
+        </div>
+
+        <form #loginForm="ngForm" (ngSubmit)="loginUser(loginForm.value)" class="login-form">
+          <div class="form-group">
+            <div class="input-icon">
+              <i class="bx bx-envelope"></i>
+            </div>
+            <div class="input-field">
+              <input 
+                type="email" 
+                name="Email" 
+                id="email" 
+                email 
+                #email="ngModel" 
+                ngModel 
+                required
+              >
+              <label for="email">Email address</label>
+            </div>
+            <div class="error-message" *ngIf="email.invalid && (email.touched || email.dirty)">
+              <p *ngIf="email.hasError('required')">Email field cannot be empty!</p>
+              <p *ngIf="email.hasError('email')">Invalid email format!</p>
+            </div>
           </div>
 
-          <form #loginForm="ngForm" (ngSubmit)="loginUser(loginForm.value)">
-            <div class="input">
-              <div class="image-label">
-                <img src="../../../icons/email_53dp_544820.png" alt="">
-                <label for="email">email</label>
-              </div>
-              <div class="input-cont">
-                <input type="email" name="Email" email #email="ngModel" ngModel required placeholder="johndoe@gmail.com">
-              </div>
-              <div class="err" *ngIf="email.invalid && (email.touched || email.dirty)">
-                <div class="err" *ngIf="email.hasError('required')">
-                  <p>Email field cannot be empty!</p>
-                </div>
-                <div class="err" *ngIf="email.hasError('email')">
-                  <p>Invalid email format!</p>
-                </div>
-              </div>
+          <div class="form-group">
+            <div class="input-icon">
+              <i class="bx bx-lock-alt"></i>
             </div>
-            <div class="input">
-              <div class="image-label">
-                <img src="../../../icons/password_53dp_544820.png" alt="">
-                <label for="password">password</label>
-              </div>
-              <div class="input-cont">
-                <input type="password" name="Password" #password="ngModel" ngModel minlength="8" maxlength="30" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,30}$" password required placeholder="abcABC@123">
-              </div>
-              <div class="err" *ngIf="password.invalid && (password.touched || password.dirty)">
-                <div class="err" *ngIf="password.hasError('required')">
-                  <p>Password field cannot be empty!</p>
-                </div>
-                <div class="err" *ngIf="password.hasError('minlength')">
-                  <p>Password should be at least 8 characters long!</p>
-                </div>
-                <div class="err" *ngIf="password.hasError('maxlength')">
-                  <p>Password should not exceed 30 characters!</p>
-                </div>
-                <div class="err" *ngIf="password.hasError('pattern')">
-                  <p>Password should contain at least one uppercase letter, one lowercase letter, one number, and one special character.</p>
-                </div>
-              </div>
+            <div class="input-field">
+              <input 
+                type="password" 
+                name="Password" 
+                id="password" 
+                #password="ngModel" 
+                ngModel 
+                minlength="8" 
+                maxlength="30" 
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,30}$" 
+                required
+              >
+              <label for="password">Password</label>
             </div>
-            <div class="button-input">
-              <button type="submit" [disabled]="loginForm.invalid">Login</button>
+            <div class="error-message" *ngIf="password.invalid && (password.touched || password.dirty)">
+              <p *ngIf="password.hasError('required')">Password field cannot be empty!</p>
+              <p *ngIf="password.hasError('minlength')">Password should be at least 8 characters long!</p>
+              <p *ngIf="password.hasError('maxlength')">Password should not exceed 30 characters!</p>
+              <p *ngIf="password.hasError('pattern')">Password should contain at least one uppercase letter, one lowercase letter, one number, and one special character.</p>
             </div>
-            <div class="alternative-option">
-              <p class="login-link">Don't have an account? <a routerLink="/signup">Sign Up</a></p>
+          </div>
+
+          <div class="form-options">
+            <div class="remember-me">
+              <input type="checkbox" id="remember" name="remember">
+              <label for="remember">Remember me</label>
             </div>
-          </form>
-        </div>
+            <a href="#" class="forgot-password">Forgot password?</a>
+          </div>
+
+          <div class="form-action">
+            <button type="submit" [disabled]="loginForm.invalid" class="login-button">
+              <span>Login</span>
+              <i class="bx bx-right-arrow-alt"></i>
+            </button>
+          </div>
+
+          <div class="alternative-login">
+            <p>Or continue with</p>
+            <div class="social-login">
+              <button type="button" class="social-button">
+                <i class="bx bxl-google"></i>
+              </button>
+              <button type="button" class="social-button">
+                <i class="bx bxl-facebook"></i>
+              </button>
+              <button type="button" class="social-button">
+                <i class="bx bxl-apple"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="alternative-option">
+            <p>Don't have an account? <a routerLink="/signup" class="signup-link">Sign Up</a></p>
+          </div>
+        </form>
       </div>
     </div>
   </div>

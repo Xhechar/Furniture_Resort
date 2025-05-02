@@ -1,17 +1,12 @@
 import { Response } from "express";
 import { ExtendedRequest, getIdFromToken } from "../middlewares/verification.tokens";
 import { ReviewService } from "../services/reviews.service";
-import { ReviewSchema } from "../validators/backend.input.validators";
 
-const reviewsService = new ReviewService();
+export const reviewsService = new ReviewService();
 
 export class ReviewsController {
   async createReview(req: ExtendedRequest, res: Response) {
     try {
-
-      let { error } = ReviewSchema.validate(req.body);
-
-      if (error) res.status(401).json({ error: error.message });
 
       let result = await reviewsService.createReview(getIdFromToken(req), req.params.ProductId, req.body);
 
@@ -25,9 +20,6 @@ export class ReviewsController {
   }
   async updateReview(req: ExtendedRequest, res: Response) {
     try {
-      let { error } = ReviewSchema.validate(req.body);
-
-      if (error) res.status(401).json({ error: error.message });
 
       let result = await reviewsService.updateReview(getIdFromToken(req), req.params.ReviewId, req.body);
 

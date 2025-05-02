@@ -11,7 +11,7 @@
   bottom: 0;
   transition: width var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
   overflow-x: hidden;
-  z-index: 100;
+  z-index: 101;
 }
 
 .sidebar.collapsed {

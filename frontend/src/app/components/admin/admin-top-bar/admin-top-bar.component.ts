@@ -5,6 +5,7 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../interfaces/interfaces';
 import { NotificationsService } from '../../../services/notifications.service';
+import { SidebarService } from '../../../services/modifiers/sidebar.service';
 
 @Component({
   selector: 'app-admin-top-bar',
@@ -18,7 +19,7 @@ export class AdminTopBarComponent implements OnInit {
   child: string = '';
   user!: User;
 
-  constructor(private router: Router, private hs: HandlerService, private us: UserService, private ns: NotificationsService ) {
+  constructor(private router: Router, private hs: HandlerService, private us: UserService, private ns: NotificationsService, private ss: SidebarService ) {
     let route = router.url;
   }
 
@@ -34,6 +35,10 @@ export class AdminTopBarComponent implements OnInit {
     });
 
     this.loadUser();
+  }
+
+  switchSideBar() {
+    this.ss.toggleSidebar();
   }
 
   loadUser() {

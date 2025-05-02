@@ -1,5 +1,5 @@
 <app-logout></app-logout>
-<div class="body">
+<div class="body" *ngIf="!sidebarState">
   <div class="sidebar" [class.collapsed]="isSidebarCollapsed">
     <div class="sidebar-header">
       <div class="logo-container">
