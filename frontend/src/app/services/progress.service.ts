@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { Progress } from '../interfaces/interfaces';
 import { Observable } from 'rxjs';
 import { getAuthHeaders } from './notifications.service';
+import { SharedService } from './modifiers/shared.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProgressService {
-  private API_URL = 'http://localhost:3000/progress/';
+  // private API_URL = 'http://localhost:3000/progress/';
+      API_URL: string = `${SharedService.API_URL}progress/`;
 
   constructor(private http: HttpClient) { }
 

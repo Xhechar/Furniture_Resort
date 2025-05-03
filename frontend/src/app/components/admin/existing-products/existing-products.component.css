@@ -70,7 +70,7 @@ body {
 
 .filter-btn:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
+  box-shadow: var(--accent);
 }
 
 .filter-btn.active {
@@ -148,9 +148,9 @@ body {
 }
 
 .button-u:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--accent);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
+  box-shadow: var(--accent);
 }
 
 .button-u.hiding {
@@ -501,7 +501,7 @@ body {
 }
 
 .add-pqt-btn:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--accent);
   transform: translateY(-2px);
 }
 

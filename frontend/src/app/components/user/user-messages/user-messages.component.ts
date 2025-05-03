@@ -1,5 +1,5 @@
 import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Messages, Product, User } from '../../../interfaces/interfaces';
+import { CustomOrder, Messages, Product, User } from '../../../interfaces/interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -25,6 +25,7 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
   messages: Messages[] = [];
   messageText: string = '';
   isAdminTyping: boolean = false;
+  hasCustomOrders: boolean = false;
   
   // For editing messages
   isEditing: boolean = false;
@@ -62,8 +63,6 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
   private messagePollingInterval: any;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private messageService: MessagesService,
     private productService: ProductsService,
     private userService: UserService,
@@ -78,6 +77,7 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
           if (response.success) {
             this.currentUser = response.user as User;
             this.receiverId = this.currentUser.UserId;
+            this.checkForCustomOrders();
             this.initializeChat();
           } else {
             this.ns.showMessage(response.error as string, false);
@@ -87,6 +87,10 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
             this.ns.showMessage(err.error.error as string, false);
         }
       })
+  }
+
+  checkForCustomOrders(): boolean {
+    return (this.currentUser.CustomOrders as CustomOrder[]).length > 0;
   }
 
   ngAfterViewChecked(): void {
@@ -104,43 +108,15 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
   private initializeChat(): void {
     // Load chat messages
     this.loadMessages();
-    
-    // Set up message polling (every 5 seconds)
-    this.messagePollingInterval = setInterval(() => {
-      this.loadMessages(false);
-    }, 5000);
   }
 
-  private loadProductDetails(): void {
-    if (!this.productId) return;
-
-    this.productService.getSingleActivatedProduct(this.productId).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.selectedProduct = response.product as Product;
-        } else {
-          this.ns.showMessage(response.error as string, false);
-        }
-      },
-      error: (err) => {
-        this.ns.showMessage(err.error.error as string, false);
-      }
-    })
-  }
 
   loadMessages(showLoading: boolean = true): void {
     if (showLoading) {
       // Show loading indicator if needed
     }
-
-    const params = {
-      senderId: this.currentUser.UserId,
-      receiverId: this.receiverId,
-      productId: this.productId
-    };
-
     
-    this.messageService.getAllSendersMessages('').subscribe({
+    this.messageService.getAllSendersMessages('verify').subscribe({
       next: (response) => {
         console.log(response);
         if (response.success) {
@@ -176,6 +152,8 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
     if (event) {
       event.preventDefault();
     }
+
+    if (this.hasCustomOrders) this.ns.showMessage("Only personell with customorders are allowed to send messages", false);
     
     if ((!this.messageText.trim() && !this.selectedImage) || !this.currentUser) {
       return;
@@ -201,8 +179,10 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
       next: (response) => {
         if(response.success) {
           this.loadMessages();
-
         }
+      },
+      error: (err) => {
+        this.ns.showMessage(err.error.error as string, false);
       }
     })
   }
@@ -219,18 +199,18 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
 
     
     this.messageService.updateMessage(updatedMessage.MessagesId, updatedMessage.Message).subscribe({
-      next: (result) => {
+      next: () => {
         // Update message in local array
         const index = this.messages.findIndex(m => m.MessagesId === this.editingMessageId);
         if (index !== -1) {
           this.messages[index].Message = this.messageText.trim();
         }
-        
+        this.loadMessages();
         // Reset editing state
         this.resetMessageInput();
       },
       error: (err) => {
-        console.error('Error updating message:', err);
+        this.ns.showMessage(err.error.error as string, false);
       }
     });
   }
@@ -402,6 +382,6 @@ export class UserMessagesComponent implements OnInit, AfterViewChecked, OnDestro
   }
 
   goBack(): void {
-    this.router.navigate(['/products']);
+    history.back();
   }
 }

@@ -38,7 +38,7 @@ export class DashboardComponent {
   }
 
   getProducts() {
-    this.ps.getAllProducts().subscribe((res: any) => {
+    this.ps.getAllProducts().subscribe((res) => {
       if (res.success) {
         this.products = res.products as Product[];
       }
@@ -46,7 +46,7 @@ export class DashboardComponent {
   }
 
   getRecentUsers() {
-    this.us.getAllUsers().subscribe((res: any) => {
+    this.us.getAllUsers().subscribe((res) => {
       if (res.success) {
         this.recentUsers = res.users as User[];
         this.activeUsers = this.recentUsers.filter((user: User) => (!user.IsDeleted)).length;
@@ -55,39 +55,50 @@ export class DashboardComponent {
   }
 
   getCustomOrders() {
-    let earnings: number = 0;
     let customOrders: CustomOrder[] = [];
     let orders: Order[] = [];
 
-    this.cos.getAllCustomOrders().subscribe((res: any) => {
+    this.cos.getAllCustomOrders().subscribe((res) => {
       if (res.success) {
         customOrders = res.customOrders as CustomOrder[];
         this.customOrders = customOrders.length;
+
+        customOrders.forEach((co: CustomOrder) => {
+          if ((co.Progresses as Progress[])[0].Status === 'complete') {
+            this.revenue += co.Deposit + co.Balance;
+            this.completedCustomOrders++;
+          }
+          this.revenue += co.Deposit
+        });
+        
       }
     });
 
-    this.os.getAllOrders().subscribe((res: any) => {
+    this.os.getAllOrders().subscribe((res) => {
       if (res.success) {
         orders = res.orders as Order[];
-        this.orders = orders.length;
+        this.orders = orders.length;        
+
+        orders.forEach((o) => {
+          this.revenue += o.AmountPaid;
+          if (o.DeliveryStatus === 'Delivered') {
+            this.completedOrders++;
+          }
+        });
       }
     });
+  }
 
-    customOrders.forEach((co: CustomOrder) => {
-      if ((co.Progresses as Progress[])[0].Status === 'complete') {
-        earnings += co.Deposit + co.Balance;
-        this.completedCustomOrders++;
-      }
-    });
-
-    orders.forEach((o) => {
-      earnings += o.AmountPaid;
-      if (o.DeliveryStatus === 'Delivered') {
-        this.completedOrders++;
-      }
-    });
-
-    this.revenue = earnings;
+  
+  // orders.reduce((sum, order) => sum + this.calculateOrderTotal(order), 0) +
+  // customOrders.reduce((sum, order) => sum + this.calculateCustomOrderTotal(order), 0); 
+ 
+  calculateOrderTotal(order: Order): number {
+    return order.Price * order.Quantity * (1 - (order.Discount / 100));
+  }
+  
+  calculateCustomOrderTotal(order: CustomOrder): number {
+    return order.Price * order.Quantity * (1 - (order.Discount / 100));
   }
 
   getProgresses() {

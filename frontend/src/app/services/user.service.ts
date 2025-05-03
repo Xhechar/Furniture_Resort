@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { User } from '../interfaces/interfaces';
 import { Observable } from 'rxjs';
 import { getAuthHeaders } from './notifications.service';
+import { SharedService } from './modifiers/shared.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  API_URL: string = 'http://localhost:3000/user'
+  // API_URL: string = 'http://localhost:3000/user';
+  API_URL: string = `${SharedService.API_URL}user`;
 
   constructor(private http: HttpClient) { }
 

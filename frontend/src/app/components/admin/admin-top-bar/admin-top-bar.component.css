@@ -85,10 +85,6 @@
   box-shadow: 0 4px 8px rgba(84, 72, 32, 0.2);
 }
 
-.mobile-menu {
-  display: none;
-}
-
 /* Profile Section */
 .profile {
   display: flex;
@@ -181,12 +177,11 @@
   }
   
   .name-and-role p {
-    font-size: 0.65rem;
+    font-size: 0.45rem;
   }
   
   .img-container {
-    width: 35px;
-    height: 35px;
+    display: none;
   }
   
   .nav-icon i {

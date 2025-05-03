@@ -3,13 +3,15 @@ import { Injectable } from '@angular/core';
 import { Product } from '../interfaces/interfaces';
 import { Observable } from 'rxjs';
 import { getAuthHeaders } from './notifications.service';
+import { SharedService } from './modifiers/shared.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
 
-  API_URL: string = 'http://localhost:3000/products/'
+  // API_URL: string = 'http://localhost:3000/products/';
+    API_URL: string = `${SharedService.API_URL}products/`;
 
   constructor(private http: HttpClient) { }
 

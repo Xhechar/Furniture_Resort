@@ -50,6 +50,7 @@ export class LogoutComponent implements OnInit{
       this.router.navigate(['/']);
       this.isVisible = false;
       this.reset();
+      this.cancel();
     }, 6000);
   }
   

@@ -52,6 +52,7 @@ export class OrdersComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.filteredNormalOrders = response.orders as Order[];
+          this.calculateStats();
         } else {
           // this.ns.showMessage(response.error as string, false);
         }
@@ -67,6 +68,7 @@ export class OrdersComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.filteredCustomOrders = response.customOrders as CustomOrder[];
+          this.calculateStats();
         } else {
           // this.ns.showMessage(response.error as string, false);
         }

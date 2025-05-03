@@ -1,162 +1,223 @@
 <app-notifications></app-notifications>
-<body>
-    <div class="container">
-        <h1>{{inUpdate ? 'Update' : 'Create'}} <span class="highlight">{{inUpdate ? 'Existing' : 'New'}}</span> Furniture</h1>
-        <form [formGroup]="newProductForm" (ngSubmit)="createNewProduct()">
-            <div class="form-layout">
-                <div class="upload-seection-holder">
-                    <div class="upload-section">
-                        <label for="image-upload" class="upload-label">
-                            <div class="spinner-container">
-                                <div class="loader" *ngIf="set_loader == 1"></div>
-                                <div class="no-loader" *ngIf="set_loader == 0">
-                                    <img src="../../../icons/image_upload.png" alt="Upload icon">
-                                </div>
+<div class="container">
+    <h1 class="page-title">{{inUpdate ? 'Update' : 'Create'}} <span class="highlight">{{inUpdate ? 'Existing' : 'New'}}</span> Furniture</h1>
+    
+    <form [formGroup]="newProductForm" (ngSubmit)="createNewProduct()">
+        <div class="form-layout">
+            <!-- Upload Section -->
+            <div class="upload-seection-holder card">
+                <h3><i class="fas fa-images"></i> Product Images</h3>
+                <div class="upload-section">
+                    <label for="image-upload" class="upload-label">
+                        <div class="spinner-container">
+                            <div class="loader" *ngIf="set_loader == 1"></div>
+                            <div class="no-loader" *ngIf="set_loader == 0">
+                                <img src="../../../icons/image_upload.png" alt="Upload icon">
                             </div>
-                            <p *ngIf="set_loader == 1" style="color: #544820; font-weight: 600; letter-spacing: 2px;">Loading Image ...</p>
-                            <p *ngIf="set_loader == 0">Drag and Drop image here to Upload</p>
-                        </label>
-                        <input type="file" id="image-upload" (change)="setFurnitureImages($event)" hidden>
-                    </div>
-                    <div class="new-images-holder">
-                        <div class="new-image" *ngFor="let furniture_image of furniture_images; let i = index">
-                            <button type="button" (click)="removeImage(i)">X</button>
-                            <img [src]="furniture_images[i]" alt="new {{furniture_image}}">
                         </div>
+                        <p *ngIf="set_loader == 1" class="loading-text">Loading Image...</p>
+                        <p *ngIf="set_loader == 0" class="upload-text">Drag and Drop image here to Upload</p>
+                    </label>
+                    <input type="file" id="image-upload" (change)="setFurnitureImages($event)" hidden>
+                </div>
+                
+                <div class="new-images-holder">
+                    <div class="new-image" *ngFor="let furniture_image of furniture_images; let i = index">
+                        <button type="button" class="remove-btn" (click)="removeImage(i)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <img [src]="furniture_images[i]" alt="new {{furniture_image}}">
                     </div>
                 </div>
+            </div>
 
-                <div class="pricing-section">
-                    <h3>Furniture Stock</h3>
-                    <div class="input-box">
-                        <label for="stock_quantity">Stock Quantity</label>
+            <!-- Stock Section -->
+            <div class="pricing-section card">
+                <h3><i class="fas fa-box"></i> Furniture Stock</h3>
+                <div class="input-box">
+                    <label for="stock_quantity">Stock Quantity</label>
+                    <div class="input-wrapper">
                         <input type="number" id="stock_quantity" required formControlName="StockQuantity" placeholder="0">
                     </div>
-                    <div class="err" *ngIf="newProductForm.get('StockQuantity')?.invalid && (newProductForm.get('StockQuantity')?.touched || newProductForm.get('StockQuantity')?.dirty)">
-                        <div *ngIf="newProductForm.get('StockQuantity')?.errors?.['required']">furniture stock quantity is required.</div>
-                    </div>
-                    <div class="input-box">
-                        <label for="stock_limit">Stock Limit</label>
+                </div>
+                <div class="err" *ngIf="newProductForm.get('StockQuantity')?.invalid && (newProductForm.get('StockQuantity')?.touched || newProductForm.get('StockQuantity')?.dirty)">
+                    <div *ngIf="newProductForm.get('StockQuantity')?.errors?.['required']">Furniture stock quantity is required.</div>
+                </div>
+                
+                <div class="input-box">
+                    <label for="stock_limit">Stock Limit</label>
+                    <div class="input-wrapper">
                         <input type="number" id="stock_limit" required formControlName="StockLimit" placeholder="0">
                     </div>
-                    <div class="err" *ngIf="newProductForm.get('StockLimit')?.invalid && (newProductForm.get('StockLimit')?.touched || newProductForm.get('StockLimit')?.dirty)">
-                        <div *ngIf="newProductForm.get('StockLimit')?.errors?.['required']">furniture stock limit is required.</div>
-                    </div>
-                    <div class="input-box">
-                        <label for="make_periods">Make Periods</label>
+                </div>
+                <div class="err" *ngIf="newProductForm.get('StockLimit')?.invalid && (newProductForm.get('StockLimit')?.touched || newProductForm.get('StockLimit')?.dirty)">
+                    <div *ngIf="newProductForm.get('StockLimit')?.errors?.['required']">Furniture stock limit is required.</div>
+                </div>
+                
+                <div class="input-box">
+                    <label for="make_periods">Make Periods</label>
+                    <div class="input-wrapper">
                         <input type="number" id="make_periods" required formControlName="MakePeriods" placeholder="example 2, for making (1 item for 2days, 2 items for 4days)">
                     </div>
-                    <div class="err" *ngIf="newProductForm.get('MakePeriods')?.invalid && (newProductForm.get('MakePeriods')?.touched || newProductForm.get('MakePeriods')?.dirty)">
-                        <div *ngIf="newProductForm.get('MakePeriods')?.errors?.['required']">make periods are required.</div>
+                </div>
+                <div class="err" *ngIf="newProductForm.get('MakePeriods')?.invalid && (newProductForm.get('MakePeriods')?.touched || newProductForm.get('MakePeriods')?.dirty)">
+                    <div *ngIf="newProductForm.get('MakePeriods')?.errors?.['required']">Make periods are required.</div>
+                </div>
+            </div>
+
+            <!-- Identity Section -->
+            <div class="identity-section card">
+                <h3><i class="fas fa-id-card"></i> Identity</h3>
+                <div class="input-box">
+                    <label for="product-name">Product Name</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="ProductName" required formControlName="ProductName" placeholder="Enter name here" maxlength="20">
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('ProductName')?.invalid && (newProductForm.get('ProductName')?.touched || newProductForm.get('ProductName')?.dirty)">
+                        <div *ngIf="newProductForm.get('ProductName')?.errors?.['required']">Furniture name is required.</div>
+                        <div *ngIf="newProductForm.get('ProductName')?.errors?.['invalidStringLength']">Furniture name must be more than 2 characters.</div>
+                        <div *ngIf="newProductForm.get('ProductName')?.errors?.['invalidString']">Furniture name can only contain alphanumeric characters and spaces.</div>
+                        <div *ngIf="newProductForm.get('ProductName')?.errors?.['maxlength']">Furniture name must be 20 characters or less.</div>
                     </div>
                 </div>
-
-                <div class="identity-section">
-                    <h3>Identity</h3>
-                    <div class="input-box">
-                        <label for="product-name">Product Name</label>
-                        <input type="text" id="ProductName" required formControlName="ProductName" placeholder="enter name here" maxlength="20">
-                        <div class="err" *ngIf="newProductForm.get('ProductName')?.invalid && (newProductForm.get('ProductName')?.touched || newProductForm.get('ProductName')?.dirty)">
-                            <div *ngIf="newProductForm.get('ProductName')?.errors?.['required']">furniture name is required.</div>
-                            <div *ngIf="newProductForm.get('ProductName')?.errors?.['invalidStringLength']">furniture name must be more than 2 characters.</div>
-                            <div *ngIf="newProductForm.get('ProductName')?.errors?.['invalidString']">furniture name can only contain alphanumeric characters and spaces.</div>
-                            <div *ngIf="newProductForm.get('ProductName')?.errors?.['maxlength']">furniture name must be 20 characters or less.</div>
-                        </div>
-                    </div>
-                    <div class="input-box">
-                        <label for="category">Category</label>
+                
+                <div class="input-box">
+                    <label for="category">Category</label>
+                    <div class="select-wrapper">
                         <select formControlName="Category" id="category">
                             <option value="" selected disabled>Select Category</option>
                             <option *ngFor="let cat_option of category_options" [value]="cat_option.CategoryName">
                               {{ cat_option.CategoryName }}
                             </option>
                         </select>
-                        <div class="err" *ngIf="newProductForm.get('Category')?.invalid && (newProductForm.get('Category')?.touched || newProductForm.get('Category')?.dirty)">
-                            <div *ngIf="newProductForm.get('Category')?.errors?.['required']">category is required.</div>
-                            <div *ngIf="newProductForm.get('Category')?.errors?.['invalidStringLength']">category must be more than 2 characters.</div>
-                            <div *ngIf="newProductForm.get('Category')?.errors?.['invalidString']">category can only contain alphanumeric characters and spaces.</div>
+                    </div>
+                    <div class="err" *ngIf="newProductForm.get('Category')?.invalid && (newProductForm.get('Category')?.touched || newProductForm.get('Category')?.dirty)">
+                        <div *ngIf="newProductForm.get('Category')?.errors?.['required']">Category is required.</div>
+                        <div *ngIf="newProductForm.get('Category')?.errors?.['invalidStringLength']">Category must be more than 2 characters.</div>
+                        <div *ngIf="newProductForm.get('Category')?.errors?.['invalidString']">Category can only contain alphanumeric characters and spaces.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Requirements Section -->
+            <div class="product-details-section card">
+                <h3><i class="fas fa-list-check"></i> Furniture Requirements</h3>
+                <div class="input-box">
+                    <label for="sizes">Sizes</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="sizes" required formControlName="Sizes" placeholder="Add known furniture size, e.g (4 X 4)">
+                    </div>
+                </div>
+                <div class="err" *ngIf="newProductForm.get('Sizes')?.invalid && (newProductForm.get('Sizes')?.touched || newProductForm.get('Sizes')?.dirty)">
+                    <div *ngIf="newProductForm.get('Sizes')?.errors?.['required']">Sizes is required.</div>
+                    <div *ngIf="newProductForm.get('Sizes')?.errors?.['invalidStringLength']">Sizes must be more than 2 characters.</div>
+                    <div *ngIf="newProductForm.get('Sizes')?.errors?.['invalidString']">Sizes can only contain alphanumeric characters and spaces.</div>
+                </div>
+                
+                <div class="color-selection">
+                    <label for="color">Colour</label>
+                    <div class="color-inputs">
+                        <input class="color-picker" type="color" id="color" required (change)="setColorBg($event)" [value]="picked_color ? picked_color.split(', ')[0] : '#f9f9f9'">
+                        <input type="text" class="color-text-input" placeholder="e.g. #544820 or Brown" 
+                               [value]="picked_color ? picked_color.split(', ')[0] : ''"
+                               (input)="setColorBg($event)">
+                    </div>
+                    <div class="color-area" *ngIf="picked_color" [style]="_color">
+                        <p>{{picked_color.split(', ')[0]}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Section -->
+            <div class="pricing-section card">
+                <h3><i class="fas fa-tag"></i> Pricing</h3>
+                <div class="input-box">
+                    <label for="price">Price (Ksh)</label>
+                    <div class="input-wrapper currency-input">
+                        <span class="currency-symbol">Ksh</span>
+                        <input type="number" id="price" required formControlName="Prize" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="err" *ngIf="newProductForm.get('Prize')?.invalid && (newProductForm.get('Prize')?.touched || newProductForm.get('Prize')?.dirty)">
+                    <div *ngIf="newProductForm.get('Prize')?.errors?.['required']">Product price is required.</div>
+                </div>
+                
+                <div class="input-box">
+                    <label for="discount">Discount (Ksh)</label>
+                    <div class="input-wrapper currency-input">
+                        <span class="currency-symbol">Ksh</span>
+                        <input type="number" id="discount" required formControlName="Discount" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="err" *ngIf="newProductForm.get('Discount')?.invalid && (newProductForm.get('Discount')?.touched || newProductForm.get('Discount')?.dirty)">
+                    <div *ngIf="newProductForm.get('Discount')?.errors?.['required']">Product discount is required.</div>
+                </div>
+                
+                <div class="input-box">
+                    <label for="deposit">Deposit (Ksh)</label>
+                    <div class="input-wrapper currency-input">
+                        <span class="currency-symbol">Ksh</span>
+                        <input type="number" id="deposit" required formControlName="Deposit" placeholder="Add deposit for custom made items">
+                    </div>
+                </div>
+                <div class="err" *ngIf="newProductForm.get('Deposit')?.invalid && (newProductForm.get('Deposit')?.touched || newProductForm.get('Deposit')?.dirty)">
+                    <div *ngIf="newProductForm.get('Deposit')?.errors?.['required']">Product deposit is required.</div>
+                </div>
+                
+                <div class="input-box">
+                    <label for="custom-price">Custom Price (Ksh)</label>
+                    <div class="input-wrapper currency-input">
+                        <span class="currency-symbol">Ksh</span>
+                        <input type="number" id="custom-price" required formControlName="CustomPrize" placeholder="Add custom price for items custom made">
+                    </div>
+                </div>
+                <div class="err" *ngIf="newProductForm.get('CustomPrize')?.invalid && (newProductForm.get('CustomPrize')?.touched || newProductForm.get('CustomPrize')?.dirty)">
+                    <div *ngIf="newProductForm.get('CustomPrize')?.errors?.['required']">Product custom price is required.</div>
+                </div>
+            </div>
+
+            <!-- Details Section -->
+            <div class="product-details-section card">
+                <h3><i class="fas fa-info-circle"></i> Product Details</h3>
+                <div class="input-box">
+                    <label for="short-description">Short Description</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="short-description" rows="2" required formControlName="ShortDesc" placeholder="Enter short description here" maxlength="80"></textarea>
+                        <div class="character-count" *ngIf="newProductForm.get('ShortDesc')?.value">
+                            {{newProductForm.get('ShortDesc')?.value.length}}/80
                         </div>
                     </div>
                 </div>
-
-                <div class="product-details-section">
-                    <h3>Furnitures Requirements</h3>
-                    <div class="input-box">
-                        <label for="sizes">Sizes</label>
-                        <input type="text" id="sizes" required formControlName="Sizes" placeholder="add known furniture size, e.g (4 X 4)">
-                    </div>
-                    <div class="err" *ngIf="newProductForm.get('Sizes')?.invalid && (newProductForm.get('Sizes')?.touched || newProductForm.get('Sizes')?.dirty)">
-                        <div *ngIf="newProductForm.get('Sizes')?.errors?.['required']">Sizes is required.</div>
-                        <div *ngIf="newProductForm.get('Sizes')?.errors?.['invalidStringLength']">Sizes must be more than 2 characters.</div>
-                        <div *ngIf="newProductForm.get('Sizes')?.errors?.['invalidString']">Sizes can only contain alphanumeric characters and spaces.</div>
-                    </div>
-                    <div class="input-box1">
-                        <label for="sizes">Colour</label>
-                        <input class="color-picker" type="color" id="color" required (change)="setColorBg($event)" [value]="picked_color ? picked_color.split(', ')[0] : '#f9f9f9'">
-                        <div class="color-area" *ngIf="picked_color" [style]="_color"><p>{{picked_color.split(', ')[0]}}</p></div>
+                <div class="err" *ngIf="newProductForm.get('ShortDesc')?.invalid && (newProductForm.get('ShortDesc')?.touched || newProductForm.get('ShortDesc')?.dirty)">
+                    <div *ngIf="newProductForm.get('ShortDesc')?.errors?.['required']">Short description is required.</div>
+                    <div *ngIf="newProductForm.get('ShortDesc')?.errors?.['invalidStringLength']">Short description must be more than 2 characters.</div>
+                    <div *ngIf="newProductForm.get('ShortDesc')?.errors?.['invalidString']">Short description can only contain alphanumeric characters and spaces.</div>
+                </div>
+                
+                <div class="input-box">
+                    <label for="long-description">Long Description</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="long-description" rows="4" required formControlName="LongDesc" placeholder="Enter long description here, explain product details"></textarea>
                     </div>
                 </div>
-
-                <div class="pricing-section">
-                    <h3>Pricing</h3>
-                    <div class="input-box">
-                        <label for="price">Price (Ksh)</label>
-                        <input type="number" id="price" required formControlName="Prize" placeholder="0.00 Ksh">
-                    </div>
-                    <div class="err" *ngIf="newProductForm.get('Prize')?.invalid && (newProductForm.get('Prize')?.touched || newProductForm.get('Prize')?.dirty)">
-                        <div *ngIf="newProductForm.get('Prize')?.errors?.['required']">Product price is required.</div>
-                    </div>
-                    <div class="input-box">
-                        <label for="color">Discount (Ksh)</label>
-                        <input type="number" id="discount" required formControlName="Discount" placeholder="0.00 Ksh">
-                    </div>
-                    <div class="err" *ngIf="newProductForm.get('Discount')?.invalid && (newProductForm.get('Discount')?.touched || newProductForm.get('Discount')?.dirty)">
-                        <div *ngIf="newProductForm.get('Discount')?.errors?.['required']">Product discount is required.</div>
-                    </div>
-                    <div class="input-box">
-                        <label for="size">Deposit (Ksh)</label>
-                        <input type="number" id="deposit" required formControlName="Deposit" placeholder="add deposit for custom made items">
-                    </div>
-                    <div class="err" *ngIf="newProductForm.get('Deposit')?.invalid && (newProductForm.get('Deposit')?.touched || newProductForm.get('Deposit')?.dirty)">
-                        <div *ngIf="newProductForm.get('Deposit')?.errors?.['required']">Product deposit is required.</div>
-                    </div>
-                    <div class="input-box">
-                        <label for="price">Custom Price (Ksh)</label>
-                        <input type="number" id="price" required formControlName="CustomPrize" placeholder="add custom prize for items custom made">
-                    </div>
-                    <div class="err" *ngIf="newProductForm.get('CustomPrize')?.invalid && (newProductForm.get('CustomPrize')?.touched || newProductForm.get('CustomPrize')?.dirty)">
-                        <div *ngIf="newProductForm.get('CustomPrize')?.errors?.['required']">Product custom price is required.</div>
-                    </div>
-                </div>
-
-                <div class="product-details-section">
-                    <h3>Product Details</h3>
-                    <div class="input-box">
-                        <label for="short-description">Short Description</label>
-                        <textarea id="short-description" rows="2" required formControlName="ShortDesc" placeholder="enter short description here" maxlength="80"></textarea>
-                    </div>
-                    <div class="err" *ngIf="newProductForm.get('ShortDesc')?.invalid && (newProductForm.get('ShortDesc')?.touched || newProductForm.get('ShortDesc')?.dirty)">
-                        <div *ngIf="newProductForm.get('ShortDesc')?.errors?.['required']">Short description is required.</div>
-                        <div *ngIf="newProductForm.get('ShortDesc')?.errors?.['invalidStringLength']">Short description must be more than 2 characters.</div>
-                        <div *ngIf="newProductForm.get('ShortDesc')?.errors?.['invalidString']">Short description can only contain alphanumeric characters and spaces.</div>
-                    </div>
-                    <div class="input-box">
-                        <label for="long-description">Long Description</label>
-                        <textarea id="long-description" rows="4" required formControlName="LongDesc" placeholder="enter long description here, explain product details"></textarea>
-                    </div>
-                    <div class="err" *ngIf="newProductForm.get('LongDesc')?.invalid && (newProductForm.get('LongDesc')?.touched || newProductForm.get('LongDesc')?.dirty)">
-                        <div *ngIf="newProductForm.get('LongDesc')?.errors?.['required']">Long description is required.</div>
-                        <div *ngIf="newProductForm.get('LongDesc')?.errors?.['invalidStringLength']">Long description must be more than 2 characters.</div>
-                        <div *ngIf="newProductForm.get('LongDesc')?.errors?.['invalidString']">Long description can only contain alphanumeric characters and spaces.</div>
-                    </div>
+                <div class="err" *ngIf="newProductForm.get('LongDesc')?.invalid && (newProductForm.get('LongDesc')?.touched || newProductForm.get('LongDesc')?.dirty)">
+                    <div *ngIf="newProductForm.get('LongDesc')?.errors?.['required']">Long description is required.</div>
+                    <div *ngIf="newProductForm.get('LongDesc')?.errors?.['invalidStringLength']">Long description must be more than 2 characters.</div>
+                    <div *ngIf="newProductForm.get('LongDesc')?.errors?.['invalidString']">Long description can only contain alphanumeric characters and spaces.</div>
                 </div>
             </div>
+        </div>
 
-            <!-- Buttons -->
-            <div class="button-group">
-                <button type="submit" class="create-btn">{{inUpdate ? 'Update' : 'Create'}}</button>
-                <button type="button" class="cancel-btn" routerLink="/admin/products" (click)="removeFormValues()">Cancel</button>
-            </div>
-        </form>
-    </div>
-</body>
+        <!-- Buttons -->
+        <div class="button-group">
+            <button type="submit" class="create-btn">
+                <span class="btn-text">{{inUpdate ? 'Update' : 'Create'}}</span>
+                <i class="fas fa-check"></i>
+            </button>
+            <button type="button" class="cancel-btn" routerLink="/admin/products" (click)="removeFormValues()">
+                <span class="btn-text">Cancel</span>
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </form>
+</div>

@@ -3,23 +3,24 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Stats Cards Styles */
+/* Stats cards */
 .stats-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .stat-card {
+  flex: 1;
+  min-width: 200px;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
   display: flex;
   align-items: center;
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
   transition: var(--transition);
-  overflow: hidden;
-  position: relative;
 }
 
 .stat-card:hover {
@@ -27,71 +28,29 @@
   box-shadow: var(--shadow-hover);
 }
 
-.stat-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 5px;
-}
-
 .stat-card i {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-right: 1rem;
+  color: var(--accent);
 }
 
 .stat-info {
-  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .stat-info h3 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
-  opacity: 0.8;
+  font-size: 0.875rem;
+  color: var(--text-light);
+  margin: 0 0 0.25rem 0;
+  font-weight: normal;
 }
 
-.stat-count {
-  margin: 0.5rem 0 0;
+.stat-info .stat-count {
   font-size: 1.75rem;
-  font-weight: 600;
-}
-
-.normal-orders {
-  background-color: var(--normal-orders-bg);
-  color: var(--normal-orders-color);
-}
-
-.normal-orders::before {
-  background-color: var(--normal-orders-color);
-}
-
-.custom-orders {
-  background-color: var(--custom-orders-bg);
-  color: var(--custom-orders-color);
-}
-
-.custom-orders::before {
-  background-color: var(--custom-orders-color);
-}
-
-.delivered {
-  background-color: var(--flush-bg);
-  color: var(--revenue-color);
-}
-
-.delivered::before {
-  background-color: var(--revenue-color);
-}
-
-.total-revenue {
-  background-color: var(--revenue-bg);
-  color: var(--revenue-color);
-}
-
-.total-revenue::before {
-  background-color: var(--revenue-color);
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0;
 }
 
 /* Controls Section Styles */

@@ -3,13 +3,15 @@ import { Injectable } from '@angular/core';
 import { ProductQuantityTime } from '../interfaces/interfaces';
 import { Observable } from 'rxjs';
 import { getAuthHeaders } from './notifications.service';
+import { SharedService } from './modifiers/shared.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PqtService {
   
-  API_URL: string = 'http://localhost:3000/pqt/'
+  // API_URL: string = 'http://localhost:3000/pqt/';
+  API_URL: string = `${SharedService.API_URL}pqt/`;
 
   constructor(private http: HttpClient) { }
 

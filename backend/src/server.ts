@@ -21,13 +21,15 @@ import { wishlistRouter } from './routers/wishlist.routes';
 const app = express();
 
 app.use(json());
-app.use(cors());
+app.use(cors({
+  origin: "https://ndagani-sf.onrender.com"
+}));
 
 app.use('/auth', authRouter);
 app.use('/cart', cartRouter);
 app.use('/category', categoryRouter);
 app.use('/custom-order', cOrderRouter);
-app.use('/messqges', messageRouter);
+app.use('/messages', messageRouter);
 app.use('/order', orderRouter);
 app.use('/pqt', pqtRouter);
 app.use('/products', productRouter);

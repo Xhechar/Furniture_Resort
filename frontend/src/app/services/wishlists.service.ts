@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { getAuthHeaders } from './notifications.service';
 import { Wishlist } from '../interfaces/interfaces';
+import { SharedService } from './modifiers/shared.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WishlistsService {
-  private API_URL = 'http://localhost:3000/wishlist/';
+  // private API_URL = 'http://localhost:3000/wishlist/';
+  API_URL: string = `${SharedService.API_URL}wishlist/`;
 
   constructor(private http: HttpClient) { }
 

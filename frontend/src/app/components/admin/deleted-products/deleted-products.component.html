@@ -1,28 +1,42 @@
 <app-notifications></app-notifications>
 <div class="progress-tracker">
-  <!-- Statistics Dashboard -->
+<!-- Statistics Dashboard -->
+<div class="dashboard-header">
+  <h1 class="main-title">Project Statistics</h1>
   <div class="stats-container">
     <div class="stat-card total">
       <div class="stat-icon"><i class='bx bx-list-ul'></i></div>
-      <div class="stat-value">{{ totalProjects }}</div>
-      <div class="stat-label">Total Projects</div>
+      <div class="stat-info">
+        <span class="stat-value">{{ totalProjects }}</span>
+        <span class="stat-label">Total Projects</span>
+      </div>
     </div>
+    
     <div class="stat-card active">
       <div class="stat-icon"><i class='bx bx-loader-circle'></i></div>
-      <div class="stat-value">{{ inProgressProjects }}</div>
-      <div class="stat-label">In Progress</div>
+      <div class="stat-info">
+        <span class="stat-value">{{ inProgressProjects }}</span>
+        <span class="stat-label">In Progress</span>
+      </div>
     </div>
+    
     <div class="stat-card completed">
       <div class="stat-icon"><i class='bx bx-check-circle'></i></div>
-      <div class="stat-value">{{ completedProjects }}</div>
-      <div class="stat-label">Completed</div>
+      <div class="stat-info">
+        <span class="stat-value">{{ completedProjects }}</span>
+        <span class="stat-label">Completed</span>
+      </div>
     </div>
+    
     <div class="stat-card revenue">
       <div class="stat-icon"><i class='bx bx-money'></i></div>
-      <div class="stat-value">KSH {{ totalRevenue | number }}</div>
-      <div class="stat-label">Total Revenue</div>
+      <div class="stat-info">
+        <span class="stat-value">KSH {{ totalRevenue | number }}</span>
+        <span class="stat-label">Total Revenue</span>
+      </div>
     </div>
   </div>
+</div>
 
   <!-- Filters Section -->
   <div class="filters-container">

@@ -77,7 +77,7 @@ The frontend is located in the `frontend` folder and is built with **Angular** f
 
 ## Live Demo
 
-[Live Project Link](https://example.com) *(Update this link with the actual live project URL)*
+[Live Project Link](https://ndagani-sf.onrender.com)
 
 ## Contributing
 

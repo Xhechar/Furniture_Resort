@@ -21,7 +21,7 @@
     </div>
 
     <div class="chat-body" #chatBody>
-        <div class="welcome-message" *ngIf="messages.length === 0">
+        <div class="welcome-message" *ngIf="messages.length === 0 || hasCustomOrders">
             <div class="welcome-icon">
                 <i class="bx bxs-message-alt-detail"></i>
             </div>

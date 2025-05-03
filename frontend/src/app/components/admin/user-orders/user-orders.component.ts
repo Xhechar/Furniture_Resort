@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Order, CustomOrder } from '../../../interfaces/interfaces';
+import { Order, CustomOrder, Progress } from '../../../interfaces/interfaces';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrderService } from '../../../services/order.service';
@@ -98,11 +98,18 @@ export class UserOrdersComponent implements OnInit {
   }
   
   calculateOrderTotal(order: Order): number {
-    return order.Price * order.Quantity * (1 - (order.Discount / 100));
+    return order.AmountPaid
   }
   
   calculateCustomOrderTotal(order: CustomOrder): number {
-    return order.Price * order.Quantity * (1 - (order.Discount / 100));
+    let revenue: number = 0;
+
+    if ((order.Progresses as Progress[])[0].Status === 'complete') {
+      revenue = order.Balance + order.Deposit;
+    }
+
+    revenue += order.Deposit
+    return revenue
   }
   
   setActiveTab(tab: string): void {

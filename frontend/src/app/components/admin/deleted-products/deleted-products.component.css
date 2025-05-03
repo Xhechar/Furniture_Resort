@@ -4,89 +4,65 @@
   width: 100%;
 }
 
-/* Dashboard Statistics Section */
+/* Dashboard header */
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.main-title {
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Stats cards */
 .stats-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .stat-card {
+  flex: 1;
+  min-width: 200px;
   background-color: var(--white);
   border-radius: var(--border-radius);
-  padding: 1.5rem;
+  padding: 1.25rem;
   box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
   transition: var(--transition);
-  overflow: hidden;
-  position: relative;
 }
 
 .stat-card:hover {
+  transform: translateY(-5px);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-4px);
 }
 
-.stat-card .stat-icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+.stat-icon i {
+  font-size: 2rem;
+  margin-right: 1rem;
+  color: var(--accent);
+}
+
+.stat-info {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  margin-bottom: 1rem;
-}
-
-.stat-card.total .stat-icon {
-  background-color: var(--custom-orders-bg);
-  color: var(--custom-orders-color);
-}
-
-.stat-card.active .stat-icon {
-  background-color: var(--active-bg);
-  color: var(--normal-orders-color);
-}
-
-.stat-card.completed .stat-icon {
-  background-color: var(--flush-bg);
-  color: var(--revenue-color);
-}
-
-.stat-card.revenue .stat-icon {
-  background-color: var(--revenue-bg);
-  color: var(--revenue-color);
+  flex-direction: column;
 }
 
 .stat-value {
   font-size: 1.75rem;
   font-weight: 700;
-  margin-bottom: 0.25rem;
+  color: var(--primary);
+  margin: 0;
 }
 
 .stat-label {
+  font-size: 0.875rem;
   color: var(--text-light);
-  font-size: 0.9rem;
-}
-
-.stat-change {
-  display: flex;
-  align-items: center;
-  font-size: 0.85rem;
-  margin-top: 0.5rem;
-}
-
-.stat-change i {
-  margin-right: 0.25rem;
-}
-
-.stat-change.positive {
-  color: var(--revenue-color);
-}
-
-.stat-change.negative {
-  color: #e74c3c;
+  margin: 0;
 }
 
 /* Filters and Search Section */

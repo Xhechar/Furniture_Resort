@@ -60,7 +60,7 @@ export class ReviewsController {
   async getReviewsByUserId(req: ExtendedRequest, res: Response) {
     try {
 
-      let result = await reviewsService.getReviewsByUserId(req.params.UserId);
+      let result = await reviewsService.getReviewsByUserId(getIdFromToken(req));
 
       res.status(201).json(result);
       

@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { Review } from '../interfaces/interfaces';
 import { Observable } from 'rxjs';
 import { getAuthHeaders } from './notifications.service';
+import { SharedService } from './modifiers/shared.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReviewsService {
-  private API_URL = 'http://localhost:3000/reviews/';
+  // private API_URL = 'http://localhost:3000/reviews/';
+  API_URL: string = `${SharedService.API_URL}reviews/`;
 
   constructor(private http: HttpClient) { }
 
@@ -44,7 +46,7 @@ export class ReviewsService {
 
   getReviewsByUserId(): Observable<{ success: boolean; error?: string; message?: string; reviews?: Review[] }> {
     return this.http.get<{ success: boolean; error?: string; message?: string; reviews?: Review[] }>(
-      `${this.API_URL}get-reviews-by-user/`,
+      `${this.API_URL}get-reviews-by-user`,
       { headers: getAuthHeaders() }
     );
   }

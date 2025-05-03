@@ -252,10 +252,13 @@ export class MessagesService implements MessagesInterface {
       }
     }
   }
-  public async getAllSendersMessages(SenderId: string, ReceiverId: string | ''): Promise<{ success: boolean; error?: string; message?: string; messages?: Messages[] | unknown[]}> {
+  public async getAllSendersMessages(SenderId: string, ReceiverId: string): Promise<{ success: boolean; error?: string; message?: string; messages?: Messages[] | unknown[]}> {
     let userExists = await this.prisma.user.findUnique({
       where: {
         UserId: SenderId
+      },
+      include: {
+        CustomOrders: true
       }
     });
 
@@ -273,7 +276,14 @@ export class MessagesService implements MessagesInterface {
       }
     }
     
-    if(userExists.Role === 'user' && ReceiverId === '') {
+    if (userExists.Role === 'user' && ReceiverId === 'verify') {
+      
+      if (userExists.CustomOrders.length === 0 || undefined || null) {
+        return {
+          'success': false,
+          'error': 'Only personell with customorders are allowed to send messages'
+        }
+      }
 
       let receiverExists = await this.prisma.user.findFirst({
       where: {

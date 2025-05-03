@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { Cart, UpdateCartDto } from '../interfaces/interfaces';
 import { Observable } from 'rxjs';
 import { getAuthHeaders } from './notifications.service';
+import { SharedService } from './modifiers/shared.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  API_URL: string = 'http://localhost:3000/cart/'
+  // API_URL: string = 'http://localhost:3000/cart/';
+    API_URL: string = `${SharedService.API_URL}cart/`;
 
   constructor(private http: HttpClient) { }
 

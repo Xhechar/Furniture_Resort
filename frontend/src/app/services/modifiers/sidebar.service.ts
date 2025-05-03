@@ -14,6 +14,8 @@ export class SidebarService {
 
   constructor() {
     window.addEventListener('resize', () => this.onResize());
+
+    this.sidebarState.next(window.innerWidth < 425);
   }
 
   toggleIncreaseWidth(): void {
